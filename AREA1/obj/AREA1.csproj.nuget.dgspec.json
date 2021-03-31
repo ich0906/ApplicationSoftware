@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kih03\\source\\repos\\AREA1\\AREA1\\AREA1.csproj": {}
+    "C:\\Users\\kih03\\source\\repos\\AREA1\\ApplicationSoftware\\AREA1\\AREA1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kih03\\source\\repos\\AREA1\\AREA1\\AREA1.csproj": {
+    "C:\\Users\\kih03\\source\\repos\\AREA1\\ApplicationSoftware\\AREA1\\AREA1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kih03\\source\\repos\\AREA1\\AREA1\\AREA1.csproj",
+        "projectUniqueName": "C:\\Users\\kih03\\source\\repos\\AREA1\\ApplicationSoftware\\AREA1\\AREA1.csproj",
         "projectName": "AREA1",
-        "projectPath": "C:\\Users\\kih03\\source\\repos\\AREA1\\AREA1\\AREA1.csproj",
+        "projectPath": "C:\\Users\\kih03\\source\\repos\\AREA1\\ApplicationSoftware\\AREA1\\AREA1.csproj",
         "packagesPath": "C:\\Users\\kih03\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kih03\\source\\repos\\AREA1\\AREA1\\obj\\",
+        "outputPath": "C:\\Users\\kih03\\source\\repos\\AREA1\\ApplicationSoftware\\AREA1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\kih03\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,6 +40,18 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.4, )"
+            },
+            "Oracle.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.21.1, )"
+            },
             "Oracle.ManagedDataAccess.Core": {
               "target": "Package",
               "version": "[3.21.1, )"

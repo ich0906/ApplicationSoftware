@@ -1,40 +1,38 @@
-﻿using AREA1.Models;
+﻿using AREA1.Data;
+using AREA1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AREA1.Controllers {
     public class HomeController : Controller {
         private readonly ILogger<HomeController> _logger;
+        private readonly AppSoftDbContext _context;
+        private readonly CommonDao _commonDao;
 
-        public HomeController(ILogger<HomeController> logger) {
+        public HomeController(ILogger<HomeController> logger, AppSoftDbContext context) {
             _logger = logger;
+            _context = context;
+            _commonDao = new CommonDao(context);
         }
 
         public IActionResult Index() {
-            string DBConnString = "User Id=APPSOFTDEV; Password=appsoftdevpass; Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521)))(CONNECT_DATA=(SID=XE)))";
+            using var transaction = _context.Database.BeginTransaction();
+            string query = "SELECT 'ABC' AS ABC, 'BCD' AS BCD FROM DUAL";
+          
+            // 쿼리 결과가 datatable로 반환됨
+            // datatable은 쿼리 결과로 나오는 테이블을 c#객체로 구현한 것이라고 생각하면 됨
+            DataTable result = _commonDao.selectOne(query, new DataSet());
 
-            OracleConnection conn = null;
 
-            conn = new OracleConnection(DBConnString);
+            // 행과 열을 지정해서 조회할수도 있고
+            ViewData["Title"] = result.Rows[0]["BCD"].ToString();
+            // 열만 선택해서 조회할수도 있음
+            ViewData["Title"] = result.Columns["BCD"].ToString();
 
-            conn.Open();
-
-            string sql = "select 'abc' from dual";
-
-            OracleDataAdapter adapter = new OracleDataAdapter(sql, conn);
-
-            DataSet ds = new DataSet();
-
-            adapter.Fill(ds, "test");
-
-            ViewData["Title"] = ds.Tables["test"].Rows[0][0].ToString();
+            transaction.Commit();
 
 
             return View();
