@@ -3,6 +3,7 @@ using AREA1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Oracle.ManagedDataAccess.Client;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 
@@ -21,16 +22,17 @@ namespace AREA1.Controllers {
         public IActionResult Index() {
             using var transaction = _context.Database.BeginTransaction();
             string query = "SELECT 'ABC' AS ABC, 'BCD' AS BCD FROM DUAL";
-          
-            // 쿼리 결과가 datatable로 반환됨
-            // datatable은 쿼리 결과로 나오는 테이블을 c#객체로 구현한 것이라고 생각하면 됨
-            DataTable result = _commonDao.selectOne(query, new DataSet());
+
+            // 쿼리 결과가 딕셔너리로 반환됨
+            // SelectOne은 단 한건의 결과만 반환됨, 나머지는 날라감
+            Dictionary<string, string> result = _commonDao.SelectOne(query);
+
+            // SelectList는 Dictionary의 리스트로 반환됨, 쿼리 결과가 여러줄이 나올 때 사용 가능
+            //List< Dictionary<string, string>> resultList = _commonDao.SelectList(query, new DataSet());
 
 
-            // 행과 열을 지정해서 조회할수도 있고
-            ViewData["Title"] = result.Rows[0]["BCD"].ToString();
-            // 열만 선택해서 조회할수도 있음
-            ViewData["Title"] = result.Columns["BCD"].ToString();
+            // 컬럼 이름만 집어넣고 바로 사용 가능함
+            ViewData["Title"] = result["BCD"];
 
             transaction.Commit();
 
