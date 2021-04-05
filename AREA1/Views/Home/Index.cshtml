@@ -3,5 +3,34 @@
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <form id="aform">
+        PersonId  : <input name="person_id" /><br>
+        LastName  : <input name="last_name" /><br>
+        FirstName : <input name="first_name" /><br>
+        Address   : <input name="address" /><br>
+        City      : <input name="city" /><br>
+
+    </form>
+
+    <button id="btn_insert">Insert Button</button>
+    <button id="btn_update">Update Button</button>
+    <button id="btn_delete">Delete Button</button>
+    <button id="btn_select">Delete Button</button>
+
+    <div id="rslt_select">
+    </div>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#btn_insert").click(function () {
+
+            $("#aform").attr("action", "/Home/InsertData");
+            $("#aform").attr("method", "POST");
+            $("#aform").submit();
+
+        });
+    });
+</script>
 

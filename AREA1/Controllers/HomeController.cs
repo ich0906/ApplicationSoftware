@@ -36,8 +36,26 @@ namespace AREA1.Controllers {
 
             transaction.Commit();
 
-
             return View();
+        }
+
+        public IActionResult InsertData() {
+            using var transaction = _context.Database.BeginTransaction();
+
+
+            string query = "INSERT INTO PERSONS VALUES(" + Request.Form["person_id"] + ","
+                                                          + "'" + Request.Form["last_name"] + "',"
+                                                          + "'" + Request.Form["first_name"] + "',"
+                                                          + "'" + Request.Form["address"] + "',"
+                                                          + "'" + Request.Form["city"]
+                                                          + "')";
+
+
+            _commonDao.Insert(query);
+
+            transaction.Commit();
+
+            return Redirect("Index");
         }
 
         public IActionResult Privacy() {
