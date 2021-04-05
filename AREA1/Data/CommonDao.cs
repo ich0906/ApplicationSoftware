@@ -27,7 +27,7 @@ namespace AREA1.Data {
             return DataDic;
         }
 
-        public  List<Dictionary<string, string>> SelectList(string sqlQuery) {
+        public List<Dictionary<string, string>> SelectList(string sqlQuery) {
 
             List < Dictionary<string, string> > resultList = new List<Dictionary<string, string>>();
 
