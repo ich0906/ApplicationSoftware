@@ -62,9 +62,9 @@ namespace AREA1.Controllers {
             using var transaction = _context.Database.BeginTransaction();
 
 
-            string query = "UPDATE PERSONS SET PERSONID = " + Request.Form["person_id"] + ","
-                                                          + "LASTNAME = " + "'" + Request.Form["last_name"] + "',"
-                                                          + "FIRSTNAME = " + "'" + Request.Form["first_name"] + "',"
+            string query = "UPDATE PERSONS SET PERSON_ID = " + Request.Form["person_id"] + ","
+                                                          + "LAST_NAME = " + "'" + Request.Form["last_name"] + "',"
+                                                          + "FIRST_NAME = " + "'" + Request.Form["first_name"] + "',"
                                                           + "ADDRESS = " + "'" + Request.Form["address"] + "',"
                                                           + "CITY = " + "'" + Request.Form["city"] + "'";
 
