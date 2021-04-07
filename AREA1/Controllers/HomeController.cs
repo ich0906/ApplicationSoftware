@@ -57,6 +57,20 @@ namespace AREA1.Controllers {
 
             return Redirect("Index");
         }
+        public IActionResult DeleteData()
+        {
+            using var transaction = _context.Database.BeginTransaction();
+
+
+            string query = "DELETE FROM PERSONS WHERE PERSON_ID = " + Request.Form["person_id"];
+
+            _commonDao.Delete(query);
+
+
+            transaction.Commit();
+
+            return Redirect("Index");
+        }   
 
         public IActionResult Privacy() {
             return View();
