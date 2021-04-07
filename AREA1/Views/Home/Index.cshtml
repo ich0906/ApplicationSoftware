@@ -32,6 +32,12 @@
 
         });
 
+        $("#btn_update").click(function () {
+            $("#aform").attr("action", "/Home/UpdateData");
+            $("#aform").attr("method", "POST");
+            $("#aform").submit();
+        });
+
         $("#btn_delete").click(function () {
             $("#aform").attr("action", "/Home/DeleteData");
             $("#aform").attr("method", "POST");

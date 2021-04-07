@@ -57,6 +57,24 @@ namespace AREA1.Controllers {
 
             return Redirect("Index");
         }
+        public IActionResult UpdateData()
+        {
+            using var transaction = _context.Database.BeginTransaction();
+
+
+            string query = "UPDATE PERSONS SET PERSONID = " + Request.Form["person_id"] + ","
+                                                          + "LASTNAME = " + "'" + Request.Form["last_name"] + "',"
+                                                          + "FIRSTNAME = " + "'" + Request.Form["first_name"] + "',"
+                                                          + "ADDRESS = " + "'" + Request.Form["address"] + "',"
+                                                          + "CITY = " + "'" + Request.Form["city"] + "'";
+
+
+            _commonDao.Update(query);
+
+            transaction.Commit();
+
+            return Redirect("Index");
+        }
         public IActionResult DeleteData()
         {
             using var transaction = _context.Database.BeginTransaction();
