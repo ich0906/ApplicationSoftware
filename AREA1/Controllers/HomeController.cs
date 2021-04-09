@@ -88,7 +88,29 @@ namespace AREA1.Controllers {
             transaction.Commit();
 
             return Redirect("Index");
-        }   
+        }
+        public List<JsonResult> SelectData()
+        {
+            using var transaction = _context.Database.BeginTransaction();
+
+            string query = "SELECT * FROM PERSONS";
+            List<Dictionary<string, string>> resultList = _commonDao.SelectList(query);
+
+            var persons = new List<JsonResult>();
+            for (int i = 0; i < resultList.Count; ++i)
+            {
+                var person = new Dictionary<string, string>()
+                {
+                    {"PERSON_ID",resultList[i]["PERSON_ID"]},
+                    {"LAST_NAME",resultList[i]["LAST_NAME"]},
+                    {"FIRST_NAME",resultList[i]["FIRST_NAME"]},
+                    {"ADDRESS",resultList[i]["ADDRESS"]},
+                    {"CITY",resultList[i]["CITY"]}
+                };
+                persons.Add(Json(person));
+            }
+            return persons;
+        }
 
         public IActionResult Privacy() {
             return View();
