@@ -1,11 +1,10 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Oracle.ManagedDataAccess.Client;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace AREA1.Data {
     public class CommonDao {
@@ -96,10 +95,12 @@ namespace AREA1.Data {
         }
 
 
-        public DataTable SelectTable(string sqlQuery) {
+        public DataTable SelectTable(string sqlQuery)
+        {
             DbProviderFactory dbFactory = DbProviderFactories.GetFactory(_context.Database.GetDbConnection());
 
-            using (var cmd = dbFactory.CreateCommand()) {
+            using (var cmd = dbFactory.CreateCommand())
+            {
                 cmd.Connection = _context.Database.GetDbConnection();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = sqlQuery;
@@ -163,10 +164,12 @@ namespace AREA1.Data {
             }
         }
 
-        public int Insert(string sqlQuery) {
+        public DataTable SelectTable(string sqlQuery, IFormCollection param)
+        {
             DbProviderFactory dbFactory = DbProviderFactories.GetFactory(_context.Database.GetDbConnection());
 
-            using (var cmd = dbFactory.CreateCommand()) {
+            using (var cmd = dbFactory.CreateCommand())
+            {
                 cmd.Connection = _context.Database.GetDbConnection();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = sqlQuery;
@@ -233,14 +236,73 @@ namespace AREA1.Data {
             }
         }
 
-        public int Update(string sqlQuery) {
+        public int Update(string sqlQuery)
+        {
             DbProviderFactory dbFactory = DbProviderFactories.GetFactory(_context.Database.GetDbConnection());
 
-            using (var cmd = dbFactory.CreateCommand()) {
+            using (var cmd = dbFactory.CreateCommand())
+            {
                 cmd.Connection = _context.Database.GetDbConnection();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = sqlQuery;
-                using (DbDataAdapter adapter = dbFactory.CreateDataAdapter()) {
+                using (DbDataAdapter adapter = dbFactory.CreateDataAdapter())
+                {
+                    adapter.UpdateCommand = cmd;
+
+                    DataTable dt = new DataTable();
+                    int resultRowCnt = adapter.UpdateCommand.ExecuteNonQuery();
+
+                    return resultRowCnt;
+                }
+            }
+        }
+
+        public int Update(string sqlQuery, IFormCollection param)
+        {
+            DbProviderFactory dbFactory = DbProviderFactories.GetFactory(_context.Database.GetDbConnection());
+
+            using (var cmd = dbFactory.CreateCommand())
+            {
+                cmd.Connection = _context.Database.GetDbConnection();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = sqlQuery;
+
+                Regex reg = new Regex("@([_]?[a-z])*:[A-Z]*");
+                MatchCollection resultColl = reg.Matches(cmd.CommandText);
+
+                foreach (Match mm in resultColl)
+                {
+                    Group g = mm.Groups[0];
+
+                    string prmNm = g.ToString().Split(":")[0].Replace("@", ":");
+                    string prmType = g.ToString().Split(":")[1];
+                    cmd.CommandText = cmd.CommandText.Replace(g.ToString(), prmNm);
+
+                    OracleParameter sqlparam = null;
+
+                    if (prmType.Contains("VARCHAR"))
+                    {
+                        sqlparam = new OracleParameter(prmNm, OracleDbType.Varchar2);
+                        sqlparam.Value = param[prmNm.Replace(":", "")];
+                    }
+                    else if (prmType.Contains("NUMBER"))
+                    {
+                        sqlparam = new OracleParameter(prmNm, OracleDbType.Int32);
+                        sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
+                    }
+                    else if (prmType.Contains("DATE"))
+                    {
+                        sqlparam = new OracleParameter(prmNm, OracleDbType.Date);
+                        sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
+                    }
+
+
+                    cmd.Parameters.Add(sqlparam);
+                }
+
+
+                using (DbDataAdapter adapter = dbFactory.CreateDataAdapter())
+                {
                     adapter.UpdateCommand = cmd;
 
                     DataTable dt = new DataTable();
@@ -303,17 +365,78 @@ namespace AREA1.Data {
             }
         }
 
-        public int Delete(string sqlQuery) {
+        public int Delete(string sqlQuery)
+        {
             DbProviderFactory dbFactory = DbProviderFactories.GetFactory(_context.Database.GetDbConnection());
 
-            using (var cmd = dbFactory.CreateCommand()) {
+            using (var cmd = dbFactory.CreateCommand())
+            {
                 cmd.Connection = _context.Database.GetDbConnection();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = sqlQuery;
-                using (DbDataAdapter adapter = dbFactory.CreateDataAdapter()) {
+                using (DbDataAdapter adapter = dbFactory.CreateDataAdapter())
+                {
                     adapter.DeleteCommand = cmd;
 
                     DataTable dt = new DataTable();
+                    int resultRowCnt = adapter.DeleteCommand.ExecuteNonQuery();
+
+                    return resultRowCnt;
+                }
+            }
+        }
+
+        public int Delete(string sqlQuery, IFormCollection param)
+        {
+            DbProviderFactory dbFactory = DbProviderFactories.GetFactory(_context.Database.GetDbConnection());
+
+            using (var cmd = dbFactory.CreateCommand())
+            {
+                cmd.Connection = _context.Database.GetDbConnection();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = sqlQuery;
+
+                Regex reg = new Regex("@([_]?[a-z])*:[A-Z]*");
+                MatchCollection resultColl = reg.Matches(cmd.CommandText);
+
+                foreach (Match mm in resultColl)
+                {
+                    Group g = mm.Groups[0];
+
+                    string prmNm = g.ToString().Split(":")[0].Replace("@", ":");
+                    string prmType = g.ToString().Split(":")[1];
+                    cmd.CommandText = cmd.CommandText.Replace(g.ToString(), prmNm);
+
+                    OracleParameter sqlparam = null;
+
+                    if (prmType.Contains("VARCHAR"))
+                    {
+                        sqlparam = new OracleParameter(prmNm, OracleDbType.Varchar2);
+                        sqlparam.Value = param[prmNm.Replace(":", "")];
+                    }
+                    else if (prmType.Contains("NUMBER"))
+                    {
+                        sqlparam = new OracleParameter(prmNm, OracleDbType.Int32);
+                        sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
+                    }
+                    else if (prmType.Contains("DATE"))
+                    {
+                        sqlparam = new OracleParameter(prmNm, OracleDbType.Date);
+                        sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
+                    }
+
+
+                    cmd.Parameters.Add(sqlparam);
+                }
+
+
+                using (DbDataAdapter adapter = dbFactory.CreateDataAdapter())
+                {
+                    adapter.DeleteCommand = cmd;
+
+                    DataTable dt = new DataTable();
+                    adapter.DeleteCommand.Prepare();
+
                     int resultRowCnt = adapter.DeleteCommand.ExecuteNonQuery();
 
                     return resultRowCnt;
