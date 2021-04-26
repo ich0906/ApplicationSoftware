@@ -59,24 +59,60 @@ namespace AREA1.Controllers {
 
             return Redirect("Index");
         }
-
-        public IActionResult UpdateData() {
-            /* using var transaction = _context.Database.BeginTransaction();
-
-
-             string query = "UPDATE PERSONS SET PERSONID = " + Request.Form["person_id"] + ","
-                                                           + "LASTNAME = " + "'" + Request.Form["last_name"] + "',"
-                                                           + "FIRSTNAME = " + "'" + Request.Form["first_name"] + "',"
-                                                           + "ADDRESS = " + "'" + Request.Form["address"] + "',"
-                                                           + "CITY = " + "'" + Request.Form["city"] + "'";
+        public IActionResult UpdateData()
+        {
+            using var transaction = _context.Database.BeginTransaction();
 
 
-             _commonDao.Update(query);
+            string query = "UPDATE PERSONS SET PERSON_ID = " + Request.Form["person_id"] + ","
+                                                          + "LAST_NAME = " + "'" + Request.Form["last_name"] + "',"
+                                                          + "FIRST_NAME = " + "'" + Request.Form["first_name"] + "',"
+                                                          + "ADDRESS = " + "'" + Request.Form["address"] + "',"
+                                                          + "CITY = " + "'" + Request.Form["city"] + "'";
 
-             transaction.Commit();*/
+
+            _commonDao.Update(query);
+
+            transaction.Commit();
 
             return Redirect("Index");
-        } 
+        }
+        public IActionResult DeleteData()
+        {
+            using var transaction = _context.Database.BeginTransaction();
+
+
+            string query = "DELETE FROM PERSONS WHERE PERSON_ID = " + Request.Form["person_id"];
+
+            _commonDao.Delete(query);
+
+
+            transaction.Commit();
+
+            return Redirect("Index");
+        }
+        public List<JsonResult> SelectData()
+        {
+            using var transaction = _context.Database.BeginTransaction();
+
+            string query = "SELECT * FROM PERSONS";
+            List<Dictionary<string, string>> resultList = _commonDao.SelectList(query);
+
+            var persons = new List<JsonResult>();
+            for (int i = 0; i < resultList.Count; ++i)
+            {
+                var person = new Dictionary<string, string>()
+                {
+                    {"PERSON_ID",resultList[i]["PERSON_ID"]},
+                    {"LAST_NAME",resultList[i]["LAST_NAME"]},
+                    {"FIRST_NAME",resultList[i]["FIRST_NAME"]},
+                    {"ADDRESS",resultList[i]["ADDRESS"]},
+                    {"CITY",resultList[i]["CITY"]}
+                };
+                persons.Add(Json(person));
+            }
+            return persons;
+        }
 
         public IActionResult Privacy() {
             return View();

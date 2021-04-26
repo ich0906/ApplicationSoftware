@@ -93,8 +93,9 @@ using AREA1.Models;
     <button id=""btn_insert"">Insert Button</button>
     <button id=""btn_update"">Update Button</button>
     <button id=""btn_delete"">Delete Button</button>
-    <button id=""btn_select"">Delete Button</button>
+    <button id=""btn_select"">Select Button</button>
 
+    <br>
     <div id=""rslt_select"">
     </div>
 </div>
@@ -107,10 +108,41 @@ using AREA1.Models;
             $(""#aform"").attr(""method"", ""POST"");
             $(""#aform"").submit();
 
+        });
+
+        $(""#btn_select"").click(function () {
+            $(""#aform"").attr(""action"", ""/Home/SelectData"");
+            $(""#aform"").attr(""method"", ""POST"");
+
+            $(""#aform"").ajaxForm({
+                success: function (data) {
+                    var table = '<table id=""rslt_table"">' +
+                        '<tr>' +
+                        '<td>ID</td>' +
+                        '<td>LAST_NAME</td>' +
+                        '<td>FIRST_NAME</td>' +
+               ");
+            WriteLiteral(@"         '<td>ADDRESS</td>' +
+                        '<td>CITY</td>' +
+                        '</tr>' +
+                        '<tbody></tbody>' +
+                        '</table> ';
+                    $(""#rslt_select"").append(table);
+                    for (let i = 0; i < data.length; ++i) {
+                        $(""#rslt_table > tbody:last"").append(""<tr><td>""
+                            + data[i].value['PERSON_ID'] + ""</td><td>"" +
+                            data[i].value['LAST_NAME'] + ""</td><td>"" +
+                            data[i].value['FIRST_NAME'] + ""</td><td>"" +
+                            data[i].value['ADDRESS'] + ""</td><td>"" +
+                            data[i].value['CITY'] + ""</td></tr>"");
+                    }
+                }
             });
+
+            $('#aform').submit();
+        });
     });
 </script>
-
 ");
         }
         #pragma warning restore 1998

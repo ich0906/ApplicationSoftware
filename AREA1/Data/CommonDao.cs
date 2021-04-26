@@ -22,10 +22,7 @@ namespace AREA1.Data {
             Dictionary<string, string> DataDic = new Dictionary<string, string>();
 
             for (int i = 0; i < dt.Columns.Count; i++) {
-                if (dt.Rows.Count > 0)
-                    DataDic.Add(dt.Columns[i].ColumnName, dt.Rows[0][i].ToString());
-                else
-                    DataDic.Add(dt.Columns[i].ColumnName, "");
+                DataDic.Add(dt.Columns[i].ColumnName, dt.Rows[0][i].ToString());
             }
 
             return DataDic;
@@ -38,10 +35,7 @@ namespace AREA1.Data {
             Dictionary<string, string> DataDic = new Dictionary<string, string>();
 
             for (int i = 0; i < dt.Columns.Count; i++) {
-                if (dt.Rows.Count > 0)
-                    DataDic.Add(dt.Columns[i].ColumnName, dt.Rows[0][i].ToString());
-                else
-                    DataDic.Add(dt.Columns[i].ColumnName, "");
+                DataDic.Add(dt.Columns[i].ColumnName, dt.Rows[0][i].ToString());
             }
 
             return DataDic;
@@ -59,10 +53,7 @@ namespace AREA1.Data {
                 DataDic.Clear();
 
                 for (int j = 0; j < dt.Columns.Count; j++) {
-                    if (dt.Rows.Count > 0)
-                        DataDic.Add(dt.Columns[j].ColumnName, dt.Rows[0][j].ToString());
-                    else
-                        DataDic.Add(dt.Columns[j].ColumnName, "");
+                    DataDic.Add(dt.Columns[j].ColumnName, dt.Rows[i][j].ToString());
                 }
 
                 resultList.Add(DataDic);
@@ -83,10 +74,7 @@ namespace AREA1.Data {
                 DataDic.Clear();
 
                 for (int j = 0; j < dt.Columns.Count; j++) {
-                    if (dt.Rows.Count > 0)
-                        DataDic.Add(dt.Columns[j].ColumnName, dt.Rows[0][j].ToString());
-                    else
-                        DataDic.Add(dt.Columns[j].ColumnName, "");
+                    DataDic.Add(dt.Columns[j].ColumnName, dt.Rows[i][j].ToString());
                 }
 
                 resultList.Add(DataDic);
@@ -143,15 +131,15 @@ namespace AREA1.Data {
                     } else if (prmType.Contains("DATE")) {
                         sqlparam = new OracleParameter(prmNm, OracleDbType.Date);
                         sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
-                    } else if (prmType.Contains("CHAR")) {
-                        sqlparam = new OracleParameter(prmNm, OracleDbType.Char);
-                        sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
                     }
 
 
                     cmd.Parameters.Add(sqlparam);
                 }
 
+                cmd.Connection = _context.Database.GetDbConnection();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = sqlQuery;
                 using (DbDataAdapter adapter = dbFactory.CreateDataAdapter()) {
                     adapter.SelectCommand = cmd;
 
@@ -209,9 +197,6 @@ namespace AREA1.Data {
                         sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
                     } else if (prmType.Contains("DATE")) {
                         sqlparam = new OracleParameter(prmNm, OracleDbType.Date);
-                        sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
-                    } else if (prmType.Contains("CHAR")) {
-                        sqlparam = new OracleParameter(prmNm, OracleDbType.Char);
                         sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
                     }
 
@@ -280,9 +265,6 @@ namespace AREA1.Data {
                     } else if (prmType.Contains("DATE")) {
                         sqlparam = new OracleParameter(prmNm, OracleDbType.Date);
                         sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
-                    } else if (prmType.Contains("CHAR")) {
-                        sqlparam = new OracleParameter(prmNm, OracleDbType.Char);
-                        sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
                     }
 
 
@@ -349,9 +331,6 @@ namespace AREA1.Data {
                         sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
                     } else if (prmType.Contains("DATE")) {
                         sqlparam = new OracleParameter(prmNm, OracleDbType.Date);
-                        sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
-                    } else if (prmType.Contains("CHAR")) {
-                        sqlparam = new OracleParameter(prmNm, OracleDbType.Char);
                         sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
                     }
 
