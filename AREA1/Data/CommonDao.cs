@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Http;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Oracle.ManagedDataAccess.Client;
 using System.Collections.Generic;
@@ -66,7 +65,7 @@ namespace AREA1.Data {
 
             List<Dictionary<string, string>> resultList = new List<Dictionary<string, string>>();
 
-            DataTable dt = SelectTable(sqlQuery);
+            DataTable dt = SelectTable(sqlQuery, param);
 
             Dictionary<string, string> DataDic = new Dictionary<string, string>();
 
