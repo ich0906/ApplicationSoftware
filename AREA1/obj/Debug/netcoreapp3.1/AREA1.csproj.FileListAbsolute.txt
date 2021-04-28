@@ -86,3 +86,4 @@ C:\Users\jaeha\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AR
 C:\Users\jaeha\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.dll
 C:\Users\jaeha\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.pdb
 C:\Users\jaeha\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.genruntimeconfig.cache
+C:\Users\jaeha\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.csprojAssemblyReference.cache
