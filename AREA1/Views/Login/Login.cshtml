@@ -1,0 +1,72 @@
+﻿@{
+    Layout = "";
+}
+<!DOCTYPE html>
+<html style="background-color: #f8f9fa">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>광운대학교 KLAS</title>
+    <link rel="shortcut icon" href="https://klas.kw.ac.kr/assets/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="https://klas.kw.ac.kr/assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="~/css/Login/axboot.css">
+    <link rel="stylesheet" type="text/css" href="~/css/Login/axicon.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/Login/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/Login/spv-frame.css">
+    <link rel="stylesheet" type="text/css" href="~/css/Login/fonts.css">
+    <style>
+        .ax-body.login {
+            color: #ccc;
+            background: #000 url(/images/login/loginbg.jpg) no-repeat 0 0 !important;
+            background-size: 100% !important;
+            vertical-align: middle !important;
+            position: relative;
+            font-weight: 300;
+            font-family: 'Noto Sans KR', "맑은 고딕", "Malgun Gothic", "Apple Gothic", "돋움", Dotum, "굴림", Gulim, sans-serif;
+        }
+    </style>
+    <script type="text/javascript">
+        @if (!ViewData["AlertMsg"].Equals("")) {
+            <text>
+            alert("@ViewData["AlertMsg"]");
+            </text>
+         }
+    </script>
+</head>
+<body class="ax-body login">
+    <div class="container">
+        <div class="newpanel">
+            <div class="panel-body" style="margin-top:185px;"?>
+">
+                <!-- user title -->
+                <div class="userLoginTitle">
+                    <p><img src="~/images/Login/logo.png"></p>
+                </div>
+
+                <div class="panel-body-inner">
+
+                    <!-- user title -->
+                    <form name="login-form" class="" method="post" action="Login/DoLogin" autocomplete="off">
+                        <div class="login-form-input-group">
+                            <div class="form-group">
+                                <!-- <label for="userCd"><i class="cqc-new-message"></i> ID</label> -->
+                                <input type="text" id="loginId" value="" name="login_id" class="form-control ime-false" placeholder="ID">
+                            </div>
+                            <div class="form-group">
+                                <!-- <label for="userPs"><i class="cqc-key"></i> Password</label> -->
+                                <input type="password" id="loginPwd" name="login_pass" class="form-control ime-false" placeholder="PASSWORD" maxlength="10">
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="" value="">
+                        <div class="adminLogin-box">
+                            <button type="submit" class="btn">&nbsp;&nbsp;로그인&nbsp;&nbsp;</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

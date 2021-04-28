@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Http;
-using Microsoft.Data.SqlClient;
+
 using Microsoft.EntityFrameworkCore;
 using Oracle.ManagedDataAccess.Client;
 using System.Collections.Generic;
@@ -41,27 +41,6 @@ namespace AREA1.Data {
             return DataDic;
         }
 
-        public List<Dictionary<string, string>> SelectList(string sqlQuery) {
-
-            List < Dictionary<string, string> > resultList = new List<Dictionary<string, string>>();
-
-            DataTable dt = SelectTable(sqlQuery);
-
-            Dictionary<string, string> DataDic = new Dictionary<string, string>();
-
-            for (int i = 0; i < dt.Rows.Count; i++) {
-                DataDic.Clear();
-
-                for (int j = 0; j < dt.Columns.Count; j++) {
-                    DataDic.Add(dt.Columns[j].ColumnName, dt.Rows[i][j].ToString());
-                }
-
-                resultList.Add(DataDic);
-            }
-
-            return resultList;
-        }
-
         public List<Dictionary<string, string>> SelectList(string sqlQuery, IFormCollection param) {
 
             List<Dictionary<string, string>> resultList = new List<Dictionary<string, string>>();
@@ -81,6 +60,25 @@ namespace AREA1.Data {
             }
 
             return resultList;
+        }
+
+
+        public DataTable SelectTable(string sqlQuery) {
+            DbProviderFactory dbFactory = DbProviderFactories.GetFactory(_context.Database.GetDbConnection());
+
+            using (var cmd = dbFactory.CreateCommand()) {
+                cmd.Connection = _context.Database.GetDbConnection();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = sqlQuery;
+                using (DbDataAdapter adapter = dbFactory.CreateDataAdapter()) {
+                    adapter.SelectCommand = cmd;
+
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+
+                    return dt;
+                }
+            }
         }
 
 
@@ -180,7 +178,7 @@ namespace AREA1.Data {
                 Regex reg = new Regex("@([_]?[a-z])*:[A-Z]*");
                 MatchCollection resultColl = reg.Matches(cmd.CommandText);
 
-                foreach(Match mm in resultColl) {
+                foreach (Match mm in resultColl) {
                     Group g = mm.Groups[0];
 
                     string prmNm = g.ToString().Split(":")[0].Replace("@", ":");
@@ -200,7 +198,7 @@ namespace AREA1.Data {
                         sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
                     }
 
-                   
+
                     cmd.Parameters.Add(sqlparam);
                 }
 

@@ -542,7 +542,11 @@ footer {
   margin-bottom: .1rem;
 }
 
+<<<<<<< HEAD
 .con_footer h1.logo{position:absolute;width:158px;height:50px;background:url("../images/footerlogo.png") no-repeat 0 10px; }
+=======
+.con_footer h1.logo{position:absolute;width:158px;height:50px;background:url("../images/layout/footerlogo.png") no-repeat 0 10px; }
+>>>>>>> 68d87c0cf44622217c2c7e5631d1fdadf7891933
 .con_footer .copyright {color:#5e5e5e;font-size:0.8571rem; font-weight:300;margin:0 0 0px 180px}
 
 footer .btnup a{font-size:2rem; color:#b5b4b5}

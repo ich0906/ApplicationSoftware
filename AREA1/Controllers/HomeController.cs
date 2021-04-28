@@ -1,11 +1,11 @@
 ﻿using AREA1.Data;
 using AREA1.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Oracle.ManagedDataAccess.Client;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
+using Tool;
 
 namespace AREA1.Controllers {
     public class HomeController : Controller {
@@ -23,16 +23,21 @@ namespace AREA1.Controllers {
             using var transaction = _context.Database.BeginTransaction();
             string query = "SELECT 'ABC' AS ABC, 'BCD' AS BCD FROM DUAL";
 
+
             // 쿼리 결과가 딕셔너리로 반환됨
             // SelectOne은 단 한건의 결과만 반환됨, 나머지는 날라감
             //Dictionary<string, string> result = _commonDao.SelectOne(query, Request.Form);
+
+            string query2 = "SELECT * FROM PERSONS";
+            List<Dictionary<string, string>> resultList = _commonDao.SelectList(query2);
 
             // SelectList는 Dictionary의 리스트로 반환됨, 쿼리 결과가 여러줄이 나올 때 사용 가능
             //List< Dictionary<string, string>> resultList = _commonDao.SelectList(query, new DataSet());
 
 
             // 컬럼 이름만 집어넣고 바로 사용 가능함
-            //ViewData["Title"] = result["BCD"];
+
+            ViewData["Title"] = HttpContext.Session.GetString("_Key");
 
             transaction.Commit();
 
@@ -49,7 +54,6 @@ namespace AREA1.Controllers {
                                                     + "@address:VARCHAR,"
                                                     + "@city:VARCHAR"
                                                     + ")";
-
 
             _commonDao.Insert(query, Request.Form);
 
@@ -88,7 +92,29 @@ namespace AREA1.Controllers {
             transaction.Commit();
 
             return Redirect("Index");
-        }   
+        }
+        public List<JsonResult> SelectData()
+        {
+            using var transaction = _context.Database.BeginTransaction();
+
+            string query = "SELECT * FROM PERSONS";
+            List<Dictionary<string, string>> resultList = _commonDao.SelectList(query);
+
+            var persons = new List<JsonResult>();
+            for (int i = 0; i < resultList.Count; ++i)
+            {
+                var person = new Dictionary<string, string>()
+                {
+                    {"PERSON_ID",resultList[i]["PERSON_ID"]},
+                    {"LAST_NAME",resultList[i]["LAST_NAME"]},
+                    {"FIRST_NAME",resultList[i]["FIRST_NAME"]},
+                    {"ADDRESS",resultList[i]["ADDRESS"]},
+                    {"CITY",resultList[i]["CITY"]}
+                };
+                persons.Add(Json(person));
+            }
+            return persons;
+        }
 
         public IActionResult Privacy() {
             return View();
