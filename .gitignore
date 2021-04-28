@@ -2,3 +2,6 @@
 
 *./Debug/*
 /Debug
+*.v2
+*.suo
+*.cache
