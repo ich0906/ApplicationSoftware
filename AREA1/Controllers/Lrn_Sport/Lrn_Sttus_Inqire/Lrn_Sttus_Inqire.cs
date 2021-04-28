@@ -7,13 +7,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 
-namespace AREA1.Controllers {
-    public class HomeController : Controller {
-        private readonly ILogger<HomeController> _logger;
+namespace AREA1.Controllers.Lrn_Sport.Lrn_Sttus_Inqire
+{
+    public class Lrn_Sttus_Inqire : Controller {
+        private readonly ILogger<Lrn_Sttus_Inqire> _logger;
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
 
-        public HomeController(ILogger<HomeController> logger, AppSoftDbContext context) {
+        public Lrn_Sttus_Inqire(ILogger<Lrn_Sttus_Inqire> logger, AppSoftDbContext context) {
             _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);

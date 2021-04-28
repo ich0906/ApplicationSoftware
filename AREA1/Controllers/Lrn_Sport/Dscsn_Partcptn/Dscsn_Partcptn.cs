@@ -7,13 +7,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 
-namespace AREA1.Controllers {
-    public class HomeController : Controller {
-        private readonly ILogger<HomeController> _logger;
+namespace AREA1.Controllers.Lrn_Sport.Dscsn_Partcptn
+{
+    public class Dscsn_Partcptn : Controller {
+        private readonly ILogger<Dscsn_Partcptn> _logger;
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
 
-        public HomeController(ILogger<HomeController> logger, AppSoftDbContext context) {
+        public Dscsn_Partcptn(ILogger<Dscsn_Partcptn> logger, AppSoftDbContext context) {
             _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);
