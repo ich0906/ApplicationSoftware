@@ -7,19 +7,23 @@
 //using System.Data;
 //using System.Diagnostics;
 
-//namespace AREA1.CodeTools {
-//    public class CodeMngTool {
+//namespace AREA1.CodeTools
+//{
+//    public class CodeMngTool
+//    {
 //        private readonly ILogger<CodeMngTool> _logger;
 //        private readonly AppSoftDbContext _context;
 //        private readonly CommonDao _commonDao;
 
-//        public CodeMngTool(ILogger<CodeMngTool> logger, AppSoftDbContext context) {
+//        public CodeMngTool(ILogger<CodeMngTool> logger, AppSoftDbContext context)
+//        {
 //            _logger = logger;
 //            _context = context;
 //            _commonDao = new CommonDao(context);
 //        }
 
-//        public IActionResult InsertData() {
+//        public IActionResult InsertData()
+//        {
 //            using var transaction = _context.Database.BeginTransaction();
 
 
@@ -68,14 +72,16 @@
 //            transaction.Commit();
 
 //            return Redirect("Index");
-//        }   
+//        }
 
-//        public IActionResult Privacy() {
+//        public IActionResult Privacy()
+//        {
 //            return View();
 //        }
 
 //        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-//        public IActionResult Error() {
+//        public IActionResult Error()
+//        {
 //            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 //        }
 //    }
