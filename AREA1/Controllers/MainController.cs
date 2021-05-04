@@ -1,14 +1,13 @@
 ﻿using AREA1.Data;
+using AREA1.Filters;
 using AREA1.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Tool;
 
-namespace AREA1.Controllers
-{
+namespace AREA1.Controllers {
+    [LoginActionFilter]
     public class MainController : Controller
     {
         private readonly ILogger<MainController> _logger;
