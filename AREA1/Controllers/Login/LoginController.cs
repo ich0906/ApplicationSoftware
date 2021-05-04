@@ -48,10 +48,11 @@ namespace AREA1.Login.Controllers {
         public IActionResult DoLogin() {
             if (!Request.Form["login_id"].Equals("")) {
                 string query = "SELECT USER_ID" +
+                                    ", NAME" +
                                     ", AUTHOR" +
-                                    ", BIRTHDAY" + 
-                                    ", PHONE" + 
-                                    ", EMAIL" + 
+                                    ", BIRTHDAY" +
+                                    ", PHONE" +
+                                    ", EMAIL" +
                                 " FROM OP_USER" +
                                 " WHERE USER_ID = @login_id:CHAR" +
                                     " AND PASSWORD = @login_pass:VARCHAR";
@@ -63,6 +64,7 @@ namespace AREA1.Login.Controllers {
                 if (!result["USER_ID"].Equals("")) {
                     UserModel userInfo = new UserModel();
                     userInfo.user_id = result["USER_ID"];
+                    userInfo.name = result["NAME"];
                     userInfo.author = result["AUTHOR"];
                     userInfo.birthday = result["BIRTHDAY"];
                     userInfo.phone = result["PHONE"];
@@ -70,13 +72,10 @@ namespace AREA1.Login.Controllers {
 
                     SessionExtensionTool.SetObject(HttpContext.Session, "userInfo", userInfo);
 
-                   
-                    return View("/Views/Main.cshtml");
+                    return Redirect("/Main/Main");
                 }
             }
-
-
-            return RedirectToAction("Login", new { alertLogin = 1 });
+                return RedirectToAction("Login", new { alertLogin = 1 });
         }
 
         public IActionResult Error() {
