@@ -23,7 +23,7 @@ namespace AREA1 {
             services.AddDistributedMemoryCache();
 
             services.AddSession(options => {
-                options.IdleTimeout = TimeSpan.FromDays(Convert.ToDouble(10));
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
