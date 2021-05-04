@@ -2,4 +2,6 @@
 
 *./Debug/*
 /Debug
-/AREA1/Upload
+*.v2
+*.suo
+*.cache
