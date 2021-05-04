@@ -93,7 +93,7 @@ namespace AREA1.Data {
         }
 
 
-        public DataTable SelectTable(string sqlQuery) {
+        private DataTable SelectTable(string sqlQuery) {
             DbProviderFactory dbFactory = DbProviderFactories.GetFactory(_context.Database.GetDbConnection());
 
             using (var cmd = dbFactory.CreateCommand()) {
