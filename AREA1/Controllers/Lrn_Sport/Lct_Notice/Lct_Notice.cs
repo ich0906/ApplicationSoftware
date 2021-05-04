@@ -43,6 +43,11 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                           + "FROM OP_BBS A"
                           + "JOIN OP_USER B"
                           + "ON A.REGISTER = B.USER_ID"
+<<<<<<< HEAD
+=======
+                          + "JOIN OP_FILE C"
+                          + "ON A.DOC_ID = C.DOC_ID AND C.SNO = 1"
+>>>>>>> 2fe69837d42967dd9f18e14aa989536a153510c2
                           + "WHERE BBS_CODE = " //+ CodeMngTool.getCode("BBS", "NOTICE") 
                           + "AND LCTRE_SE = @LCTRE_SE:VARCHAR";
 
