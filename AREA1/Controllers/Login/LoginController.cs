@@ -19,7 +19,6 @@ namespace AREA1.Login.Controllers {
             _context = context;
             _commonDao = new CommonDao(context);
         }
-     
 
         public IActionResult Login() {
             string alertMsg = "";

@@ -1,14 +1,14 @@
 ﻿using AREA1.Data;
+using AREA1.Filters;
 using AREA1.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Oracle.ManagedDataAccess.Client;
-using System.Collections.Generic;
-using System.Data;
+using System;
 using System.Diagnostics;
 
-namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
-{
+namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
+    [LoginActionFilter]
     public class Lct_Notice : Controller {
         private readonly ILogger<Lct_Notice> _logger;
         private readonly AppSoftDbContext _context;
@@ -20,80 +20,61 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
             _commonDao = new CommonDao(context);
         }
 
-        public IActionResult Index() {
-            using var transaction = _context.Database.BeginTransaction();
-            string query = "SELECT 'ABC' AS ABC, 'BCD' AS BCD FROM DUAL";
+        public IActionResult SelectPageListNotice() {
+            string sql = "SELECT COUNT(*) AS BBS_CNT"                                                                                                      
+                      + "FROM OP_BBS A"
+                      + "JOIN OP_USER B"
+                      + "ON A.REGISTER = B.USER_ID"
+                      + "JOIN OP_FILE C"
+                      + "ON A.DOC_ID = C.DOC_ID AND C.SNO = 1"
+                      + "WHERE BBS_CODE = " //+ CodeMngTool.getCode("BBS", "NOTICE") 
+                      + "AND LCTRE_SE = @LCTRE_SE:VARCHAR";
 
-            // 쿼리 결과가 딕셔너리로 반환됨
-            // SelectOne은 단 한건의 결과만 반환됨, 나머지는 날라감
-            //Dictionary<string, string> result = _commonDao.SelectOne(query, Request.Form);
+            int bbsCnt = Convert.ToInt32(_commonDao.SelectOne(sql, Request.Form)["BBS_CNT"]);
 
-            // SelectList는 Dictionary의 리스트로 반환됨, 쿼리 결과가 여러줄이 나올 때 사용 가능
-            //List< Dictionary<string, string>> resultList = _commonDao.SelectList(query, new DataSet());
+            if (bbsCnt > 0) {
 
+                sql = "SELECT A.SJ"                                                                                                                 // 게시글 제목
+                                + ", (SELECT DECODE(COUNT(*), 0, 'F', 'Y') FROM OP_FILE WHERE DOC_ID = A.DOC_ID) AS FILE_AT"                        // 파일 여부
+                                + ", (SELECT DECODE(COUNT(*), 0, '', FILE_ID) FROM OP_FILE WHERE DOC_ID = A.DOC_ID AND SNO = 1) AS FILE_ID"         // 첫번째 첨부파일 ID
+                                + ", B.NAME AS REGISTER"                                                                                            // 작성자명
+                                + ", A.REGIST_DT"                                                                                                   // 작성일
+                                + ", A.RDCNT"                                                                                                       // 조회수
+                          + "FROM OP_BBS A"
+                          + "JOIN OP_USER B"
+                          + "ON A.REGISTER = B.USER_ID"
+<<<<<<< HEAD
+=======
+                          + "JOIN OP_FILE C"
+                          + "ON A.DOC_ID = C.DOC_ID AND C.SNO = 1"
+>>>>>>> 2fe69837d42967dd9f18e14aa989536a153510c2
+                          + "WHERE BBS_CODE = " //+ CodeMngTool.getCode("BBS", "NOTICE") 
+                          + "AND LCTRE_SE = @LCTRE_SE:VARCHAR";
 
-            // 컬럼 이름만 집어넣고 바로 사용 가능함
-            //ViewData["Title"] = result["BCD"];
+                var resultList = _commonDao.SelectList(sql, Request.Form);
+                ViewBag.ResultList = resultList;
+            }
 
-            transaction.Commit();
+            ViewBag.ResultCnt = bbsCnt;
 
+            return View("BoardListStdPage");
+        }
+
+        public IActionResult SelectNotice() {
             return View();
         }
 
-        public IActionResult InsertData() {
-            using var transaction = _context.Database.BeginTransaction();
-
-
-            string query = "INSERT INTO PERSONS VALUES(@person_id:NUMBER,"
-                                                    + "@last_name:VARCHAR,"
-                                                    + "@first_name:VARCHAR,"
-                                                    + "@address:VARCHAR,"
-                                                    + "@city:VARCHAR"
-                                                    + ")";
-
-
-            _commonDao.Insert(query, Request.Form);
-
-            transaction.Commit();
-
-            return Redirect("Index");
-        }
-        public IActionResult UpdateData()
-        {
-            using var transaction = _context.Database.BeginTransaction();
-
-
-            string query = "UPDATE PERSONS SET PERSON_ID = @person_id:NUMBER, "
-                                                          + "LAST_NAME = @last_name:VARCHAR, "
-                                                          + "FIRST_NAME = @first_name:VARCHAR, "
-                                                          + "ADDRESS = @address:VARCHAR, "
-                                                          + "CITY = @city:VARCHAR";
-
-
-            _commonDao.Update(query, Request.Form);
-
-            transaction.Commit();
-
-            return Redirect("Index");
-        }
-        public IActionResult DeleteData()
-        {
-            using var transaction = _context.Database.BeginTransaction();
-
-
-            string query = "DELETE FROM PERSONS WHERE PERSON_ID = @person_id:NUMBER";
-
-            _commonDao.Delete(query, Request.Form);
-
-
-            transaction.Commit();
-
-            return Redirect("Index");
-        }   
-
-        public IActionResult Privacy() {
+        public IActionResult InsertNotice() {
             return View();
         }
+
+        public IActionResult UpdateNotice() {
+            return View();
+        }
+        public IActionResult DeleteNotice() {
+            return View();
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error() {

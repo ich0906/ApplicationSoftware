@@ -2,66 +2,42 @@
     font-family: 'Noto Sans KR';
     font-style: normal;
 	font-weight: 100;
-<<<<<<< HEAD
-    src: url('./font/NotoSans/NotoSans-Thin.woff') format('woff');
-=======
     src: url('./font/NotoSans-Thin.woff') format('woff');
->>>>>>> 68d87c0cf44622217c2c7e5631d1fdadf7891933
 }
 
 @font-face {
     font-family: 'Noto Sans KR';
     font-style: normal;
 	font-weight: 300;
-<<<<<<< HEAD
-    src: url('./font/NotoSans/NotoSans-Light.woff') format('woff');
-=======
     src: url('./font/NotoSans-Light.woff') format('woff');
->>>>>>> 68d87c0cf44622217c2c7e5631d1fdadf7891933
 }
 
 @font-face {
     font-family: 'Noto Sans KR';
     font-style: normal;
 	font-weight: 400;
-<<<<<<< HEAD
-    src: url('./font/NotoSans/NotoSans-Regular.woff') format('woff');
-=======
     src: url('./font/NotoSans-Regular.woff') format('woff');
->>>>>>> 68d87c0cf44622217c2c7e5631d1fdadf7891933
 }
 
 @font-face {
     font-family: 'Noto Sans KR';
     font-style: normal;
 	font-weight: 500;
-<<<<<<< HEAD
-    src: url('./font/NotoSans/NotoSans-Medium.woff') format('woff');
-=======
     src: url('./font/NotoSans-Medium.woff') format('woff');
->>>>>>> 68d87c0cf44622217c2c7e5631d1fdadf7891933
 }
 
 @font-face {
     font-family: 'Noto Sans KR';
     font-style: normal;
 	font-weight: 700;
-<<<<<<< HEAD
-    src: url('./font/NotoSans/NotoSans-Bold.woff') format('woff');
-=======
     src: url('./font/NotoSans-Bold.woff') format('woff');
->>>>>>> 68d87c0cf44622217c2c7e5631d1fdadf7891933
 }
 
 @font-face {
     font-family: 'Noto Sans KR';
     font-style: normal;
 	font-weight: 900;
-<<<<<<< HEAD
-    src: url('./font/NotoSans/NotoSans-Bold.woff') format('woff');
-=======
     src: url('./font/NotoSans-Bold.woff') format('woff');
->>>>>>> 68d87c0cf44622217c2c7e5631d1fdadf7891933
 }
 
 
