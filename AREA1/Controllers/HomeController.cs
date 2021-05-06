@@ -28,7 +28,7 @@ namespace AREA1.Controllers {
             // SelectOne은 단 한건의 결과만 반환됨, 나머지는 날라감
             Dictionary<string, string> result = _commonDao.SelectOne(query);
 
-            string query2 = "SELECT * FROM PERSONS";
+            string query2 = "SELECT * FROM OP_USER";
             List<Dictionary<string, string>> resultList = _commonDao.SelectList(query2);
 
             // SelectList는 Dictionary의 리스트로 반환됨, 쿼리 결과가 여러줄이 나올 때 사용 가능
