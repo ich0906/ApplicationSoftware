@@ -1,4 +1,5 @@
 ﻿using AREA1.Data;
+using AREA1.Filters;
 using AREA1.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +8,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Tool;
 
-namespace AREA1.Controllers
-{
+namespace AREA1.Controllers {
+    [LoginActionFilter]
     public class MainController : Controller
     {
         private readonly ILogger<MainController> _logger;
@@ -29,7 +30,7 @@ namespace AREA1.Controllers
                 return RedirectToAction("/Login", new { alertLogin = 2 });
             }
 
-            ViewData["name"] = userInfo.name;
+            ViewData["author"] = userInfo.author;
             ViewData["user_id"] = userInfo.user_id;
 
             ViewData["Title"] = HttpContext.Session.GetString("_Key");
