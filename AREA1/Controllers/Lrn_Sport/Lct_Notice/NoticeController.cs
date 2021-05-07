@@ -9,12 +9,12 @@ using System.Diagnostics;
 
 namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
     [LoginActionFilter]
-    public class Lct_Notice : Controller {
-        private readonly ILogger<Lct_Notice> _logger;
+    public class NoticeController : Controller {
+        private readonly ILogger<NoticeController> _logger;
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
 
-        public Lct_Notice(ILogger<Lct_Notice> logger, AppSoftDbContext context) {
+        public NoticeController(ILogger<NoticeController> logger, AppSoftDbContext context) {
             _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);
@@ -35,7 +35,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             if (bbsCnt > 0) {
 
                 sql = "SELECT A.SJ"                                                                                                                 // 게시글 제목
-                                + ", (SELECT DECODE(COUNT(*), 0, 'F', 'Y') FROM OP_FILE WHERE DOC_ID = A.DOC_ID) AS FILE_AT"                        // 파일 여부
+                                + ", (SELECT DECODE(COUNT(*), 0, 'N', 'Y') FROM OP_FILE WHERE DOC_ID = A.DOC_ID) AS FILE_AT"                        // 파일 여부
                                 + ", (SELECT DECODE(COUNT(*), 0, '', FILE_ID) FROM OP_FILE WHERE DOC_ID = A.DOC_ID AND SNO = 1) AS FILE_ID"         // 첫번째 첨부파일 ID
                                 + ", B.NAME AS REGISTER"                                                                                            // 작성자명
                                 + ", A.REGIST_DT"                                                                                                   // 작성일
@@ -43,11 +43,6 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                           + "FROM OP_BBS A"
                           + "JOIN OP_USER B"
                           + "ON A.REGISTER = B.USER_ID"
-<<<<<<< HEAD
-=======
-                          + "JOIN OP_FILE C"
-                          + "ON A.DOC_ID = C.DOC_ID AND C.SNO = 1"
->>>>>>> 2fe69837d42967dd9f18e14aa989536a153510c2
                           + "WHERE BBS_CODE = " //+ CodeMngTool.getCode("BBS", "NOTICE") 
                           + "AND LCTRE_SE = @LCTRE_SE:VARCHAR";
 

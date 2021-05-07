@@ -8,13 +8,11 @@ using Tool;
 
 namespace AREA1.Controllers {
     [LoginActionFilter]
-    public class MainController : Controller
-    {
+    public class MainController : Controller {
         private readonly ILogger<MainController> _logger;
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
-        public MainController(ILogger<MainController> logger, AppSoftDbContext context)
-        {
+        public MainController(ILogger<MainController> logger, AppSoftDbContext context) {
             _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);
