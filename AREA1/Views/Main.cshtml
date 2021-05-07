@@ -1,1 +1,818 @@
-﻿
+﻿<main role="main">
+    <div class="py-5 bg-light">
+        <div class="container">
+
+            <script src="/assets/plugins/vue/v-calendar/polyfill.min.js?features=Array.prototype.find,Intl"></script>
+
+            <link rel="stylesheet" href="/assets/plugins/vue/v-calendar/v-calendar.min.css">
+            <script src="/assets/plugins/vue/v-calendar/v-calendar.min.js"></script>
+
+            <div id="appModule" class="row">
+                <div class="col-md-12 subjectbox">
+                    <div class="card card-body mb-4">
+                        <div class="bodtitle">
+                            <p class="title-text">수강 과목 현황</p>
+                        </div>
+                        <table id="yes-deadline" style="width: 100%; display: table;">
+                            <colgroup>
+                                <col width="21%">
+                                <col width="25%">
+                                <col width="25%">
+                                <col width="25%">
+                            </colgroup>
+                            <thead>
+                                <tr style="border-bottom: 1px solid #dce3eb; font-weight: bold; height: 30px">
+                                    <td></td>
+                                    <td>온라인 강의</td>
+                                    <td>과제</td>
+                                    <td>팀 프로젝트</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < 7; ++i)
+                                {
+                                    <text>
+                                        <tr style="border-bottom: 1px solid #dce3eb; height: 30px">
+                                            <td style="font-weight: bold">
+                                                <span style="cursor: pointer">휴먼컴퓨터인터페이스</span>
+                                            </td>
+                                            <td>
+                                                @{ if (true)
+                                                    {
+                                                        <text><span style="color: green">남아있는 강의가 없습니다!</span></text>
+                                }
+                                else
+                                {
+                                    <text><span style="color: green">남은기간</span></text>
+                                }
+                                                }
+                                            </td>
+                                            <td>
+                                                <span style="color: green">남아있는 강의가 없습니다!</span>
+                                            </td>
+                                            <td>
+                                                <span style="color: green">남아있는 팀 프로젝트가 없습니다!</span>
+                                            </td>
+                                        </tr>
+                                        </text>
+                                    }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <div class="card card-body mb-4">
+                            <div class="scheduletitle"><select class="form-control form-control-sm" style="width: 160px;"><option value="2021,1">2021년도 1학기</option><option value="2020,2">2020년도 2학기</option><option value="2020,1">2020년도 1학기</option><option value="2017,2">2017년도 2학기</option><option value="2017,1">2017년도 1학기</option></select>시간표<br><span>(2021.04.28 수요일)</span></div> <div class="schedule">
+                                <table class="scheduletb">
+                                    <colgroup><col> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"></colgroup>
+                                    <thead><tr><th></th> <th><!---->월</th> <th><!---->화</th> <th><p class="today1">수</p><!----></th> <th><!---->목</th> <th><!---->금</th> <th><!---->토</th></tr></thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="time">0</td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                            <td>
+                                                <div class="namecol07 lessontime3" style="cursor: pointer;">
+                                                    <p>
+                                                        응용소프트웨어실습
+                                                        (새빛301 / 이윤구)
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td><!----></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="time">1</td>
+                                            <td><!----></td>
+                                            <td>
+                                                <div class="namecol04 lessontime1" style="cursor: pointer;">
+                                                    <p>
+                                                        데이터베이스
+                                                        (미지정 / 문승현)
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="time">2</td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                            <td>
+                                                <div class="namecol04 lessontime1" style="cursor: pointer;">
+                                                    <p>
+                                                        데이터베이스
+                                                        (새빛204 / 문승현)
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                        </tr>
+                                        <tr><td class="time">3</td> <td><!----></td><td><!----></td><td><!----></td><td><!----></td><td><!----></td><td><!----></td></tr>
+                                        <tr><td class="time">4</td> <td><!----></td><td><!----></td><td><!----></td><td><!----></td><td><!----></td><td><!----></td></tr>
+                                        <tr>
+                                            <td class="time">5</td>
+                                            <td>
+                                                <div class="namecol05 lessontime1" style="cursor: pointer;">
+                                                    <p>
+                                                        데이터통신
+                                                        (미지정 / 최웅철)
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="namecol02 lessontime1" style="cursor: pointer;">
+                                                    <p>
+                                                        운영체제
+                                                        (미지정 / 안우현)
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="namecol06 lessontime1" style="cursor: pointer;">
+                                                    <p>
+                                                        휴먼컴퓨터인터페이스
+                                                        (새빛204 / 이강훈)
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="time">6</td>
+                                            <td>
+                                                <div class="namecol01 lessontime1" style="cursor: pointer;">
+                                                    <p>
+                                                        알고리즘
+                                                        (미지정 / 김용혁)
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td><!----></td>
+                                            <td>
+                                                <div class="namecol05 lessontime1" style="cursor: pointer;">
+                                                    <p>
+                                                        데이터통신
+                                                        (참B101 / 최웅철)
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="namecol02 lessontime1" style="cursor: pointer;">
+                                                    <p>
+                                                        운영체제
+                                                        (새빛204 / 안우현)
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="time">91</td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                            <td>
+                                                <div class="namecol03 lessontime1" style="cursor: pointer;">
+                                                    <p>
+                                                        취업전략
+                                                        (미지정 / 김정권)
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="time">99</td>
+                                            <td>
+                                                <div class="namecol06 lessontime1" style="cursor: pointer;">
+                                                    <p>
+                                                        휴먼컴퓨터인터페이스
+                                                        (미지정 / 이강훈)
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                            <td><!----></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> <div class="card card-body mb-4">
+                            <div class="listtitle"><p class="title-text">수강과목 <span>( 2021학년도 1학기 )</span></p></div> <ul class="subjectlist listbox">
+                                <li>
+                                    <div class="left" style="cursor: pointer;">
+                                        알고리즘 (H030-3-0969-02)
+                                        <br> <span>김용혁 / 월 6교시미지정</span>
+                                    </div> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall">공지사항 <span class="icon_new"></span></button> <button type="button" class="btn2 btn-lightpurple btnsmall">강의자료실  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightbrown btnsmall">강의Q&amp;A  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightblue btnsmall">학습톡톡 <span class="icon_new" style="display: none;"></span></button></div> <!---->
+                                </li>
+                                <li>
+                                    <div class="left" style="cursor: pointer;">
+                                        운영체제 (H030-3-1110-01)
+                                        <br> <span>안우현 / 화 5교시미지정, 목 6교시/새빛204</span>
+                                    </div> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall">공지사항 <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightpurple btnsmall">강의자료실  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightbrown btnsmall">강의Q&amp;A  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightblue btnsmall">학습톡톡 <span class="icon_new" style="display: none;"></span></button></div> <!---->
+                                </li>
+                                <li>
+                                    <div class="left" style="cursor: pointer;">
+                                        취업전략 (0000-3-3240-01)
+                                        <br> <span>김정권 / 토 91교시미지정</span>
+                                    </div> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall">공지사항 <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightpurple btnsmall">강의자료실  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightbrown btnsmall">강의Q&amp;A  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightblue btnsmall">학습톡톡 <span class="icon_new" style="display: none;"></span></button></div> <!---->
+                                </li>
+                                <li>
+                                    <div class="left" style="cursor: pointer;">
+                                        데이터베이스 (H030-3-3663-01)
+                                        <br> <span>문승현 / 화 1교시미지정, 목 2교시/새빛204</span>
+                                    </div> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall">공지사항 <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightpurple btnsmall">강의자료실  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightbrown btnsmall">강의Q&amp;A  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightblue btnsmall">학습톡톡 <span class="icon_new" style="display: none;"></span></button></div> <!---->
+                                </li>
+                                <li>
+                                    <div class="left" style="cursor: pointer;">
+                                        데이터통신 (H030-3-4534-01)
+                                        <br> <span>최웅철 / 월 5교시미지정, 수 6교시/참B101</span>
+                                    </div> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall">공지사항 <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightpurple btnsmall">강의자료실  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightbrown btnsmall">강의Q&amp;A  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightblue btnsmall">학습톡톡 <span class="icon_new" style="display: none;"></span></button></div> <!---->
+                                </li>
+                                <li>
+                                    <div class="left" style="cursor: pointer;">
+                                        휴먼컴퓨터인터페이스 (H030-3-6899-01)
+                                        <br> <span>이강훈 / 월 99교시미지정, 수 5교시/새빛204</span>
+                                    </div> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall">공지사항 <span class="icon_new"></span></button> <button type="button" class="btn2 btn-lightpurple btnsmall">강의자료실  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightbrown btnsmall">강의Q&amp;A  <span class="icon_new"></span></button> <button type="button" class="btn2 btn-lightblue btnsmall">학습톡톡 <span class="icon_new" style="display: none;"></span></button></div> <!---->
+                                </li>
+                                <li>
+                                    <div class="left" style="cursor: pointer;">
+                                        응용소프트웨어실습 (H030-3-8485-03)
+                                        <br> <span>이윤구 / 금 0,1,2교시/새빛301</span>
+                                    </div> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall">공지사항 <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightpurple btnsmall">강의자료실  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightbrown btnsmall">강의Q&amp;A  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightblue btnsmall">학습톡톡 <span class="icon_new" style="display: none;"></span></button></div> <!---->
+                                </li>
+                            </ul>
+                        </div> @*
+                    <div class="card card-body mb-4"><div class="bodtitle"><p class="title-text">과목별 <span class="fjahong">NOTICE</span></p></div> <ul class="subjecttypenotice"><li><div class="left"><span class="day">2021-04-28 강의 공지사항 &gt;</span> <span class="title">휴먼컴퓨터인터페이스</span></div> <div class="right" style="cursor: pointer;">과제 #2 마감기한 연장 및 그에 따른 일정 변경 (일부 수정)</div></li><li><div class="left"><span class="day">2021-04-27 강의 공지사항 &gt;</span> <span class="title">알고리즘</span></div> <div class="right" style="cursor: pointer;">익명게시판 답변영상 업로드 알림 (9주차 1회)</div></li><li><div class="left"><span class="day">2021-04-27 수시퀴즈 &gt;</span> <span class="title">알고리즘</span></div> <div class="right" style="cursor: pointer;">Quiz for the third lecture (Chapter 4 - 06)</div></li><li><div class="left"><span class="day">2021-04-27 수시퀴즈 &gt;</span> <span class="title">알고리즘</span></div> <div class="right" style="cursor: pointer;">Quiz for the second lecture (Chapter 4 - 05)</div></li><li><div class="left"><span class="day">2021-04-27 수시퀴즈 &gt;</span> <span class="title">알고리즘</span></div> <div class="right" style="cursor: pointer;">Quiz for the first lecture (Chapter 4 - 04)</div></li></ul></div> <div class="card card-body calendarbox mb-4">
+
+                            <div class="bodtitle"><p class="title-text">일정</p> <a href="/std/ads/admst/MySchdulPage.do" class="more_btn"><i class="fas fa-list"></i></a></div> <div>
+                                <div class="calendarday">
+                                    <div data-v-bc55024c="" class="c-pane-container is-expanded" titleposition="right" style="border: 0px;">
+                                        <div data-v-2083cb72="" data-v-bc55024c="" class="c-pane" titleposition="right" attributes="[object Object]" style="min-width: 256px;">
+                                            <div data-v-2083cb72="" class="c-header" style="padding: 0px 0px 20px;">
+                                                <div data-v-2083cb72="" class="c-arrow-layout"><svg data-v-12e91ab4="" data-v-2083cb72="" width="26px" height="26px" viewBox="3 2 12 32" class="svg-icon c-arrow" style="color: rgb(177, 0, 88); stroke-width: 2;"><path data-v-12e91ab4="" d="M11.196 10c0 0.143-0.071 0.304-0.179 0.411l-7.018 7.018 7.018 7.018c0.107 0.107 0.179 0.268 0.179 0.411s-0.071 0.304-0.179 0.411l-0.893 0.893c-0.107 0.107-0.268 0.179-0.411 0.179s-0.304-0.071-0.411-0.179l-8.321-8.321c-0.107-0.107-0.179-0.268-0.179-0.411s0.071-0.304 0.179-0.411l8.321-8.321c0.107-0.107 0.268-0.179 0.411-0.179s0.304 0.071 0.411 0.179l0.893 0.893c0.107 0.107 0.179 0.25 0.179 0.411z"></path></svg></div> <div data-v-2083cb72="" class="c-title-layout align-center">
+                                                    <div data-v-1ad2436f="" data-v-2083cb72="" tabindex="-1" class="c-title-popover popover-container">
+                                                        <!----> <div data-v-2083cb72="" class="c-title-anchor" data-v-1ad2436f="">
+                                                            <div data-v-2083cb72="" class="c-title" style="font-weight: 600; font-size: 20px; line-height: 10px;">
+                                                                2021. 04
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> <div data-v-2083cb72="" class="c-arrow-layout"><svg data-v-12e91ab4="" data-v-2083cb72="" width="26px" height="26px" viewBox="-2 1 11 32" class="svg-icon c-arrow" style="color: rgb(177, 0, 88); stroke-width: 2;"><path data-v-12e91ab4="" d="M10.625 17.429c0 0.143-0.071 0.304-0.179 0.411l-8.321 8.321c-0.107 0.107-0.268 0.179-0.411 0.179s-0.304-0.071-0.411-0.179l-0.893-0.893c-0.107-0.107-0.179-0.25-0.179-0.411 0-0.143 0.071-0.304 0.179-0.411l7.018-7.018-7.018-7.018c-0.107-0.107-0.179-0.268-0.179-0.411s0.071-0.304 0.179-0.411l0.893-0.893c0.107-0.107 0.268-0.179 0.411-0.179s0.304 0.071 0.411 0.179l8.321 8.321c0.107 0.107 0.179 0.268 0.179 0.411z"></path></svg></div>
+                                            </div> <div data-v-2083cb72="" class="c-horizontal-divider" style="border-top: 1px solid rgba(255, 255, 255, 0.2); width: 80%;"></div> <div data-v-2083cb72="" class="c-weekdays" style="color: rgb(255, 255, 255); font-weight: 700; background-color: rgb(216, 86, 151); padding: 5px;">
+                                                <div data-v-2083cb72="" class="c-weekday">
+                                                    일
+                                                </div><div data-v-2083cb72="" class="c-weekday">
+                                                    월
+                                                </div><div data-v-2083cb72="" class="c-weekday">
+                                                    화
+                                                </div><div data-v-2083cb72="" class="c-weekday today">
+                                                    수
+                                                </div><div data-v-2083cb72="" class="c-weekday">
+                                                    목
+                                                </div><div data-v-2083cb72="" class="c-weekday">
+                                                    금
+                                                </div><div data-v-2083cb72="" class="c-weekday">
+                                                    토
+                                                </div>
+                                            </div> <!----> <div data-v-2083cb72="" class="c-weeks" style="padding: 0px;">
+                                                <div data-v-2083cb72="" class="c-weeks-rows-wrapper">
+                                                    <div data-v-28896542="" data-v-2083cb72="" styles="[object Object]" formats="[object Object]" titleposition="right" attributes="[object Object]" class="c-weeks-rows">
+                                                        <div data-v-28896542="" class="c-week">
+                                                            <div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day" style="opacity: 0.4;">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                28
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day" style="opacity: 0.4;">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                29
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day" style="opacity: 0.4;">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                30
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day" style="opacity: 0.4;">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                31
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                1
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-layer c-day-box-center-bottom"><div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dots"><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(0, 188, 212); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span></div></div> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                2
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-layer c-day-box-center-bottom"><div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dots"><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span></div></div> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                3
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div>
+                                                        </div><div data-v-28896542="" class="c-week">
+                                                            <div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                4
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-layer c-day-box-center-bottom"><div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dots"><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(0, 188, 212); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span></div></div> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                5
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-layer c-day-box-center-bottom"><div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dots"><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span></div></div> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                6
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                7
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                8
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                9
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-layer c-day-box-center-bottom"><div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dots"><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span></div></div> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                10
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-layer c-day-box-center-bottom"><div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dots"><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(0, 188, 212); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span></div></div> <!---->
+                                                                </div>
+                                                            </div>
+                                                        </div><div data-v-28896542="" class="c-week">
+                                                            <div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                11
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-layer c-day-box-center-bottom"><div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dots"><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(0, 188, 212); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(0, 188, 212); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span></div></div> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                12
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-layer c-day-box-center-bottom"><div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dots"><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span></div></div> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                13
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                14
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                15
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                16
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-layer c-day-box-center-bottom"><div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dots"><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(0, 188, 212); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span></div></div> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                17
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div>
+                                                        </div><div data-v-28896542="" class="c-week">
+                                                            <div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                18
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                19
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-layer c-day-box-center-bottom"><div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dots"><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span></div></div> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                20
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-layer c-day-box-center-bottom"><div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dots"><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(58, 5, 31); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(58, 5, 31); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span></div></div> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                21
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                22
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-layer c-day-box-center-bottom"><div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dots"><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span></div></div> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                23
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                24
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div>
+                                                        </div><div data-v-28896542="" class="c-week">
+                                                            <div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                25
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                26
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-layer c-day-box-center-bottom"><div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dots"><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(58, 5, 31); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span></div></div> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                27
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""><div data-v-3db80f80="" class="c-day-layer c-day-box-center-center c-day-scale-enter c-day-scale-leave"><div data-v-3db80f80="" class="c-day-background" style="width: 1.8rem; height: 1.8rem; background-color: rgb(207, 190, 130); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></div></div></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(255, 255, 255); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                28
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-layer c-day-box-center-bottom"><div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dots"><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(58, 5, 31); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span></div></div> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                29
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                30
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-layer c-day-box-center-bottom"><div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dots"><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(58, 5, 31); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(233, 30, 99); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span><span data-v-3db80f80="" data-v-1ad2436f="" class="c-day-dot" style="width: 5px; height: 5px; background-color: rgb(58, 5, 31); border-width: 0px; border-style: solid; border-radius: 50%; opacity: 1;"></span></div></div> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day" style="opacity: 0.4;">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                1
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div>
+                                                        </div><div data-v-28896542="" class="c-week">
+                                                            <div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day" style="opacity: 0.4;">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                2
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day" style="opacity: 0.4;">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                3
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day" style="opacity: 0.4;">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                4
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day" style="opacity: 0.4;">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                5
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day" style="opacity: 0.4;">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                6
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day" style="opacity: 0.4;">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                7
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div><div data-v-1ad2436f="" data-v-3db80f80="" data-v-28896542="" class="c-day-popover popover-container" titleposition="right">
+                                                                <!----> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day" style="opacity: 0.4;">
+                                                                    <div data-v-3db80f80="" class="c-day-backgrounds c-day-layer" data-v-1ad2436f=""></div> <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content-wrapper">
+                                                                        <div data-v-3db80f80="" data-v-1ad2436f="" class="c-day-content" style="color: rgb(85, 85, 85); font-size: 0.9rem; font-weight: 300; height: 40px;">
+                                                                            <div data-v-3db80f80="" data-v-1ad2436f="">
+                                                                                8
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> <!----> <!---->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <div class="card-body calnotice">
+                                <ul>
+                                    <li>
+                                        <div>
+                                            <span style="font-weight: bold;">
+                                                2021-04-14 (수)&nbsp;00:00&nbsp;&nbsp;~&nbsp;&nbsp;2021-05-15 (토)&nbsp;23:59
+                                            </span> <span style="margin-left: 10px; font-weight: normal;"><font style="color: rgb(0, 188, 212);">●</font> [과제] WebUI 계산기 구현</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            <span style="font-weight: bold;">
+                                                2021-04-19 (월)&nbsp;00:00&nbsp;&nbsp;~&nbsp;&nbsp;2021-04-30 (금)&nbsp;23:59
+                                            </span> <span style="margin-left: 10px; font-weight: normal;"><font style="color: rgb(233, 30, 99);">●</font> [온라인시험] 수시퀴즈 - Bonus quiz</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            <span style="font-weight: bold;">
+                                                2021-04-20 (화)
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                ~
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                2021-05-03 (월)
+                                            </span> <span style="margin-left: 5px; font-weight: normal;"><font style="color: rgb(58, 5, 31);">●</font> [학사일정] 1학기 강의 중간 평가</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            <span style="font-weight: bold;">
+                                                2021-04-26 (월)&nbsp;00:00&nbsp;&nbsp;~&nbsp;&nbsp;2021-05-07 (금)&nbsp;23:59
+                                            </span> <span style="margin-left: 10px; font-weight: normal;"><font style="color: rgb(233, 30, 99);">●</font> [온라인시험] 수시퀴즈 - Quiz for the second lecture (Chapter 4 - 02)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            <span style="font-weight: bold;">
+                                                2021-04-26 (월)&nbsp;00:00&nbsp;&nbsp;~&nbsp;&nbsp;2021-05-21 (금)&nbsp;23:59
+                                            </span> <span style="margin-left: 10px; font-weight: normal;"><font style="color: rgb(0, 188, 212);">●</font> [과제] Homework #2</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            <span style="font-weight: bold;">
+                                                2021-04-26 (월)&nbsp;00:00&nbsp;&nbsp;~&nbsp;&nbsp;2021-06-06 (일)&nbsp;23:59
+                                            </span> <span style="margin-left: 10px; font-weight: normal;"><font style="color: rgb(0, 188, 212);">●</font> [과제] 취업전략 1, 2차 과제 안내</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            <span style="font-weight: bold;">
+                                                2021-04-26 (월)&nbsp;00:00&nbsp;&nbsp;~&nbsp;&nbsp;2021-05-07 (금)&nbsp;23:59
+                                            </span> <span style="margin-left: 10px; font-weight: normal;"><font style="color: rgb(233, 30, 99);">●</font> [온라인시험] 수시퀴즈 - Quiz for the third lecture (Chapter 4 - 03)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            <span style="font-weight: bold;">
+                                                2021-04-26 (월)&nbsp;00:00&nbsp;&nbsp;~&nbsp;&nbsp;2021-05-03 (월)&nbsp;23:59
+                                            </span> <span style="margin-left: 10px; font-weight: normal;"><font style="color: rgb(233, 30, 99);">●</font> [온라인시험] 수시퀴즈 - ER model (3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            <span style="font-weight: bold;">
+                                                2021-04-26 (월)&nbsp;00:00&nbsp;&nbsp;~&nbsp;&nbsp;2021-05-03 (월)&nbsp;23:59
+                                            </span> <span style="margin-left: 10px; font-weight: normal;"><font style="color: rgb(233, 30, 99);">●</font> [온라인시험] 수시퀴즈 - ER model (4)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            <span style="font-weight: bold;">
+                                                2021-04-26 (월)&nbsp;00:00&nbsp;&nbsp;~&nbsp;&nbsp;2021-05-07 (금)&nbsp;23:59
+                                            </span> <span style="margin-left: 10px; font-weight: normal;"><font style="color: rgb(233, 30, 99);">●</font> [온라인시험] 수시퀴즈 - Quiz for the first lecture (Chapter 4 - 01)</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div> *@<div class="card card-body mb-4"><div><div class="listtitle"><p class="title-text">책임지도교수&nbsp;&nbsp;<font color="white">20210428160537</font></p></div> <table class="tablegw"><colgroup><col style="width: 20%;"> <col style="width: 30%;"> <col style="width: 20%;"> <col style="width: 30%;"></colgroup> <tbody><tr><th>성명</th> <td class="lft">최민규</td> <th>전화번호</th> <td class="lft">940-5472</td></tr> <tr><th>연구실위치</th> <td class="lft">새빛관 802호</td> <th>이메일</th> <td class="lft">mgchoi@kw.ac.kr</td></tr> <tr><th>상담시간</th> <td class="lft"></td> <th>홈페이지</th> <td class="lft">http://cg.kw.ac.kr/</td></tr></tbody></table></div></div>
+                    </div> <!----> <div><ul class="linkbanner"><li><a href="https://itplusinfo.kw.ac.kr/main.do" target="_blank"><img src="/images/layout/link01.gif"></a></li> <li><a href="/std/ext/dream/popup/DreamPopup.do" target="_blank"><img src="/images/layout/link02.gif"></a></li> <li><a href="https://www.kw.ac.kr/ko/info/privacy.jsp" target="_blank"><img src="/images/layout/link04.gif"></a></li> <li><a href="https://www.kw.ac.kr/" target="_blank"><img src="/images/layout/link05.gif"></a></li></ul></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
