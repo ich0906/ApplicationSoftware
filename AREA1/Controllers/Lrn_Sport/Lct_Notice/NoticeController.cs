@@ -21,7 +21,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
         }
 
         public IActionResult SelectPageListNotice() {
-            string sql = "SELECT COUNT(*) AS BBS_CNT"                                                                                                      
+            string sql = "SELECT COUNT(*) AS BBS_CNT"
                       + "FROM OP_BBS A"
                       + "JOIN OP_USER B"
                       + "ON A.REGISTER = B.USER_ID"
@@ -38,11 +38,12 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                                 + ", (SELECT DECODE(COUNT(*), 0, 'N', 'Y') FROM OP_FILE WHERE DOC_ID = A.DOC_ID) AS FILE_AT"                        // 파일 여부
                                 + ", (SELECT DECODE(COUNT(*), 0, '', FILE_ID) FROM OP_FILE WHERE DOC_ID = A.DOC_ID AND SNO = 1) AS FILE_ID"         // 첫번째 첨부파일 ID
                                 + ", B.NAME AS REGISTER"                                                                                            // 작성자명
-                                + ", A.REGIST_DT"                                                                                                   // 작성일  
+                                + ", A.REGIST_DT"                                                                                                   // 작성일
                                 + ", A.RDCNT"                                                                                                       // 조회수
                           + "FROM OP_BBS A"
                           + "JOIN OP_USER B"
                           + "ON A.REGISTER = B.USER_ID"
+                          + "WHERE BBS_CODE = " //+ CodeMngTool.getCode("BBS", "NOTICE") 
                           + "AND LCTRE_SE = @LCTRE_SE:VARCHAR";
 
                 var resultList = _commonDao.SelectList(sql, Request.Form);
