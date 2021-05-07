@@ -4,6 +4,8 @@ using AREA1.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Tool;
 
 namespace AREA1.Controllers {
@@ -21,10 +23,16 @@ namespace AREA1.Controllers {
         {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
 
+            if (userInfo == null)
+            {
+                return RedirectToAction("/Login", new { alertLogin = 2 });
+            }
+
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
 
             ViewData["Title"] = HttpContext.Session.GetString("_Key");
+
 
             return View("/Views/Main.cshtml");
         }
