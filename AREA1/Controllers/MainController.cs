@@ -1,4 +1,5 @@
 ﻿using AREA1.Data;
+using AREA1.Filters;
 using AREA1.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,17 +13,13 @@ using System.Text;
 using System;
 using System.Security.Cryptography;
 
-
-
-namespace AREA1.Controllers
-{
-    public class MainController : Controller
-    {
+namespace AREA1.Controllers {
+    [LoginActionFilter]
+    public class MainController : Controller {
         private readonly ILogger<MainController> _logger;
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
-        public MainController(ILogger<MainController> logger, AppSoftDbContext context)
-        {
+        public MainController(ILogger<MainController> logger, AppSoftDbContext context) {
             _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);
@@ -40,7 +37,7 @@ namespace AREA1.Controllers
         }
 
         /*public IActionResult Upload()
-        {
+            {
             string fileName = "";
          
             foreach (IFormFile file in Request.Form.Files)
@@ -145,6 +142,7 @@ namespace AREA1.Controllers
             Response.WriteAsync("<script language=\"javascript\">alert('" + fileName + "이 저장되었습니다!');</script>");
             Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
 
+            return View("/Views/Main.cshtml");
         }
 
     }
