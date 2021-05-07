@@ -30,7 +30,7 @@ namespace AREA1.Controllers {
                 return RedirectToAction("/Login", new { alertLogin = 2 });
             }
 
-            ViewData["author"] = userInfo.author;
+            ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
 
             ViewData["Title"] = HttpContext.Session.GetString("_Key");
