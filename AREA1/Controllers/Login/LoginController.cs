@@ -46,12 +46,14 @@ namespace AREA1.Login.Controllers {
         }
 
         public IActionResult DoLogin() {
-            if (!Request.Form["login_id"].Equals("")) {
+            if (!Request.Form["login_id"].Equals(""))
+            {
                 string query = "SELECT USER_ID" +
+                                    ", NAME" +
                                     ", AUTHOR" +
-                                    ", BIRTHDAY" + 
-                                    ", PHONE" + 
-                                    ", EMAIL" + 
+                                    ", BIRTHDAY" +
+                                    ", PHONE" +
+                                    ", EMAIL" +
                                 " FROM OP_USER" +
                                 " WHERE USER_ID = @login_id:CHAR" +
                                     " AND PASSWORD = @login_pass:VARCHAR";
@@ -60,9 +62,11 @@ namespace AREA1.Login.Controllers {
                 // SelectOne은 단 한건의 결과만 반환됨, 나머지는 날라감
                 Dictionary<string, string> result = _commonDao.SelectOne(query, Request.Form);
 
-                if (!result["USER_ID"].Equals("")) {
+                if (!result["USER_ID"].Equals(""))
+                {
                     UserModel userInfo = new UserModel();
                     userInfo.user_id = result["USER_ID"];
+                    userInfo.name = result["NAME"];
                     userInfo.author = result["AUTHOR"];
                     userInfo.birthday = result["BIRTHDAY"];
                     userInfo.phone = result["PHONE"];
@@ -70,8 +74,7 @@ namespace AREA1.Login.Controllers {
 
                     SessionExtensionTool.SetObject(HttpContext.Session, "userInfo", userInfo);
 
-                   
-                    return View("/Views/Main.cshtml");
+                    return Redirect("/Main/Main");
                 }
             }
 

@@ -26,7 +26,7 @@ namespace AREA1.Controllers {
 
             // 쿼리 결과가 딕셔너리로 반환됨
             // SelectOne은 단 한건의 결과만 반환됨, 나머지는 날라감
-            Dictionary<string, string> result = _commonDao.SelectOne(query);
+            //Dictionary<string, string> result = _commonDao.SelectOne(query, Request.Form);
 
             string query2 = "SELECT * FROM PERSONS";
             List<Dictionary<string, string>> resultList = _commonDao.SelectList(query2);
@@ -36,6 +36,7 @@ namespace AREA1.Controllers {
 
 
             // 컬럼 이름만 집어넣고 바로 사용 가능함
+
             ViewData["Title"] = HttpContext.Session.GetString("_Key");
 
             transaction.Commit();
@@ -53,6 +54,7 @@ namespace AREA1.Controllers {
                                                     + "@address:VARCHAR,"
                                                     + "@city:VARCHAR"
                                                     + ")";
+
             _commonDao.Insert(query, Request.Form);
 
             transaction.Commit();
@@ -64,14 +66,14 @@ namespace AREA1.Controllers {
             using var transaction = _context.Database.BeginTransaction();
 
 
-            string query = "UPDATE PERSONS SET PERSON_ID = " + Request.Form["person_id"] + ","
-                                                          + "LAST_NAME = " + "'" + Request.Form["last_name"] + "',"
-                                                          + "FIRST_NAME = " + "'" + Request.Form["first_name"] + "',"
-                                                          + "ADDRESS = " + "'" + Request.Form["address"] + "',"
-                                                          + "CITY = " + "'" + Request.Form["city"] + "'";
+            string query = "UPDATE PERSONS SET PERSON_ID = @person_id:NUMBER, "
+                                                          + "LAST_NAME = @last_name:VARCHAR, "
+                                                          + "FIRST_NAME = @first_name:VARCHAR, "
+                                                          + "ADDRESS = @address:VARCHAR, "
+                                                          + "CITY = @city:VARCHAR";
 
 
-            _commonDao.Update(query);
+            _commonDao.Update(query, Request.Form);
 
             transaction.Commit();
 
@@ -82,9 +84,9 @@ namespace AREA1.Controllers {
             using var transaction = _context.Database.BeginTransaction();
 
 
-            string query = "DELETE FROM PERSONS WHERE PERSON_ID = " + Request.Form["person_id"];
+            string query = "DELETE FROM PERSONS WHERE PERSON_ID = @person_id:NUMBER";
 
-            _commonDao.Delete(query);
+            _commonDao.Delete(query, Request.Form);
 
 
             transaction.Commit();
