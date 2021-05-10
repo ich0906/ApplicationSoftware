@@ -2,10 +2,10 @@
     <div class="py-5 bg-light">
         <div class="container">
 
-            <script src="/assets/plugins/vue/v-calendar/polyfill.min.js?features=Array.prototype.find,Intl"></script>
+            <script src="https://klas.kw.ac.kr/assets/plugins/accordion-menu/jquery-accordion-menu.js"></script>
 
-            <link rel="stylesheet" href="/assets/plugins/vue/v-calendar/v-calendar.min.css">
-            <script src="/assets/plugins/vue/v-calendar/v-calendar.min.js"></script>
+            <link rel="stylesheet" href="https://klas.kw.ac.kr/assets/plugins/vue/v-calendar/v-calendar.min.css">
+            <script src="https://klas.kw.ac.kr/assets/plugins/vue/v-calendar/v-calendar.min.js"></script>
 
             <div id="appModule" class="row">
                 <div class="col-md-12 subjectbox">
@@ -21,30 +21,29 @@
                                 <col width="25%">
                             </colgroup>
                             <thead>
+                                @if (ViewBag.ResultCount > 0) {
                                 <tr style="border-bottom: 1px solid #dce3eb; font-weight: bold; height: 30px">
                                     <td></td>
                                     <td>온라인 강의</td>
                                     <td>과제</td>
                                     <td>팀 프로젝트</td>
                                 </tr>
+                                }
                             </thead>
                             <tbody>
-                                @for (int i = 0; i < 7; ++i)
-                                {
-                                    <text>
+                                 @if (ViewBag.ResultCount > 0) {
+                                       @for (int i = 0; i < ViewBag.ResultCount; ++i) {
+                                        <text>
                                         <tr style="border-bottom: 1px solid #dce3eb; height: 30px">
                                             <td style="font-weight: bold">
-                                                <span style="cursor: pointer">휴먼컴퓨터인터페이스</span>
+                                                <span style="cursor: pointer">@ViewBag.ResultList[i]["TITLE"]</span>
                                             </td>
                                             <td>
-                                                @{ if (true)
-                                                    {
+                                                @{ if (true) {
                                                         <text><span style="color: green">남아있는 강의가 없습니다!</span></text>
-                                }
-                                else
-                                {
-                                    <text><span style="color: green">남은기간</span></text>
-                                }
+                                                    } else {
+                                                        <text><span style="color: green">남은기간</span></text>
+                                                    }
                                                 }
                                             </td>
                                             <td>
@@ -55,7 +54,12 @@
                                             </td>
                                         </tr>
                                         </text>
-                                    }
+                                                    }
+                                                    } else {
+                                    <div id="no-deadline" style="display: block; text-align: center;">
+                                        <span style="color: green; font-weight: bold">남아있는 항목이 없습니다. 깔끔하네요! 😊</span>
+                                    </div>
+                                                    }
                             </tbody>
                         </table>
                     </div>
@@ -213,48 +217,26 @@
                             </div>
                         </div> <div class="card card-body mb-4">
                             <div class="listtitle"><p class="title-text">수강과목 <span>( 2021학년도 1학기 )</span></p></div> <ul class="subjectlist listbox">
-                                <li>
-                                    <div class="left" style="cursor: pointer;">
-                                        알고리즘 (H030-3-0969-02)
-                                        <br> <span>김용혁 / 월 6교시미지정</span>
-                                    </div> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall">공지사항 <span class="icon_new"></span></button> <button type="button" class="btn2 btn-lightpurple btnsmall">강의자료실  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightbrown btnsmall">강의Q&amp;A  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightblue btnsmall">학습톡톡 <span class="icon_new" style="display: none;"></span></button></div> <!---->
-                                </li>
-                                <li>
-                                    <div class="left" style="cursor: pointer;">
-                                        운영체제 (H030-3-1110-01)
-                                        <br> <span>안우현 / 화 5교시미지정, 목 6교시/새빛204</span>
-                                    </div> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall">공지사항 <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightpurple btnsmall">강의자료실  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightbrown btnsmall">강의Q&amp;A  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightblue btnsmall">학습톡톡 <span class="icon_new" style="display: none;"></span></button></div> <!---->
-                                </li>
-                                <li>
-                                    <div class="left" style="cursor: pointer;">
-                                        취업전략 (0000-3-3240-01)
-                                        <br> <span>김정권 / 토 91교시미지정</span>
-                                    </div> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall">공지사항 <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightpurple btnsmall">강의자료실  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightbrown btnsmall">강의Q&amp;A  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightblue btnsmall">학습톡톡 <span class="icon_new" style="display: none;"></span></button></div> <!---->
-                                </li>
-                                <li>
-                                    <div class="left" style="cursor: pointer;">
-                                        데이터베이스 (H030-3-3663-01)
-                                        <br> <span>문승현 / 화 1교시미지정, 목 2교시/새빛204</span>
-                                    </div> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall">공지사항 <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightpurple btnsmall">강의자료실  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightbrown btnsmall">강의Q&amp;A  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightblue btnsmall">학습톡톡 <span class="icon_new" style="display: none;"></span></button></div> <!---->
-                                </li>
-                                <li>
-                                    <div class="left" style="cursor: pointer;">
-                                        데이터통신 (H030-3-4534-01)
-                                        <br> <span>최웅철 / 월 5교시미지정, 수 6교시/참B101</span>
-                                    </div> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall">공지사항 <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightpurple btnsmall">강의자료실  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightbrown btnsmall">강의Q&amp;A  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightblue btnsmall">학습톡톡 <span class="icon_new" style="display: none;"></span></button></div> <!---->
-                                </li>
-                                <li>
-                                    <div class="left" style="cursor: pointer;">
-                                        휴먼컴퓨터인터페이스 (H030-3-6899-01)
-                                        <br> <span>이강훈 / 월 99교시미지정, 수 5교시/새빛204</span>
-                                    </div> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall">공지사항 <span class="icon_new"></span></button> <button type="button" class="btn2 btn-lightpurple btnsmall">강의자료실  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightbrown btnsmall">강의Q&amp;A  <span class="icon_new"></span></button> <button type="button" class="btn2 btn-lightblue btnsmall">학습톡톡 <span class="icon_new" style="display: none;"></span></button></div> <!---->
-                                </li>
-                                <li>
-                                    <div class="left" style="cursor: pointer;">
-                                        응용소프트웨어실습 (H030-3-8485-03)
-                                        <br> <span>이윤구 / 금 0,1,2교시/새빛301</span>
-                                    </div> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall">공지사항 <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightpurple btnsmall">강의자료실  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightbrown btnsmall">강의Q&amp;A  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightblue btnsmall">학습톡톡 <span class="icon_new" style="display: none;"></span></button></div> <!---->
-                                </li>
+                                @if (ViewBag.ResultCount > 0) {
+                                    @for (int i = 0; i < ViewBag.ResultCount; ++i) {
+                                        <li>
+                                            <div class="left" style="cursor: pointer;">
+                                                @ViewBag.ResultList[i]["TITLE"]
+                                                <br> <span>
+                                            @ViewBag.ResultList[i]["NAME"] / @ViewBag.ResultList[i]["DAY1"] @ViewBag.ResultList[i]["PERIOD1"]교시
+                                            @if (ViewBag.ResultList[i]["DAY2"] != string.Empty) {
+                                                <span>,@ViewBag.ResultList[i]["DAY2"] @ViewBag.ResultList[i]["PERIOD2"]교시</span>
+                                            }
+                                            / @ViewBag.ResultList[i]["BUILDING"]@ViewBag.ResultList[i]["ROOM_NUMBER"]
+                                        </span>
+                                            </div> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall">공지사항 <span class="icon_new"></span></button> <button type="button" class="btn2 btn-lightpurple btnsmall">강의자료실  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightbrown btnsmall">강의Q&amp;A  <span class="icon_new" style="display: none;"></span></button> <button type="button" class="btn2 btn-lightblue btnsmall">학습톡톡 <span class="icon_new" style="display: none;"></span></button></div> <!---->
+                                        </li>
+                                    }
+                                } else {
+                                <div id="no-deadline" style="display: block; text-align: center;">
+                                    <span style="color: green; font-weight: bold">남아있는 항목이 없습니다.</span>
+                                </div>
+                                }
                             </ul>
                         </div> @*
                     <div class="card card-body mb-4"><div class="bodtitle"><p class="title-text">과목별 <span class="fjahong">NOTICE</span></p></div> <ul class="subjecttypenotice"><li><div class="left"><span class="day">2021-04-28 강의 공지사항 &gt;</span> <span class="title">휴먼컴퓨터인터페이스</span></div> <div class="right" style="cursor: pointer;">과제 #2 마감기한 연장 및 그에 따른 일정 변경 (일부 수정)</div></li><li><div class="left"><span class="day">2021-04-27 강의 공지사항 &gt;</span> <span class="title">알고리즘</span></div> <div class="right" style="cursor: pointer;">익명게시판 답변영상 업로드 알림 (9주차 1회)</div></li><li><div class="left"><span class="day">2021-04-27 수시퀴즈 &gt;</span> <span class="title">알고리즘</span></div> <div class="right" style="cursor: pointer;">Quiz for the third lecture (Chapter 4 - 06)</div></li><li><div class="left"><span class="day">2021-04-27 수시퀴즈 &gt;</span> <span class="title">알고리즘</span></div> <div class="right" style="cursor: pointer;">Quiz for the second lecture (Chapter 4 - 05)</div></li><li><div class="left"><span class="day">2021-04-27 수시퀴즈 &gt;</span> <span class="title">알고리즘</span></div> <div class="right" style="cursor: pointer;">Quiz for the first lecture (Chapter 4 - 04)</div></li></ul></div> <div class="card card-body calendarbox mb-4">
@@ -809,7 +791,9 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div> *@<div class="card card-body mb-4"><div><div class="listtitle"><p class="title-text">책임지도교수&nbsp;&nbsp;<font color="white">20210428160537</font></p></div> <table class="tablegw"><colgroup><col style="width: 20%;"> <col style="width: 30%;"> <col style="width: 20%;"> <col style="width: 30%;"></colgroup> <tbody><tr><th>성명</th> <td class="lft">최민규</td> <th>전화번호</th> <td class="lft">940-5472</td></tr> <tr><th>연구실위치</th> <td class="lft">새빛관 802호</td> <th>이메일</th> <td class="lft">mgchoi@kw.ac.kr</td></tr> <tr><th>상담시간</th> <td class="lft"></td> <th>홈페이지</th> <td class="lft">http://cg.kw.ac.kr/</td></tr></tbody></table></div></div>
+                        </div> *@<div class="card card-body mb-4"><div><div class="listtitle"><p class="title-text">책임지도교수&nbsp;&nbsp;<font color="white">20210428160537</font></p></div> <table class="tablegw"><colgroup><col style="width: 20%;"> <col style="width: 30%;"> <col style="width: 20%;"> <col style="width: 30%;"></colgroup> <tbody><tr><th>성명</th> <td class="lft">@if(ViewBag.ResultCount > 0){ @ViewBag.ResultList[0]["ADVISOR"]; }</td> <th>전화번호</th> <td class="lft">@if (ViewBag.ResultCount > 0) {@ViewBag.ResultList[0]["AD_PHONE"];
+                    }</td></tr> <tr><th>연구실위치</th> <td class="lft">새빛관 802호</td> <th>이메일</th> <td class="lft">@if (ViewBag.ResultCount > 0) {@ViewBag.ResultList[0]["AD_EMAIL"];
+                }</td></tr> <tr><th>상담시간</th> <td class="lft"></td> <th>홈페이지</th> <td class="lft">http://cg.kw.ac.kr/</td></tr></tbody></table></div></div>
                     </div> <!----> <div><ul class="linkbanner"><li><a href="https://itplusinfo.kw.ac.kr/main.do" target="_blank"><img src="/images/layout/link01.gif"></a></li> <li><a href="/std/ext/dream/popup/DreamPopup.do" target="_blank"><img src="/images/layout/link02.gif"></a></li> <li><a href="https://www.kw.ac.kr/ko/info/privacy.jsp" target="_blank"><img src="/images/layout/link04.gif"></a></li> <li><a href="https://www.kw.ac.kr/" target="_blank"><img src="/images/layout/link05.gif"></a></li></ul></div>
                 </div>
             </div>

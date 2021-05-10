@@ -21,7 +21,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
         }
 
         public IActionResult SelectPageListNotice() {
-            string sql = "SELECT COUNT(*) AS BBS_CNT"                                                                                                      
+            string sql = "SELECT COUNT(*) AS BBS_CNT"
                       + "FROM OP_BBS A"
                       + "JOIN OP_USER B"
                       + "ON A.REGISTER = B.USER_ID"

@@ -86,3 +86,4 @@ C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\ne
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.dll
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.pdb
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.genruntimeconfig.cache
+C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.csprojAssemblyReference.cache
