@@ -81,6 +81,12 @@ namespace AREA1.Login.Controllers {
             return RedirectToAction("Login", new { alertLogin = 1 });
         }
 
+        public IActionResult DoLogout() {
+            SessionExtensionTool.SetObject(HttpContext.Session, "userInfo", null);
+
+            return Redirect("/");
+        }
+
         public IActionResult Error() {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }

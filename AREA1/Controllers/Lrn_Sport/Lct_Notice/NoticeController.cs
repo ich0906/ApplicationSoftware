@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using Tool;
 
 namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
     [LoginActionFilter]
@@ -20,20 +22,58 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             _commonDao = new CommonDao(context);
         }
 
+        /*
+         * 강의 공지사항 리스트 페이지
+         * 작성자 : 김정원
+         * */
         public IActionResult SelectPageListNotice() {
-            string sql = "SELECT COUNT(*) AS BBS_CNT"
-                      + "FROM OP_BBS A"
-                      + "JOIN OP_USER B"
-                      + "ON A.REGISTER = B.USER_ID"
-                      + "JOIN OP_FILE C"
-                      + "ON A.DOC_ID = C.DOC_ID AND C.SNO = 1"
-                      + "WHERE BBS_CODE = " //+ CodeMngTool.getCode("BBS", "NOTICE") 
-                      + "AND LCTRE_SE = @LCTRE_SE:VARCHAR";
+            UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
+            ViewData["name"] = userInfo.name;
+            ViewData["user_id"] = userInfo.user_id;
+            ViewData["fs_at"] = userInfo.author.Equals("1000") ? "Y" : "N";
 
-            int bbsCnt = Convert.ToInt32(_commonDao.SelectOne(sql, Request.Form)["BBS_CNT"]);
+            string sql = "";
+
+
+            int bbsCnt = 0;
+            if (Request.HasFormContentType) {
+                if (!Request.Form["selectedSubj"].ToString().Equals("")) {
+                    // 공지사항 개수 체크
+                    sql = "SELECT COUNT(*) AS BBS_CNT "
+                      + "FROM OP_BBS A "
+                      + "JOIN OP_USER B "
+                      + "ON A.REGISTER = B.USER_ID "
+                      + "JOIN OP_FILE C "
+                      + "ON A.DOC_ID = C.DOC_ID AND C.FILE_NUM = 1 "
+                      + "WHERE BBS_CODE = 1000 " //+ CodeMngTool.getCode("BBS", "NOTICE") 
+                      + "AND ACDMC_NO = @selectedSubj:VARCHAR";
+                    bbsCnt = Convert.ToInt32(_commonDao.SelectOne(sql, Request.Form)["BBS_CNT"]);
+
+                    ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
+                }
+            } else {
+                Dictionary<string, string> param = new Dictionary<string, string>();
+
+                sql = $"SELECT B.ACDMC_NO FROM OP_TEACHES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' AND semester='1' AND YEAR = '2021' AND ROWNUM = 1 ORDER BY COURSE_ID";
+
+                param = _commonDao.SelectOne(sql);
+
+                sql = "SELECT COUNT(*) AS BBS_CNT "
+                      + "FROM OP_BBS A "
+                      + "JOIN OP_USER B "
+                      + "ON A.REGISTER = B.USER_ID "
+                      + "JOIN OP_FILE C "
+                      + "ON A.DOC_ID = C.DOC_ID AND C.FILE_NUM = 1 "
+                      + "WHERE BBS_CODE = 1000 " //+ CodeMngTool.getCode("BBS", "NOTICE") 
+                      + "AND ACDMC_NO = @ACDMC_NO:VARCHAR";
+
+                bbsCnt = Convert.ToInt32(_commonDao.SelectOne(sql, param)["BBS_CNT"]);
+                ViewBag.ACDMC_NO = param["ACDMC_NO"];
+            }
+
+
 
             if (bbsCnt > 0) {
-
                 sql = "SELECT A.SJ"                                                                                                                 // 게시글 제목
                                 + ", (SELECT DECODE(COUNT(*), 0, 'N', 'Y') FROM OP_FILE WHERE DOC_ID = A.DOC_ID) AS FILE_AT"                        // 파일 여부
                                 + ", (SELECT DECODE(COUNT(*), 0, '', FILE_ID) FROM OP_FILE WHERE DOC_ID = A.DOC_ID AND SNO = 1) AS FILE_ID"         // 첫번째 첨부파일 ID
@@ -43,7 +83,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                           + "FROM OP_BBS A"
                           + "JOIN OP_USER B"
                           + "ON A.REGISTER = B.USER_ID"
-                          + "WHERE BBS_CODE = " //+ CodeMngTool.getCode("BBS", "NOTICE") 
+                          + "WHERE BBS_CODE = 1000" //+ CodeMngTool.getCode("BBS", "NOTICE") 
                           + "AND LCTRE_SE = @LCTRE_SE:VARCHAR";
 
                 var resultList = _commonDao.SelectList(sql, Request.Form);
@@ -52,15 +92,28 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
             ViewBag.ResultCnt = bbsCnt;
 
-            return View("BoardListStdPage");
+            return View("/Views/LctSport/BoardListStdPage.cshtml");
         }
 
         public IActionResult SelectNotice() {
             return View();
         }
 
-        public IActionResult InsertNotice() {
-            return View();
+        public IActionResult InsertFormNotice() {
+            UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
+            ViewData["name"] = userInfo.name;
+            ViewData["user_id"] = userInfo.user_id;
+            ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
+
+            //if(userInfo.author.Equals())
+
+            return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
+        } 
+
+        public void InsertNotice() {
+            Object o = Response;
+
+            return;
         }
 
         public IActionResult UpdateNotice() {

@@ -15,7 +15,7 @@ using System.Security.Cryptography;
 
 
 namespace AREA1.Controllers
- {
+{
     public class FileMngToolController : Controller
     {
         private readonly ILogger<MainController> _logger;
@@ -35,7 +35,7 @@ namespace AREA1.Controllers
 
 
             foreach (IFormFile file in Request.Form.Files)
-            {
+        {
                 fileName = file.FileName;
                 string[] result = fileName.Split(new string[] { "." }, System.StringSplitOptions.None);
                 string sSourceData = fileName + DateTime.Now;
@@ -96,12 +96,12 @@ namespace AREA1.Controllers
             {
                 System.IO.DirectoryInfo uploadDir = new System.IO.DirectoryInfo(filePath);
                 foreach(var item in uploadDir.GetFiles())
-                {
+        {
                     string itemName = "";
                     itemName = item.Name.ToString();
                     fileNameTemp.Add("file_id", itemName);
                     fileNames.Add(fileNameTemp);
-                }
+        }
             }*/
 
             string Path = @"C:\filestream\uploads";
@@ -114,9 +114,9 @@ namespace AREA1.Controllers
                 foreach (var item in di.GetFiles())
                 {
                     fileName = item.Name;
-                
-                }
-            }
+
+    }            
+}
         }
     }
 }
