@@ -4,7 +4,17 @@ using AREA1.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using Tool;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Web;
+using System.Text;
+using System;
+using System.Security.Cryptography;
+
+
 
 namespace AREA1.Controllers {
     [LoginActionFilter]
@@ -19,86 +29,48 @@ namespace AREA1.Controllers {
         }
         public IActionResult Main() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
-
-            if (userInfo == null) {
-                return RedirectToAction("/Login", new { alertLogin = 2 });
-            }
-
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
-
-            ViewData["Title"] = HttpContext.Session.GetString("_Key");
-
-<<<<<<< HEAD
             return View("/Views/Main.cshtml");
         }
 
+        public List<Dictionary<string, List<Dictionary<string, string>>>> YearhakgiAtnlcSbjectList() {
+            UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
+            Dictionary<string, string> param = new Dictionary<string, string>();
+            // 학기 당 과목리스트
+            List<Dictionary<string, string>> subjList = null;
+            // 학기 정보 리스트
+            List<Dictionary<string, List<Dictionary<string, string>>>> resultList = new List<Dictionary<string, List<Dictionary<string, string>>>>();
 
-        public void Uploads()
-        {
-            string fileName = "";
-            string fileEXTSN = "";
-            DateTime timeNow = DateTime.Now;
+            param["USER_ID"] = userInfo.user_id;
 
-
-            foreach (IFormFile file in Request.Form.Files)
-            {
-                fileName = file.FileName;
-                string[] result = fileName.Split(new string[] { "." }, System.StringSplitOptions.None);
-                string sSourceData = fileName + DateTime.Now;
-                byte[] tmpSource;
-                byte[] tmpHash;
-                tmpSource = UnicodeEncoding.Unicode.GetBytes(sSourceData);
-                tmpHash = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
-
-                string fileHash = BitConverter.ToString(tmpHash);
-                fileEXTSN = result[1];
-                string fileNameSplit = result[0];
-                string FileTimeNow = timeNow.ToString("yyyyMMddHHmmss");
-
-                Dictionary<string, string> files = new Dictionary<string, string>();
-                files.Add("file_id", fileHash);
-                files.Add("file_extsn", fileEXTSN);
-                files.Add("upload_time", FileTimeNow);
-                files.Add("file_name", fileNameSplit);
+            if(userInfo.author.Equals("1000")) {
+                string sql = "SELECT B.ACDMC_NO, A.SEMESTER, A.YEAR, D.TITLE || ' (' || B.ACDMC_NO || ') - ' || C.NAME AS LABEL"
+                           + " FROM OP_TEACHES A"
+                           + " JOIN OP_SECTION B"
+                           + " ON A.COURSE_ID = B.COURSE_ID AND A.SEC_ID = B.SEC_ID AND A.SEMESTER = B.SEMESTER AND A.YEAR = B.YEAR"
+                           + " JOIN OP_USER C"
+                           + " ON A.ID = C.USER_ID"
+                           + " JOIN OP_COURSE D"
+                           + " ON A.COURSE_ID = D.COURSE_ID"
+                           + $" WHERE A.ID = '{userInfo.user_id}'"
+                           + " AND A.semester = '1'"
+                           + " AND A.YEAR = '2021'"
+                           + " ORDER BY A.COURSE_ID";
 
 
+                Dictionary<string, List<Dictionary<string, string>>> result = new Dictionary<string, List<Dictionary<string, string>>>();
 
-                using var transaction = _context.Database.BeginTransaction();
+                subjList = _commonDao.SelectList(sql);
+                result["subjList"] = subjList;
 
-                string query = "INSERT INTO FILES VALUES(@file_id:VARCHAR,"
-                                                   + "@file_extsn:VARCHAR,"
-                                                   + "@upload_time:VARCHAR,"
-                                                   + "@file_name:VARCHAR"
-                                                   + ")";
-                _commonDao.Insert(query, files);
-
-                transaction.Commit();
-              
-
-               if (file.Length > 0)    
-                {
-                    string filePath = Path.Combine(@"C:\filestream\uploads", FileTimeNow);
-
-                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        file.CopyTo(fileStream);
-
-                        fileStream.Flush();
-                    }
-                }
+                resultList.Add(result);
             }
 
-            Response.WriteAsync("<script language=\"javascript\">alert('" + fileName + "이 저장되었습니다!');</script>");
-            Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
-=======
->>>>>>> e86fc866fe0a1c108cad686d4adf46865d16babc
 
+
+            return resultList;
         }
 
-        public void Downloads()
-        {
-
-        }
     }
 }

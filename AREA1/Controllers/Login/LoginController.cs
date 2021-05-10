@@ -73,12 +73,18 @@ namespace AREA1.Login.Controllers {
 
                     SessionExtensionTool.SetObject(HttpContext.Session, "userInfo", userInfo);
 
-                    return Redirect("/Main/Main");
+                    return Redirect("/test");
                 }
             }
 
 
             return RedirectToAction("Login", new { alertLogin = 1 });
+        }
+
+        public IActionResult DoLogout() {
+            SessionExtensionTool.SetObject(HttpContext.Session, "userInfo", null);
+
+            return Redirect("/");
         }
 
         public IActionResult Error() {
