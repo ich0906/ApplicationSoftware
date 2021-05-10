@@ -1,0 +1,73 @@
+﻿</section>
+
+<script>
+
+    let appSelectSubj = new Vue({
+        el: '#appSelectSubj',
+        data: {
+            yearhakgiList: [],
+            subjList: [],
+            selectYearhakgi: null,
+            selectSubj: null,
+            selectedYearhakgi: '2021,1',
+            selectedSubj: '@ViewBag.ACDMC_NO'
+        },
+        mounted: function () {
+            this.getYearhakgiAtnlcSbjectList(this.selectedYearhakgi, this.selectedSubj);
+        },
+        methods: {
+            getYearhakgiAtnlcSbjectList: function (selectedYearhakgi, selectedSubj) {
+                axios.post('/Main/YearhakgiAtnlcSbjectList', {})
+                    .then(function (response) {
+                        this.yearhakgiList = response.data;
+
+                        let selectedIndex = 0;
+                        for (let i = 0; i < this.yearhakgiList.length; i++) {
+                            if (this.yearhakgiList[i].value === selectedYearhakgi) {
+                                selectedIndex = i;
+                                break;
+                            }
+                        }
+
+                        this.selectYearhakgi = this.yearhakgiList[selectedIndex];
+
+                        this.onYearhakgiChange(selectedSubj);
+                    }.bind(this));
+            },
+            onYearhakgiChange: function (selectedSubj) {
+                let selectedIndex = 0;
+
+                for (let yearhakgi in this.yearhakgiList) {
+                    if (this.yearhakgiList[yearhakgi] === this.selectYearhakgi) {
+                        this.subjList = this.yearhakgiList[yearhakgi]['subjList'];
+
+                        for (let j = 0; j < this.subjList.length; j++) {
+                            if (this.subjList[j]["ACDMC_NO"] === selectedSubj) {
+                                selectedIndex = j;
+                                break;
+                            }
+                        }
+
+                        break;
+                    }
+                }
+
+                this.selectSubj = this.subjList[selectedIndex];
+                this.onSubjChange();
+            },
+            onSubjChange: function () {
+
+                setLctrumInfo('', '' + this.selectSubj["YEAR"] + ',' + this.selectSubj["SEMESTER"], this.selectSubj["ACDMC_NO"]);
+
+                appEvents.$emit('eventSubjChange', {
+                    selectYearhakgi: this.selectSubj["YEAR"] + ',' + this.selectSubj["SEMESTER"],
+                    selectSubj: this.selectSubj["ACDMC_NO"],
+                    selectChangeYn: 'Y',
+                    subjNm: this.selectSubj["LABEL"],
+                    yearhakgi: this.selectYearhakgi,
+                    subj: this.selectSubj
+                });
+            }
+        }
+    });
+</script>

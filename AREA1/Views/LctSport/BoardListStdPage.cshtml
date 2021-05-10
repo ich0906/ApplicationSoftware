@@ -1,0 +1,75 @@
+﻿@Html.Partial("~/Views/Shared/LctSportHeader.cshtml")
+
+
+        <!-- content -->
+        <div id="appModule" class="card card-body mb-4 content">
+            <div><p class="contenttitle">강의 공지사항</p></div>
+            <form id="aform">
+                <div class="con_search">
+                    <ul>
+                        <li>
+                            <select class="form-control form-control-sm">
+                                <option value="ALL">전체</option>
+                                <option value="TLE">제목</option>
+                                <option value="CNT">내용</option>
+                                <option value="AUT">작성자</option>
+                            </select> <input type="text" maxlength="50" placeholder="검색어를 입력하세요">
+                        </li>
+                        <li>
+                            <button type="button" class="btn2  btn-gray">검색</button>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+            @if (ViewData["fs_at"].Equals("Y")) {
+                <div class="btnCon"><button type="button" class="btn2 btn-gray">글쓰기</button></div>
+            }
+            <table class="AType">
+                <colgroup>
+                    <col class="wid10pro  wid65px">
+                    <col>
+                    <col width="10%" class="disnone">
+                    <col width="12%" class="disnone">
+                    <col width="10%" class="disnone">
+                    <col width="10%" class="disnone">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th class="disnone">파일</th>
+                        <th class="disnone">작성자</th>
+                        <th class="disnone">작성일</th>
+                        <th class="disnone">조회수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ViewBag.ResultCnt > 0) {
+                        for (int i = 0; i < ViewBag.ResultList.Count; i++) {
+                            <tr>
+                                <td><!----> <span>@(i+1)</span></td>
+                                <td class="lft" style="cursor: pointer;">@ViewBag.ResultList[i]["SJ"]</td>
+                                <td class="disnone"><!----></td>
+                                <td class="disnone">@ViewBag.ResultList[i]["REGISTER"]</td>
+                                <td class="disnone">@ViewBag.ResultList[i]["REGIST_DT"]</td>
+                                <td class="disnone">@ViewBag.ResultList[i]["RDCNT"]</td>
+                            </tr>
+                        }
+                    } else {
+                        <tr>
+                            <td colspan="6" class="disnone">글이 없습니다.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <ul data-v-82963a40="" class="paging typeA">
+                <!---->
+                <li data-v-82963a40="" class="go-prev disabled"><a data-v-82963a40="" tabindex="-1">Prev</a></li>
+                <li data-v-82963a40="" class="active"><a data-v-82963a40="" tabindex="0">1</a></li>
+                <li data-v-82963a40="" class="go-next disabled"><a data-v-82963a40="" tabindex="-1">Next</a></li> <!---->
+            </ul>
+        </div>
+        <!-- content -->
+    </div>
+</div>
+@Html.Partial("~/Views/Shared/LctSportFooter.cshtml")

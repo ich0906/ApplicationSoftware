@@ -23,7 +23,7 @@ namespace AREA1 {
             services.AddDistributedMemoryCache();
 
             services.AddSession(options => {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.IdleTimeout = TimeSpan.FromHours(1);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
@@ -37,6 +37,8 @@ namespace AREA1 {
             {
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All); // 한글이 인코딩되는 문제 해결
             });
+
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +48,7 @@ namespace AREA1 {
             } else {
                 app.UseExceptionHandler("/Home/Error");
             }
+            
             app.UseStaticFiles();
 
             app.UseRouting();
