@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kih03\\source\\repos\\AREA1\\ApplicationSoftware\\AREA1\\AREA1.csproj": {}
+    "C:\\Users\\jaeha\\source\\repos\\ApplicationSoftware\\AREA1\\AREA1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kih03\\source\\repos\\AREA1\\ApplicationSoftware\\AREA1\\AREA1.csproj": {
+    "C:\\Users\\jaeha\\source\\repos\\ApplicationSoftware\\AREA1\\AREA1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kih03\\source\\repos\\AREA1\\ApplicationSoftware\\AREA1\\AREA1.csproj",
+        "projectUniqueName": "C:\\Users\\jaeha\\source\\repos\\ApplicationSoftware\\AREA1\\AREA1.csproj",
         "projectName": "AREA1",
-        "projectPath": "C:\\Users\\kih03\\source\\repos\\AREA1\\ApplicationSoftware\\AREA1\\AREA1.csproj",
-        "packagesPath": "C:\\Users\\kih03\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kih03\\source\\repos\\AREA1\\ApplicationSoftware\\AREA1\\obj\\",
+        "projectPath": "C:\\Users\\jaeha\\source\\repos\\ApplicationSoftware\\AREA1\\AREA1.csproj",
+        "packagesPath": "C:\\Users\\jaeha\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jaeha\\source\\repos\\ApplicationSoftware\\AREA1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kih03\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jaeha\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -75,7 +75,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,5 +1,6 @@
 ﻿using AREA1.Data;
 using AREA1.Models;
+using AREA1.Tool;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -12,11 +13,13 @@ namespace AREA1.Controllers {
         private readonly ILogger<HomeController> _logger;
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
+        private readonly CodeMngTool _codeMngTool;
 
         public HomeController(ILogger<HomeController> logger, AppSoftDbContext context) {
             _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);
+            _codeMngTool = new CodeMngTool(context);
         }
 
         public IActionResult Index() {
@@ -96,24 +99,20 @@ namespace AREA1.Controllers {
         public List<JsonResult> SelectData()
         {
             using var transaction = _context.Database.BeginTransaction();
-
-            string query = "SELECT * FROM PERSONS";
-            List<Dictionary<string, string>> resultList = _commonDao.SelectList(query);
-
-            var persons = new List<JsonResult>();
-            for (int i = 0; i < resultList.Count; ++i)
+            
+            List<Dictionary<string, string>> result = _codeMngTool.getCode(Request.Form["group_nm"]);
+            string result2 = _codeMngTool.getCode(Request.Form["group_nm"], Request.Form["code_nm"]);
+            var codes = new List<JsonResult>();
+            for(int i = 0; i < result.Count; ++i)
             {
-                var person = new Dictionary<string, string>()
-                {
-                    {"PERSON_ID",resultList[i]["PERSON_ID"]},
-                    {"LAST_NAME",resultList[i]["LAST_NAME"]},
-                    {"FIRST_NAME",resultList[i]["FIRST_NAME"]},
-                    {"ADDRESS",resultList[i]["ADDRESS"]},
-                    {"CITY",resultList[i]["CITY"]}
+                var code = new Dictionary<string, string>() {
+                    { "GROUP_ID",result[i]["GROUP_ID"]},
+                    { "CODE_ID",result[i]["CODE_ID"]}
                 };
-                persons.Add(Json(person));
+                codes.Add(Json(code));
             }
-            return persons;
+            transaction.Commit();
+            return codes;
         }
 
         public IActionResult Privacy() {

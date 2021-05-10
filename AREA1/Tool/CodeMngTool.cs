@@ -3,35 +3,44 @@ using AREA1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Oracle.ManagedDataAccess.Client;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 
-namespace AREA1.CodeTools
+namespace AREA1.Tool
 {
     public class CodeMngTool
     {
-        private readonly ILogger<CodeMngTool> _logger;
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
 
-        public CodeMngTool(ILogger<CodeMngTool> logger, AppSoftDbContext context)
+        public CodeMngTool(AppSoftDbContext context)
         {
-            _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);
         }
 
-        public List<Dictionary<string, string>> Select()
+        public List<Dictionary<string, string>> getCode(string group_nm)
         {
-            string query = "SELECT CODE_ID, CODE_NM " +
+            string query = "SELECT GROUP_ID, CODE_ID " +
                             "FROM OP_CODE NATURAL JOIN OP_CODE_GROUP " +
-                            "WHERE GROUP_ID=@group_id:NUMBER, " +
-                            "OR GROUP_NM=@group_nm:VARCHAR2";
-
+                            "WHERE GROUP_NM=@group_nm:VARCHAR2";
             List<Dictionary<string, string>> resultList = _commonDao.SelectList(query);
 
             return resultList;
+        }
+        public string getCode(string group_nm, string code_nm)
+        {
+            string query = "SELECT CODE_ID " +
+                            "FROM OP_CODE NATURAL JOIN OP_CODE_GROUP " +
+                            "WHERE CODE_NM=@code_nm:VARCHAR2 AND " +
+                            "GROUP_NM=@group_nm:VARCHAR2";
+
+            Dictionary<string, string> resultDic = _commonDao.SelectOne(query);
+            string result = resultDic["CODE_ID"];
+
+            return result;
         }
 
         public int Insert()
@@ -75,7 +84,6 @@ namespace AREA1.CodeTools
 
             return resultRowCnt;
         }
-
 
     }
 }
