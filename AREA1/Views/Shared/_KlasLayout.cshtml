@@ -6,14 +6,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    @RenderSection("Scripts", required: false)
 
     <title>광운대학교</title>
     <link rel="shortcut icon" href="/Main/Main" type="image/x-icon">
     <link rel="icon" href="/Main/Main" type="image/x-icon">
 
+    <script src="/js/jquery.min.js"></script>
     <script src="/js/vue.min.js"></script>
-    <script src="/js/main.js"></script>
     <script src="/js/axios.min.js"></script>
 
     <script src="/js/vue-loading-overlay3.js"></script>
@@ -23,6 +22,7 @@
     <script type="text/javascript" src="/js/es6-promise.auto.min.js"></script>
 
     <script src="/js/vue-toasted.min.js"></script>
+
     <style type="text/css">
         .toasted {
             padding: 0 20px
@@ -361,10 +361,9 @@
         Vue.component('paginate', VuejsPaginate);
     </script>
 
-    <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/jquery.fileDownload.js"></script>
-
+    <script src="/js/main.js"></script>
     <script>
 
         moment.locale('ko', {
@@ -403,7 +402,7 @@
 
 
                 <div class="col-md-6 navtxt">
-                    <a href="https://klas.kw.ac.kr/std/ads/admst/MyInfoStdPage.do"><i class="fas fa-cog"></i>@(ViewData["name"])(@ViewData["user_id"])</a> &nbsp;&nbsp; <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#none" onclick="fnCmdLogout();">Logout</a><i class="fas fa-sign-out-alt"></i>
+                    <a href="https://klas.kw.ac.kr/std/ads/admst/MyInfoStdPage.do"><i class="fas fa-cog"></i>@(ViewData["name"])(@ViewData["user_id"])</a> &nbsp;&nbsp; <a href="/Login/DoLogout">Logout</a><i class="fas fa-sign-out-alt"></i>
                 </div>
 
             </div>
@@ -502,7 +501,7 @@
                                         <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/evltn/LctrumHomeStdPage.do&#39;);">강의종합</a>
                                     </li>
                                     <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/sport/d052b8f845784c639f036b102fdc3023/BoardListStdPage.do&#39;);">강의 공지사항</a>
+                                        <a href="/Notice/SelectPageListNotice">강의 공지사항</a>
                                     </li>
                                     <li>
                                         <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/sport/573f918c23984ae8a88c398051bb1263/BoardQnaListStdPage.do&#39;);">강의 묻고답하기</a>
@@ -995,12 +994,65 @@
             </div>
         </div>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <script type="text/javascript">
+        var deviceAgent = navigator.userAgent.toLowerCase();
+        var ios = deviceAgent.match(/(iphone|ipod|ipad)/);
+        var android = deviceAgent.match(/(android)/);
 
+        $(document).ready(function () {
+            // Requires jQuery
+            $(document).on('click', '.js-menu_toggle.closed', function (e) {
+                e.preventDefault(); $('.list_load, .list_item').stop();
+                $(this).removeClass('closed').addClass('opened');
+
+                $('.side_menu').css({ 'left': '0px' });
+
+                var count = $('.list_item').length;
+                $('.list_load').slideDown((count * .6) * 100);
+                $('.list_item').each(function (i) {
+                    var thisLI = $(this);
+                    timeOut = 100 * i;
+                    setTimeout(function () {
+                        thisLI.css({
+                            'opacity': '1',
+                            'margin-left': '0'
+                        });
+                    }, 100 * i);
+                });
+            });
+
+            $(document).on('click', '.js-menu_toggle.opened', function (e) {
+                e.preventDefault(); $('.list_load, .list_item').stop();
+                $(this).removeClass('opened').addClass('closed');
+
+                $('.side_menu').css({ 'left': '-310px' });
+
+                var count = $('.list_item').length;
+                $('.list_item').css({
+                    'opacity': '0',
+                    'margin-left': '-20px'
+                });
+                $('.list_load').slideUp(300);
+            });
+        });
+
+        function fnCmdLogout() {
+            if (deviceAgent.indexOf("nuriwareapp") != -1) {
+                if (ios) {
+                    var message = { action: "appLogout", params: {} };
+                    window.webkit.messageHandlers.callbackHandler.postMessage(message);
+                } else if (android) {
+                    window.webkit.appLogout();
+                }
+            }
+
+            location.href = "/usr/cmn/login/Logout.do";
+
+
+
+        }
+    </script>
+    @RenderBody()
     <footer>
         <div class="container">
             <p class="float-right btnup" style="bottom: 30px; position: fixed; right: 30px;">

@@ -158,7 +158,7 @@ namespace AREA1.Data {
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = sqlQuery;
 
-                Regex reg = new Regex("@([_]?[a-z])*:[A-Z]*");
+                Regex reg = new Regex("@([_]?[a-zA-Z])*:[A-Z]*");
                 MatchCollection resultColl = reg.Matches(cmd.CommandText);
 
                 foreach (Match mm in resultColl) {
@@ -207,7 +207,7 @@ namespace AREA1.Data {
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = sqlQuery;
 
-                Regex reg = new Regex("@([_]?[a-z])*:[A-Z]*");
+                Regex reg = new Regex("@([_]?[a-zA-Z])*:[A-Z]*");
                 MatchCollection resultColl = reg.Matches(cmd.CommandText);
 
                 foreach (Match mm in resultColl) {
@@ -274,7 +274,7 @@ namespace AREA1.Data {
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = sqlQuery;
 
-                Regex reg = new Regex("@([_]?[a-z])*:[A-Z]*");
+                Regex reg = new Regex("@([_]?[a-zA-Z])*:[A-Z]*");
                 MatchCollection resultColl = reg.Matches(cmd.CommandText);
 
                 foreach (Match mm in resultColl) {
@@ -327,7 +327,7 @@ namespace AREA1.Data {
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = sqlQuery;
 
-                Regex reg = new Regex("@([_]?[a-z])*:[A-Z]*");
+                Regex reg = new Regex("@([_]?[a-zA-Z])*:[A-Z]*");
                 MatchCollection resultColl = reg.Matches(cmd.CommandText);
 
                 foreach (Match mm in resultColl) {
@@ -397,7 +397,7 @@ namespace AREA1.Data {
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = sqlQuery;
 
-                Regex reg = new Regex("@([_]?[a-z])*:[A-Z]*");
+                Regex reg = new Regex("@([_]?[a-zA-Z])*:[A-Z]*");
                 MatchCollection resultColl = reg.Matches(cmd.CommandText);
 
                 foreach (Match mm in resultColl) {
@@ -449,7 +449,7 @@ namespace AREA1.Data {
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = sqlQuery;
 
-                Regex reg = new Regex("@([_]?[a-z])*:[A-Z]*");
+                Regex reg = new Regex("@([_]?[a-zA-Z])*:[A-Z]*");
                 MatchCollection resultColl = reg.Matches(cmd.CommandText);
 
                 foreach (Match mm in resultColl) {
@@ -519,7 +519,7 @@ namespace AREA1.Data {
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = sqlQuery;
 
-                Regex reg = new Regex("@([_]?[a-z])*:[A-Z]*");
+                Regex reg = new Regex("@([_]?[a-zA-Z])*:[A-Z]*");
                 MatchCollection resultColl = reg.Matches(cmd.CommandText);
 
                 foreach (Match mm in resultColl) {
@@ -572,7 +572,7 @@ namespace AREA1.Data {
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = sqlQuery;
 
-                Regex reg = new Regex("@([_]?[a-z])*:[A-Z]*");
+                Regex reg = new Regex("@([_]?[a-zA-Z])*:[A-Z]*");
                 MatchCollection resultColl = reg.Matches(cmd.CommandText);
 
                 foreach (Match mm in resultColl) {

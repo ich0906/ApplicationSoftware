@@ -9,7 +9,7 @@
     font-family: 'Noto Sans KR';
     font-style: normal;
 	font-weight: 300;
-    src: url('./font/NotoSans/NotoSans-Light.woff') format('woff');
+    src: url('../font/NotoSans-Light.woff') format('woff');
 }
 
 @font-face {
@@ -22,8 +22,8 @@
 @font-face {
     font-family: 'Noto Sans KR';
     font-style: normal;
-	font-weight: 500;
-    src: url('./font/NotoSans/NotoSans-Medium.woff') format('woff');
+    font-weight: 500;
+    src: url('../font/NotoSans-Medium.woff') format('woff');
 }
 
 @font-face {

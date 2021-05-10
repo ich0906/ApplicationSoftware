@@ -1082,7 +1082,7 @@ ul.paging li.active a:focus {
 .board_write_form dd { display:table-cell;   position:relative;   width:80%;   padding:0.5rem 0 0 0 ;  border-bottom:1px solid #ddd; }
 .board_write_form dd input   {height:31px; background:#ffffff;  border :1px solid #ccc; width:150px;   }
 .board_write_form dd select {}
-.board_write_form dd input.es{background: url('../images/common/wrest.gif') no-repeat right top;}
+.board_write_form dd input.es{background: url('../images/lctSport/wrest.gif') no-repeat right top;}
 .board_write_form dd input[type=checkbox]{cursor:pointer;width:15px; height:15px;vertical-align:middle;border :1px solid #fff;}
 .board_write_form dd textarea{border :1px solid #ccc; width:100%; margin-bottom:0.5rem;}
 .form-control {width:150px; display:inline-block; border-radius: 0rem;}
@@ -1606,7 +1606,7 @@ a,
 
 
 #sitemap li span{float: right;	position: absolute;	line-height: 20px;	font-size: 0px; top:12px;right:10px;width:25px;height:25px;cursor:auto;}
-#sitemap li span, #sitemap li span.collapsed{background:url(../images/common/collapsed.png) no-repeat 0 0;} 
+#sitemap li span, #sitemap li span.collapsed{background:url(../images/lctSport/collapsed.png) no-repeat 0 0;} 
 #sitemap li span.expanded{background:url(../images/common/expanded.png) no-repeat 0 0;}
 
 /*side menu*/
