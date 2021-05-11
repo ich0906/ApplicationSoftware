@@ -1,0 +1,175 @@
+﻿<script>
+    let appEvents = new Vue({});
+</script>
+
+<script type="text/javascript">
+
+    function setLctrumInfo(grcode, yearhakgi, subj) {
+        $('#__form__').find('input[name="selectedGrcode"]').val(grcode);
+        $('#__form__').find('input[name="selectedYearhakgi"]').val(yearhakgi);
+        $('#__form__').find('input[name="selectedSubj"]').val(subj);
+    }
+
+    function linkWinOpen(url) {
+        window.open(url);
+    }
+
+    function linkUrl(url, param, target) {
+        if ('#' === url || '' === url) {
+            return;
+        }
+
+        let loader = Vue.$loading.show();
+
+        if (param !== undefined) {
+            if (typeof param === 'object') {
+                var $form = $('#__form__');
+                var $inputBox;
+
+                for (var key in param) {
+                    if (typeof param[key] === 'string' || typeof param[key] === 'number') {
+                        $inputBox = $form.find(':input[name="' + key + '"]');
+
+                        if ($inputBox.length > 0) {
+                            $inputBox.val(param[key]);
+                        } else {
+                            $('<input>').attr({
+                                type: 'hidden',
+                                name: key,
+                                value: param[key]
+                            }).appendTo($form);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (target === undefined) {
+            target = '';
+
+        } else {
+            loader && loader.hide();
+        }
+
+        $('#__form__').attr('target', target).attr('action', url).submit();
+    }
+
+    function linkOpenTalkPopup(yearhakgi, subj, subjNm) {
+        let param = {
+            'selectYearhakgi': yearhakgi,
+            'selectSubj': subj,
+            'subjNm': subjNm
+        };
+
+        //window.open('', 'talkPop', 'scrollbars=yes,width=345,height=495,resizable=no');
+        window.open('', 'talkPop', 'scrollbars=yes,width=500,height=495,resizable=yes');
+
+        linkUrl('/std/lis/sport/LrnTalkStdPopupPage.do', param, 'talkPop');
+    }
+    function pageReload() {
+        location.reload();
+    }
+
+</script>
+
+<form id="__form__" method="post" style="display: none;">
+    <input type="hidden" name="selectedGrcode" />
+    <input type="hidden" name="selectedYearhakgi" />
+    <input type="hidden" name="selectedSubj" />
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        $(".btnCon").find("button").click(function () {
+            $("#__form__").attr("action", "/Notice/InsertFormNotice");
+            $("#__form__").submit();
+        });
+
+        $("[name=selectSubj]").change(function () {
+            $("#__form__").attr("action", "/Notice/SelectPageListNotice");
+            $("#__form__").submit();
+        });
+    });
+</script>
+
+<section>
+
+    <div id="appHeaderSubj" class="subjectnameba">
+        <div class="container">
+            <div class="row mg0" style="height: 37px">
+                <div class="col-md-10 subtitle" style="cursor: pointer;" @@click="goLctrumMain()"><span class="subjectname">{{ subjNm }}</span> <span class="subjecttime">{{ lctrumSchdul }}</span></div>
+                <div class="col-md-2 subtap">
+                    <a href="#" @@click="appHeaderSubj.goOpenTalkWin(selectYearhakgi, selectSubj, subjNm);"><img src="/images/lctSport/btntap.png"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        let appHeaderSubj = new Vue({
+            el: '#appHeaderSubj',
+            data: {
+                subjNm: null,
+                lctrumSchdul: null,
+                selectGrcode: null,
+                selectYearhakgi: null,
+                selectSubj: null
+            },
+            mounted: function () {
+                let self = this;
+
+                appEvents.$on('eventSubjChange', function (param) {
+                    self.selectYearhakgi = param.selectYearhakgi;
+                    self.selectSubj = param.selectSubj;
+                    self.subjNm = param.subjNm;
+                });
+            },
+            methods: {
+                goLctrumMain: function () {
+
+                    linkUrl('/std/lis/evltn/LctrumHomeStdPage.do', this.$data);
+
+                },
+                goOpenTalkWin: function (yearhakgi, subj, subjNm) {
+                    linkOpenTalkPopup(yearhakgi, subj, subjNm);
+                }
+            }
+        });
+
+    </script>
+
+    <div class="py-4 bg-light">
+        <div class="container ">
+
+            <div class="card card-body selectsemester">
+                <!-- style="border:1px solid #585858;" -->
+
+                <div id="appSelectSubj" class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="col-3 aC">수강학기</div>
+                            <div class="col-9">
+                                <select name="selectYearhakgi" v-model="selectYearhakgi" @@change="onYearhakgiChange()" class="form-control form-control-sm">
+                                    <option v-for="option in yearhakgiList" :value="option">
+                                        {{ option.label }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="row">
+                            <div class="col-3 aC">과목명</div>
+                            <div class="col-9">
+                                <select name="selectSubj" v-model="selectSubj" @@change="onSubjChange()" class="form-control form-control-sm" style="width:100%">
+                                    <option v-for="option in subjList" :value="option">
+                                        {{ option.LABEL }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>

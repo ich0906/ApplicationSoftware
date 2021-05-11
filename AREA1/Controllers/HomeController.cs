@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Tool;
 
 namespace AREA1.Controllers {
     public class HomeController : Controller {
@@ -31,7 +30,7 @@ namespace AREA1.Controllers {
             // SelectOne은 단 한건의 결과만 반환됨, 나머지는 날라감
             //Dictionary<string, string> result = _commonDao.SelectOne(query, Request.Form);
 
-            string query2 = "SELECT * FROM PERSONS";
+            string query2 = "SELECT * FROM OP_USER";
             List<Dictionary<string, string>> resultList = _commonDao.SelectList(query2);
 
             // SelectList는 Dictionary의 리스트로 반환됨, 쿼리 결과가 여러줄이 나올 때 사용 가능
@@ -100,18 +99,32 @@ namespace AREA1.Controllers {
         {
             using var transaction = _context.Database.BeginTransaction();
             
-            List<Dictionary<string, string>> result = _codeMngTool.getCode(Request.Form["group_nm"]);
-            string result2 = _codeMngTool.getCode(Request.Form["group_nm"], Request.Form["code_nm"]);
+            List<Dictionary<string, string>> resultList = _codeMngTool.getCode(Request.Form["group_nm"]);
+            string resultString = _codeMngTool.getCode(Request.Form["group_nm"], Request.Form["code_nm"]);
+
             var codes = new List<JsonResult>();
-            for(int i = 0; i < result.Count; ++i)
+            for(int i = 0; i < resultList.Count; i++)
             {
-                var code = new Dictionary<string, string>() {
-                    { "GROUP_ID",result[i]["GROUP_ID"]},
-                    { "CODE_ID",result[i]["CODE_ID"]}
-                };
-                codes.Add(Json(code));
+                if (resultString.Equals(resultList[i]["CODE_ID"]) && !Request.Form["code_nm"].ToString().Equals(""))
+                {
+                    var code = new Dictionary<string, string>()
+                    {
+                        {"CODE_ID", resultList[i]["CODE_ID"] }
+                    };
+                    codes.Add(Json(code));
+                    break;
+                }
+                else if(Request.Form["code_nm"].ToString().Equals(""))
+                {
+                    var code = new Dictionary<string, string>()
+                    {
+                        {"GROUP_ID", resultList[i]["GROUP_ID"] },
+                        {"CODE_ID", resultList[i]["CODE_ID"] },
+                        {"CODE_NM", resultList[i]["CODE_NM"] }
+                    };
+                    codes.Add(Json(code));
+                }
             }
-            transaction.Commit();
             return codes;
         }
 

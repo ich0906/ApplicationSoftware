@@ -47,20 +47,16 @@
                     '<tr>' +
                     '<td>group_id</td>' +
                     '<td>code_id</td>' +
-                    //'<td>FIRST_NAME</td>' +
-                    //'<td>ADDRESS</td>' +
-                    //'<td>CITY</td>' +
+                    '<td>code_nm</td>' +
                     '</tr>' +
                     '<tbody></tbody>' +
                     '</table> ';
-                $("#rslt_select").append(table);
+                $("#rslt_select").html(table);
                 for (let i = 0; i < data.length; ++i) {
                     $("#rslt_table > tbody:last").append("<tr><td>"
-                        + data[i].value['group_id'] + "</td><td>" +
-                        //data[i].value['code_id'] + "</td><td>" +
-                        //data[i].value['FIRST_NAME'] + "</td><td>" +
-                        //data[i].value['ADDRESS'] + "</td><td>" +
-                        data[i].value['code_id'] + "</td></tr>");
+                        + data[i].value['GROUP_ID'] + "</td><td>" +
+                        data[i].value['CODE_ID'] + "</td><td>" +
+                        data[i].value['CODE_NM'] + "</td></tr>");
                 }
             }
         });

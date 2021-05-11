@@ -23,21 +23,34 @@ namespace AREA1.Tool
 
         public List<Dictionary<string, string>> getCode(string group_nm)
         {
-            string query = "SELECT GROUP_ID, CODE_ID " +
-                            "FROM OP_CODE NATURAL JOIN OP_CODE_GROUP " +
-                            "WHERE GROUP_NM=@group_nm:VARCHAR2";
-            List<Dictionary<string, string>> resultList = _commonDao.SelectList(query);
+            string query = "SELECT A.GROUP_ID, A.CODE_ID, A.CODE_NM " +
+                            "FROM OP_CODE A JOIN OP_CODE_GROUP B ON " +
+                            "A.GROUP_ID = B.GROUP_ID " +
+                            "WHERE B.GROUP_NM=@group_nm:VARCHAR";
+
+            var groupName = new Dictionary<string, string>()
+            {
+                {"group_nm", group_nm}
+            };
+            
+            List<Dictionary<string, string>> resultList = _commonDao.SelectList(query, groupName);
 
             return resultList;
         }
         public string getCode(string group_nm, string code_nm)
         {
-            string query = "SELECT CODE_ID " +
-                            "FROM OP_CODE NATURAL JOIN OP_CODE_GROUP " +
-                            "WHERE CODE_NM=@code_nm:VARCHAR2 AND " +
-                            "GROUP_NM=@group_nm:VARCHAR2";
+            string query = "SELECT A.CODE_ID " +
+                            "FROM OP_CODE A JOIN OP_CODE_GROUP B ON " +
+                            "A.GROUP_ID = B.GROUP_ID " +
+                            "WHERE A.CODE_NM=@code_nm:VARCHAR AND " +
+                            "B.GROUP_NM=@group_nm:VARCHAR";
 
-            Dictionary<string, string> resultDic = _commonDao.SelectOne(query);
+            var Name = new Dictionary<string, string>()
+            {
+                {"code_nm", code_nm},
+                {"group_nm", group_nm}
+            };
+            Dictionary<string, string> resultDic = _commonDao.SelectOne(query, Name);
             string result = resultDic["CODE_ID"];
 
             return result;
