@@ -394,3 +394,4 @@ C:\Users\kih03\source\repos\AREA1\ApplicationSoftware\AREA1\bin\Debug\netcoreapp
 C:\Users\kih03\source\repos\AREA1\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\kih03\source\repos\AREA1\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\Shared\LctSportFooter.cshtml.g.cs
 C:\Users\kih03\source\repos\AREA1\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\Shared\LctSportHeader.cshtml.g.cs
+C:\Users\kih03\source\repos\AREA1\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\test.cshtml.g.cs
