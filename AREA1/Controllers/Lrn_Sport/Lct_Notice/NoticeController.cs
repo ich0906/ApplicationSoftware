@@ -110,7 +110,8 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
         } 
 
-        public void InsertNotice() {
+        [HttpPost]
+        public void InsertNotice([FromBody]Notice notice) {
             Object o = Response;
 
             return;
@@ -121,6 +122,25 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
         }
         public IActionResult DeleteNotice() {
             return View();
+        }
+
+        public class Notice {
+            private string title { get; set; }
+            private string content { get; set; }
+            private string atchFileId { get; set; }
+            private string boardNo { get; set; }
+            private string cmd { get; set; }
+            private string masterNo { get; set; }
+            private string othbcAt { get; set; }
+            private string pageInit { get; set; }
+            private string preOthbcAt { get; set; }
+            private string searchCondition { get; set; }
+            private string selectChangeYn { get; set; }
+            private string searchKeyword { get; set; }
+            private string selectSubj { get; set; }
+            private string sortOrdr { get; set; }
+            private string storageId { get; set; }
+            private string upperNo { get; set; }
         }
 
 
