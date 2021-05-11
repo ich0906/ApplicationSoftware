@@ -73,7 +73,7 @@ namespace AREA1.Login.Controllers {
 
                     SessionExtensionTool.SetObject(HttpContext.Session, "userInfo", userInfo);
 
-                    return Redirect("/Main/Main");
+                    return Redirect("/test");
                 }
             }
 

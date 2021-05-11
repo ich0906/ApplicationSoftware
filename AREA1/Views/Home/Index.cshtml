@@ -1,14 +1,19 @@
-﻿<div class="text-center">
+﻿@{
+    Layout = "_Layout";
+}
+
+<div class="text-center">
     <h1 class="display-4">Hello @ViewData["UserId"]</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 
     <form id="aform">
-        PersonId  : <input name="person_id" /><br>
-        LastName  : <input name="last_name" /><br>
+        group_nm  : <input name="group_nm" /><br>
+        code_nm  : <input name="code_nm" /><br>
+        <!--
         FirstName : <input name="first_name" /><br>
         Address   : <input name="address" /><br>
         City      : <input name="city" /><br>
-
+        -->
     </form>
 
     <button id="btn_insert">Insert Button</button>
@@ -29,38 +34,33 @@
             $("#aform").attr("method", "POST");
             $("#aform").submit();
 
-            });
         });
+    });
 
-        $("#btn_select").click(function () {
-            $("#aform").attr("action", "/Home/SelectData");
-            $("#aform").attr("method", "POST");
+    $("#btn_select").click(function () {
+        $("#aform").attr("action", "/Home/SelectData");
+        $("#aform").attr("method", "POST");
 
-            $("#aform").ajaxForm({
-                success: function (data) {
-                    var table = '<table id="rslt_table">' +
-                        '<tr>' +
-                        '<td>ID</td>' +
-                        '<td>LAST_NAME</td>' +
-                        '<td>FIRST_NAME</td>' +
-                        '<td>ADDRESS</td>' +
-                        '<td>CITY</td>' +
-                        '</tr>' +
-                        '<tbody></tbody>' +
-                        '</table> ';
-                    $("#rslt_select").append(table);
-                    for (let i = 0; i < data.length; ++i) {
-                        $("#rslt_table > tbody:last").append("<tr><td>"
-                            + data[i].value['PERSON_ID'] + "</td><td>" +
-                            data[i].value['LAST_NAME'] + "</td><td>" +
-                            data[i].value['FIRST_NAME'] + "</td><td>" +
-                            data[i].value['ADDRESS'] + "</td><td>" +
-                            data[i].value['CITY'] + "</td></tr>");
-                    }
+        $("#aform").ajaxForm({
+            success: function (data) {
+                var table = '<table id="rslt_table">' +
+                    '<tr>' +
+                    '<td>group_id</td>' +
+                    '<td>code_id</td>' +
+                    '<td>code_nm</td>' +
+                    '</tr>' +
+                    '<tbody></tbody>' +
+                    '</table> ';
+                $("#rslt_select").html(table);
+                for (let i = 0; i < data.length; ++i) {
+                    $("#rslt_table > tbody:last").append("<tr><td>"
+                        + data[i].value['GROUP_ID'] + "</td><td>" +
+                        data[i].value['CODE_ID'] + "</td><td>" +
+                        data[i].value['CODE_NM'] + "</td></tr>");
                 }
-            });
-
-            $('#aform').submit();
+            }
         });
+
+        $('#aform').submit();
     });
 </script>

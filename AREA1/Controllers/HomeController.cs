@@ -1,5 +1,6 @@
 ﻿using AREA1.Data;
 using AREA1.Models;
+using AREA1.Tool;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,11 +12,13 @@ namespace AREA1.Controllers {
         private readonly ILogger<HomeController> _logger;
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
+        private readonly CodeMngTool _codeMngTool;
 
         public HomeController(ILogger<HomeController> logger, AppSoftDbContext context) {
             _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);
+            _codeMngTool = new CodeMngTool(context);
         }
 
         public IActionResult Index() {
@@ -95,24 +98,34 @@ namespace AREA1.Controllers {
         public List<JsonResult> SelectData()
         {
             using var transaction = _context.Database.BeginTransaction();
+            
+            List<Dictionary<string, string>> resultList = _codeMngTool.getCode(Request.Form["group_nm"]);
+            string resultString = _codeMngTool.getCode(Request.Form["group_nm"], Request.Form["code_nm"]);
 
-            string query = "SELECT * FROM PERSONS";
-            List<Dictionary<string, string>> resultList = _commonDao.SelectList(query);
-
-            var persons = new List<JsonResult>();
-            for (int i = 0; i < resultList.Count; ++i)
+            var codes = new List<JsonResult>();
+            for(int i = 0; i < resultList.Count; i++)
             {
-                var person = new Dictionary<string, string>()
+                if (resultString.Equals(resultList[i]["CODE_ID"]) && !Request.Form["code_nm"].ToString().Equals(""))
                 {
-                    {"PERSON_ID",resultList[i]["PERSON_ID"]},
-                    {"LAST_NAME",resultList[i]["LAST_NAME"]},
-                    {"FIRST_NAME",resultList[i]["FIRST_NAME"]},
-                    {"ADDRESS",resultList[i]["ADDRESS"]},
-                    {"CITY",resultList[i]["CITY"]}
-                };
-                persons.Add(Json(person));
+                    var code = new Dictionary<string, string>()
+                    {
+                        {"CODE_ID", resultList[i]["CODE_ID"] }
+                    };
+                    codes.Add(Json(code));
+                    break;
+                }
+                else if(Request.Form["code_nm"].ToString().Equals(""))
+                {
+                    var code = new Dictionary<string, string>()
+                    {
+                        {"GROUP_ID", resultList[i]["GROUP_ID"] },
+                        {"CODE_ID", resultList[i]["CODE_ID"] },
+                        {"CODE_NM", resultList[i]["CODE_NM"] }
+                    };
+                    codes.Add(Json(code));
+                }
             }
-            return persons;
+            return codes;
         }
 
         public IActionResult Privacy() {
