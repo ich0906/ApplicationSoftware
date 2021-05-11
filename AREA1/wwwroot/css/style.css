@@ -470,7 +470,7 @@ table.calendartb td.subject a:hover { color:#222; }
 .subjectlist .left span{font-size:0.7143rem; color:#7c7c7c;  font-weight:300;}
 .subjectlist .right{float:right !important; width:50%; position: relative; text-align: right;}
 .subjectlist .right button{width:22%; padding:4px 0}
-.subjectlist .right button span.icon_new{background: url("../images/common/icon-new2.png") no-repeat 1px 3px;padding:0 6px}
+.subjectlist .right button span.icon_new{background: url("../images/layout/icon-new2.png") no-repeat 1px 3px;padding:0 6px}
 
 
 .learntime {position: absolute; right:20px; font-weight: 300;}
