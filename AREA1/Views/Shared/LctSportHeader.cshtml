@@ -89,6 +89,10 @@
             $("#__form__").attr("action", "/Notice/SelectPageListNotice");
             $("#__form__").submit();
         });
+
+        $("[name=selectYearhakgi]").change(function () {
+            $("[name=selectSubj]").trigger('change');
+        });
     });
 </script>
 
@@ -151,8 +155,8 @@
                             <div class="col-3 aC">수강학기</div>
                             <div class="col-9">
                                 <select name="selectYearhakgi" v-model="selectYearhakgi" @@change="onYearhakgiChange()" class="form-control form-control-sm">
-                                    <option v-for="option in yearhakgiList" :value="option">
-                                        {{ option.label }}
+                                    <option v-for="(option, index) in yearhakgis" :value="index">
+                                        {{ option.LABEL }}
                                     </option>
                                 </select>
                             </div>

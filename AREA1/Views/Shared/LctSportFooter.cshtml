@@ -6,10 +6,11 @@
         el: '#appSelectSubj',
         data: {
             yearhakgiList: [],
+            yearhakgis: [],
             subjList: [],
             selectYearhakgi: null,
             selectSubj: null,
-            selectedYearhakgi: '2021,1',
+            selectedYearhakgi: '@ViewBag.YEAR_HAKGI',
             selectedSubj: '@ViewBag.ACDMC_NO'
         },
         mounted: function () {
@@ -23,13 +24,13 @@
 
                         let selectedIndex = 0;
                         for (let i = 0; i < this.yearhakgiList.length; i++) {
-                            if (this.yearhakgiList[i].value === selectedYearhakgi) {
+                            if (this.yearhakgiList[i]['subjList'][this.yearhakgiList.length - 1]['YEAR_HAKGI'] === selectedYearhakgi) {
                                 selectedIndex = i;
                                 break;
                             }
                         }
 
-                        this.selectYearhakgi = this.yearhakgiList[selectedIndex];
+                        this.selectYearhakgi = selectedIndex;
 
                         this.onYearhakgiChange(selectedSubj);
                     }.bind(this));
@@ -38,17 +39,19 @@
                 let selectedIndex = 0;
 
                 for (let yearhakgi in this.yearhakgiList) {
-                    if (this.yearhakgiList[yearhakgi] === this.selectYearhakgi) {
+                    if (selectedSubj != undefined)
+                        this.yearhakgis.push(this.yearhakgiList[yearhakgi]['subjList'].pop(this.yearhakgiList[yearhakgi]['subjList'].length - 1));
+
+                    if (this.yearhakgiList[yearhakgi] === this.yearhakgiList[this.selectYearhakgi] || (selectedSubj == undefined && yearhakgi == this.yearhakgiList[this.selectYearhakgi])) {
                         this.subjList = this.yearhakgiList[yearhakgi]['subjList'];
+                        this.selectYearhakgi = yearhakgi;
 
                         for (let j = 0; j < this.subjList.length; j++) {
                             if (this.subjList[j]["ACDMC_NO"] === selectedSubj) {
                                 selectedIndex = j;
                                 break;
-                            }
+                            } 
                         }
-
-                        break;
                     }
                 }
 

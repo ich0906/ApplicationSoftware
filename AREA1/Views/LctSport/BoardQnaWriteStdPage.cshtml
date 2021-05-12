@@ -51,7 +51,6 @@
                     el: '#appModule',
                     data: {
                         pageInit: false,
-
                         selectYearhakgi: null,
                         selectSubj: null,
                         selectChangeYn: 'Y',
@@ -64,7 +63,7 @@
                         preOthbcAt: 'Y',
                         content: null,
                         atchFileId: null,
-                        storageId: 'CLS_BOARD',
+                        storageId: '1000',
                         cmd: 'insert',
                         sortOrdr: null,
                         upperNo: null
@@ -110,7 +109,17 @@
                                 return false;
                             }
 
-                            axios.post('InsertNotice', null, this.$data)
+                            axios.post('InsertNotice',
+                                {
+                                    'selectSubj': this.$data.selectSubj,
+                                    'selectChangeYn': this.$data.selectChangeYn,
+                                    'title': this.$data.title,
+                                    'othbcAt': this.$data.othbcAt,
+                                    'content': this.$data.content,
+                                    'atchFileId': this.$data.atchFileId,
+                                    'storageId': this.$data.storageId,
+                                    'cmd': this.$data.cmd,
+                                })
                                 .then(function (response) {
                                     alert("등록되었습니다.");
                                     linkUrl('SelectPageListNotice', this.$data);
