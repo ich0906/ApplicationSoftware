@@ -90,34 +90,61 @@ namespace AREA1.Controllers {
         public List<Dictionary<string, List<Dictionary<string, string>>>> YearhakgiAtnlcSbjectList() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             Dictionary<string, string> param = new Dictionary<string, string>();
-            // 학기 당 과목리스트
-            List<Dictionary<string, string>> subjList = null;
+            
+            // 학기 리스트
+            List<Dictionary<string, string>> yearhakgiList = null;
             // 학기 정보 리스트
             List<Dictionary<string, List<Dictionary<string, string>>>> resultList = new List<Dictionary<string, List<Dictionary<string, string>>>>();
+            
 
             param["USER_ID"] = userInfo.user_id;
 
+            
             if (userInfo.author.Equals("1000")) {
-                string sql = "SELECT B.ACDMC_NO, A.SEMESTER, A.YEAR, D.TITLE || ' (' || B.ACDMC_NO || ') - ' || C.NAME AS LABEL"
-                           + " FROM OP_TEACHES A"
-                           + " JOIN OP_SECTION B"
-                           + " ON A.COURSE_ID = B.COURSE_ID AND A.SEC_ID = B.SEC_ID AND A.SEMESTER = B.SEMESTER AND A.YEAR = B.YEAR"
-                           + " JOIN OP_USER C"
-                           + " ON A.ID = C.USER_ID"
-                           + " JOIN OP_COURSE D"
-                           + " ON A.COURSE_ID = D.COURSE_ID"
-                           + $" WHERE A.ID = '{userInfo.user_id}'"
-                           + " AND A.semester = '1'"
-                           + " AND A.YEAR = '2021'"
-                           + " ORDER BY A.COURSE_ID";
+                string sql = "";
+
+                // 학기명
+                sql = "SELECT YEAR || '년도 ' || SEMESTER || '학기' AS LABEL"
+                    + " ,YEAR || ',' || SEMESTER AS YEAR_HAKGI "
+                    + ", YEAR, SEMESTER "
+                    + "FROM OP_TEACHES "
+                    + $"WHERE ID = '{userInfo.user_id}' "
+                    + "GROUP BY YEAR, SEMESTER "
+                    + "ORDER BY YEAR DESC, SEMESTER DESC";
+
+                yearhakgiList = _commonDao.SelectList(sql);
+                
+
+                for (int i = 0; i < yearhakgiList.Count; i++) {
+                    // 과목명
+                    sql = "SELECT B.ACDMC_NO, A.SEMESTER, A.YEAR, D.TITLE || ' (' || B.ACDMC_NO || ') - ' || C.NAME AS LABEL" +
+                        ",  A.YEAR || ',' || A.SEMESTER AS YEAR_HAKGI"
+                               + " FROM OP_TEACHES A"
+                               + " JOIN OP_SECTION B"
+                               + " ON A.COURSE_ID = B.COURSE_ID AND A.SEC_ID = B.SEC_ID AND A.SEMESTER = B.SEMESTER AND A.YEAR = B.YEAR"
+                               + " JOIN OP_USER C"
+                               + " ON A.ID = C.USER_ID"
+                               + " JOIN OP_COURSE D"
+                               + " ON A.COURSE_ID = D.COURSE_ID"
+                               + $" WHERE A.ID = '{userInfo.user_id}'"
+                               + " AND A.semester = '" + yearhakgiList[i]["SEMESTER"] + "'"
+                               + " AND A.YEAR = '" + yearhakgiList[i]["YEAR"] + "'"
+                               + " ORDER BY A.COURSE_ID";
 
 
-                Dictionary<string, List<Dictionary<string, string>>> result = new Dictionary<string, List<Dictionary<string, string>>>();
+                    // 학기 당 과목리스트
+                    List<Dictionary<string, string>> subjList = null;
 
-                subjList = _commonDao.SelectList(sql);
-                result["subjList"] = subjList;
+                    subjList = _commonDao.SelectList(sql);
+                    subjList.Add(yearhakgiList[i]);
 
-                resultList.Add(result);
+                    // 반환 리스트
+                    Dictionary<string, List<Dictionary<string, string>>> result = new Dictionary<string, List<Dictionary<string, string>>>();
+
+                    result["subjList"] = subjList;
+
+                    resultList.Add(result);
+                }
             }
             return resultList;
         }

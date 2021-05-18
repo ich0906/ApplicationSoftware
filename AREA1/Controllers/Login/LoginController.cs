@@ -23,7 +23,7 @@ namespace AREA1.Login.Controllers {
         public IActionResult Login() {
             string alertMsg = "";
 
-            switch(Convert.ToInt32(Request.Query["alertLogin"])) {
+            switch (Convert.ToInt32(Request.Query["alertLogin"])) {
                 case 1:
                     alertMsg = "로그인 정보가 틀렸습니다.";
                     break;
@@ -45,8 +45,7 @@ namespace AREA1.Login.Controllers {
         }
 
         public IActionResult DoLogin() {
-            if (!Request.Form["login_id"].Equals(""))
-            {
+            if (!Request.Form["login_id"].Equals("")) {
                 string query = "SELECT USER_ID" +
                                     ", NAME" +
                                     ", AUTHOR" +
@@ -61,8 +60,7 @@ namespace AREA1.Login.Controllers {
                 // SelectOne은 단 한건의 결과만 반환됨, 나머지는 날라감
                 Dictionary<string, string> result = _commonDao.SelectOne(query, Request.Form);
 
-                if (!result["USER_ID"].Equals(""))
-                {
+                if (!result["USER_ID"].Equals("")) {
                     UserModel userInfo = new UserModel();
                     userInfo.user_id = result["USER_ID"];
                     userInfo.name = result["NAME"];
@@ -79,12 +77,6 @@ namespace AREA1.Login.Controllers {
 
 
             return RedirectToAction("Login", new { alertLogin = 1 });
-        }
-
-        public IActionResult DoLogout() {
-            SessionExtensionTool.SetObject(HttpContext.Session, "userInfo", null);
-
-            return Redirect("/");
         }
 
         public IActionResult Error() {
