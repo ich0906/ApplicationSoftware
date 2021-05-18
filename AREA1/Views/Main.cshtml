@@ -63,148 +63,69 @@
                                     <colgroup><col> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"></colgroup>
                                     <thead><tr><th></th> <th><!---->월</th> <th><!---->화</th> <th><p class="today1">수</p><!----></th> <th><!---->목</th> <th><!---->금</th> <th><!---->토</th></tr></thead>
                                     <tbody>
+                                        @{string[] days ={"", "월", "화", "수", "목", "금", "토"};}
+                                        @{string clsStr; }
+
+                                        @for(int i = 1; i <= 6; ++i){
                                         <tr>
-                                            <td class="time">0</td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                            <td>
-                                                <div class="namecol07 lessontime3" style="cursor: pointer;">
-                                                    <p>
-                                                        응용소프트웨어실습
-                                                        (새빛301 / 이윤구)
-                                                    </p>
-                                                </div>
-                                            </td>
-                                            <td><!----></td>
+                                            <td class="time">@i</td>
+                                            @for (int j = 1; j <= 6; ++j) {
+                                                @if (ViewBag.ResultCount > 0) {
+                                                    bool found = false;
+                                                    for (int k = 0; k < ViewBag.ResultCount; ++k) {
+                                                        if (ViewBag.ResultList[k]["DAY1"] == days[j] && ViewBag.ResultList[k]["PERIOD1"] == i.ToString()) {
+                                                            <text>
+                                                                @{clsStr = "namecol0" + (k + 1) + " lessontime1";}
+                                                                <td>
+                                                                    <div class="@clsStr" style="cursor: pointer;">
+                                                                        <p>
+                                                                            @ViewBag.ResultList[k]["TITLE"]
+                                                                            (@ViewBag.ResultList[k]["BUILDING"]@ViewBag.ResultList[k]["ROOM_NUMBER"] / @ViewBag.ResultList[k]["NAME"])
+                                                                        </p>
+                                                                    </div>
+                                                                </td>
+                                                            </text>
+
+                                                                        found = true;
+                                                                    } else if (ViewBag.ResultList[k]["DAY2"] == days[j] && ViewBag.ResultList[k]["PERIOD2"] == i.ToString()) {
+                                                                        if (ViewBag.ResultList[k]["DAY1"] == "") {
+                                                                <text>
+                                                                    <td>
+                                                                        @{clsStr = "namecol0" + (k + 1) + " lessontime2";}
+                                                                        <div class="@clsStr" style="cursor: pointer;">
+                                                                            <p>
+                                                                                @ViewBag.ResultList[k]["TITLE"]
+                                                                                (@ViewBag.ResultList[k]["BUILDING"]@ViewBag.ResultList[k]["ROOM_NUMBER"] / @ViewBag.ResultList[k]["NAME"])
+                                                                            </p>
+                                                                        </div>
+                                                                    </td>
+                                                                </text>
+                                                            } else {
+                                                                <text>
+                                                                    <td>
+                                                                    @{clsStr = "namecol0" + (k + 1) + " lessontime1";}
+                                                                    <div class="@clsStr" style="cursor: pointer;">
+                                                                        <p>
+                                                                            @ViewBag.ResultList[k]["TITLE"]
+                                                                            (@ViewBag.ResultList[k]["BUILDING"]@ViewBag.ResultList[k]["ROOM_NUMBER"] / @ViewBag.ResultList[k]["NAME"])
+                                                                        </p>
+                                                                    </div>
+                                                                    </td>
+                                                                 </text>
+                                                                }
+                                                                found = true;
+                                                            }
+                                                        }
+                                                        if (!found) {
+                                                            <td><!----></td>
+                                                        }
+                                                    } else {
+                                                        <td><!----></td>
+                                                    }
+                                            }
                                         </tr>
-                                        <tr>
-                                            <td class="time">1</td>
-                                            <td><!----></td>
-                                            <td>
-                                                <div class="namecol04 lessontime1" style="cursor: pointer;">
-                                                    <p>
-                                                        데이터베이스
-                                                        (미지정 / 문승현)
-                                                    </p>
-                                                </div>
-                                            </td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="time">2</td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                            <td>
-                                                <div class="namecol04 lessontime1" style="cursor: pointer;">
-                                                    <p>
-                                                        데이터베이스
-                                                        (새빛204 / 문승현)
-                                                    </p>
-                                                </div>
-                                            </td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                        </tr>
-                                        <tr><td class="time">3</td> <td><!----></td><td><!----></td><td><!----></td><td><!----></td><td><!----></td><td><!----></td></tr>
-                                        <tr><td class="time">4</td> <td><!----></td><td><!----></td><td><!----></td><td><!----></td><td><!----></td><td><!----></td></tr>
-                                        <tr>
-                                            <td class="time">5</td>
-                                            <td>
-                                                <div class="namecol05 lessontime1" style="cursor: pointer;">
-                                                    <p>
-                                                        데이터통신
-                                                        (미지정 / 최웅철)
-                                                    </p>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="namecol02 lessontime1" style="cursor: pointer;">
-                                                    <p>
-                                                        운영체제
-                                                        (미지정 / 안우현)
-                                                    </p>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="namecol06 lessontime1" style="cursor: pointer;">
-                                                    <p>
-                                                        휴먼컴퓨터인터페이스
-                                                        (새빛204 / 이강훈)
-                                                    </p>
-                                                </div>
-                                            </td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="time">6</td>
-                                            <td>
-                                                <div class="namecol01 lessontime1" style="cursor: pointer;">
-                                                    <p>
-                                                        알고리즘
-                                                        (미지정 / 김용혁)
-                                                    </p>
-                                                </div>
-                                            </td>
-                                            <td><!----></td>
-                                            <td>
-                                                <div class="namecol05 lessontime1" style="cursor: pointer;">
-                                                    <p>
-                                                        데이터통신
-                                                        (참B101 / 최웅철)
-                                                    </p>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="namecol02 lessontime1" style="cursor: pointer;">
-                                                    <p>
-                                                        운영체제
-                                                        (새빛204 / 안우현)
-                                                    </p>
-                                                </div>
-                                            </td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="time">91</td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                            <td>
-                                                <div class="namecol03 lessontime1" style="cursor: pointer;">
-                                                    <p>
-                                                        취업전략
-                                                        (미지정 / 김정권)
-                                                    </p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="time">99</td>
-                                            <td>
-                                                <div class="namecol06 lessontime1" style="cursor: pointer;">
-                                                    <p>
-                                                        휴먼컴퓨터인터페이스
-                                                        (미지정 / 이강훈)
-                                                    </p>
-                                                </div>
-                                            </td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                            <td><!----></td>
-                                        </tr>
+                                         }
+                       
                                     </tbody>
                                 </table>
                             </div>
@@ -218,7 +139,9 @@
                                             <div class="left" style="cursor: pointer;">
                                                 @ViewBag.ResultListTeacher[i]["TITLE"] (@ViewBag.ResultListTeacher[i]["ACDMC_NO"])
                                                 <br> <span>
-                                            @ViewBag.ResultListTeacher[i]["DAY1"] @ViewBag.ResultListTeacher[i]["PERIOD1"]교시
+                                            @if (ViewBag.ResultListTeacher[i]["DAY1"] != string.Empty) {
+                                            <span>,@ViewBag.ResultListTeacher[i]["DAY1"] @ViewBag.ResultListTeacher[i]["PERIOD1"]교시</span>
+                                            }
                                             @if (ViewBag.ResultListTeacher[i]["DAY2"] != string.Empty) {
                                                 <span>,@ViewBag.ResultListTeacher[i]["DAY2"] @ViewBag.ResultListTeacher[i]["PERIOD2"]교시</span>
                                             }

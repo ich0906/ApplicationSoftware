@@ -21,6 +21,8 @@ namespace AREA1.Controllers {
             _commonDao = new CommonDao(context);
         }
         public IActionResult Main() {
+            // TIME_SLOT_TABLE에서 DAY1만 채워져 있다면 1연속 수업,
+            // DAY2만 채워져 있다면 3연속 수업, 둘 다 채워져 있다면 일반적.
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
 
             if (userInfo == null) {
