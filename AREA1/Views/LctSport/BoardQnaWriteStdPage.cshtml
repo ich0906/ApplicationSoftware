@@ -3,7 +3,7 @@
 
             <!-- content -->
             <div id="appModule" class="card card-body mb-4 content">
-                <div><p class="contenttitle">강의 묻고답하기</p></div>
+                <div><p class="contenttitle">@ViewData["pageNm"]</p></div>
                 <div class="board_write_form">
                     <dl>
                         <dt>
@@ -109,7 +109,7 @@
                                 return false;
                             }
 
-                            axios.post('InsertNotice',
+                            axios.post('@ViewBag.Insert',
                                 {
                                     'selectSubj': this.$data.selectSubj,
                                     'selectChangeYn': this.$data.selectChangeYn,
@@ -122,17 +122,17 @@
                                 })
                                 .then(function (response) {
                                     alert("등록되었습니다.");
-                                    linkUrl('SelectPageListNotice', this.$data);
+                                    linkUrl('@ViewBag.SelectPageList', this.$data);
                                 });
                         },
 
                         getData: function (param) {
-                            axios.post('SelectNotice', param)
+                            axios.post('@ViewBag.Select', param)
                                 .then(function (response) {
                                 }.bind(this));
                         },
                         goList: function () {
-                            linkUrl('SelectPageListNotice', this.$data);
+                            linkUrl('@ViewBag.SelectPageList', this.$data);
                         }
                     }
                 });
@@ -144,6 +144,22 @@
                 var oEditors = [];
                 var oContents = new Array(1);
                 oContents[0] = "content";
+
+                $(function () {
+                    $(".btnCon").find("button").click(function () {
+                        $("#__form__").attr("action", "@ViewBag.SelectPageList");
+                        $("#__form__").submit();
+                    });
+
+                    $("[name=selectSubj]").change(function () {
+                        $("#__form__").attr("action", "@ViewBag.SelectPageList");
+                        $("#__form__").submit();
+                    });
+
+                    $("[name=selectYearhakgi]").change(function () {
+                        $("[name=selectSubj]").trigger('change');
+                    });
+                });
             </script>
 
             <script type="text/javascript" src="~/lib/smarteditor/HuskyEZCreator.js" charset="utf-8"></script>

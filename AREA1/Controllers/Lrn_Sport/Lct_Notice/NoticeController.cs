@@ -38,6 +38,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewData["name"] = userInfo.name;                                       // 이름
             ViewData["user_id"] = userInfo.user_id;                                 // 유저 ID(학번)
             ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";         // 교수 여부
+            ViewData["pageNm"] = "강의 공지사항";
 
             string sql = "";
 
@@ -55,6 +56,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             int bbsCnt = 0;
             // Form이 존재하지 않으면 오류가 나기 때문에 분기해주어야한다.
             if (Request.HasFormContentType && !Request.Form["selectedSubj"].ToString().Equals("")) {
+                param.Add("page", Request.Form["page"]);
 
                 bbsCnt = Convert.ToInt32(_commonDao.SelectOne(sql, Request.Form)["BBS_CNT"]);
 
@@ -69,6 +71,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
                 param = _commonDao.SelectOne(sql2);
                 param.Add("selectedSubj", param["SELECTEDSUBJ"]);
+                param.Add("page", "1");
 
                 bbsCnt = Convert.ToInt32(_commonDao.SelectOne(sql, param)["BBS_CNT"]);
 
@@ -79,17 +82,23 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
             // 만약 조회된 공지사항이 있으면 값을 가져온다.
             if (bbsCnt > 0) {
-                sql = "SELECT A.TITLE"                                                                                                                     // 게시글 제목
-                                   /* + ", (SELECT DECODE(COUNT(*), 0, 'N', 'Y') FROM OP_FILE WHERE DOC_ID = A.DOC_ID) AS FILE_AT"                            // 파일 여부
+                sql = "SELECT * FROM (SELECT ROWNUM AS RNUM"
+                                    + ", A.TITLE"                                                                                                                   // 게시글 제목
+                                   /* + ", (SELECT DECODE(COUNT(*), 0, 'N', 'Y') FROM OP_FILE WHERE DOC_ID = A.DOC_ID) AS FILE_AT"                          // 파일 여부
                                     + ", (SELECT DECODE(COUNT(*), 0, '', FILE_ID) FROM OP_FILE WHERE DOC_ID = A.DOC_ID AND SNO = 1) AS FILE_ID"             // 첫번째 첨부파일 ID*/
                                     + ", B.NAME AS REGISTER"                                                                                                // 작성자명
                                     + ", A.REGIST_DT"                                                                                                       // 작성일
-                                    + ", A.RDCNT "                                                                                                          // 조회수
+                                    + ", A.RDCNT"                                                                                                          // 조회수
+                                    + ", A.BBS_ID "
                               + "FROM OP_BBS A "
                               + "JOIN OP_USER B "
                               + "ON A.REGISTER = B.USER_ID "
                               + "WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' "
-                              + "AND ACDMC_NO = @selectedSubj:VARCHAR";
+                              + "AND ACDMC_NO = @selectedSubj:VARCHAR "
+                              + "ORDER BY BBS_ID DESC, REGIST_DT DESC) "
+                              + "WHERE 1=1 " 
+                              + (param.ContainsKey("page") ? "AND RNUM > " + (Convert.ToInt32(param["page"]) - 1) + " * 10 " : "AND RNUM > 0 ")
+                              + (param.ContainsKey("page") ? "AND RNUM <= " + param["page"] + "0" : "AND RNUM <= 10");
 
                 // Form이 존재하지 않으면 오류가 나기 때문에 분기해주어야한다.
                 if (Request.HasFormContentType) {
@@ -100,15 +109,59 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                     var resultList = _commonDao.SelectList(sql, param);
                     ViewBag.ResultList = resultList;
                 }
+
             }
 
             ViewBag.ResultCnt = bbsCnt;
+            ViewBag.param = param;
+            ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
+            ViewBag.Select = "/Notice/SelectNotice";
+            ViewBag.InsertForm = "/Notice/InsertFormNotice";
+            ViewBag.Insert = "/Notice/InsertForm";
 
             return View("/Views/LctSport/BoardListStdPage.cshtml");
         }
 
         public IActionResult SelectNotice() {
-            return View();
+            UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
+            Dictionary<string, string> param = new Dictionary<string, string>();
+
+            ViewData["name"] = userInfo.name;
+            ViewData["user_id"] = userInfo.user_id;
+            ViewData["pageNm"] = "강의 공지사항";
+            ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
+            ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
+
+            param.Add("page", Request.Form["page"]);
+
+            string sql = "SELECT * FROM ("
+                       + "SELECT A.ACDMC_NO AS SelectSubj"
+                       + ", A.TITLE"
+                       + ", A.OTHBC_AT"
+                       + ", A.CONTENTS"
+                       + ", A.REGIST_DT "
+                       + ", B.NAME "
+                       + ", A.BBS_ID "
+                       + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
+                       + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
+                       + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
+                       + ", LAG(TITLE) OVER(ORDER BY BBS_ID) AS PREV_TITLE " 
+                       + "FROM OP_BBS A "
+                       + "JOIN OP_USER B "
+                       + "ON A.REGISTER = B.USER_ID "
+                       + "WHERE 1=1 "
+                       + "AND ACDMC_NO = @selectedSubj:VARCHAR "
+                       + "AND BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "')"
+                       + "WHERE BBS_ID = @BBS_ID:VARCHAR";
+
+            var result = _commonDao.SelectOne(sql, Request.Form);
+
+            ViewBag.result = result;
+            ViewBag.param = param;
+            ViewBag.Select = "/Notice/SelectNotice";
+            ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
+
+            return View("/Views/LctSport/BoardViewStdPage.cshtml");
         }
 
         /*
@@ -120,6 +173,10 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
+            ViewData["pageNm"] = "강의 공지사항";
+
+            Dictionary<string, string> param = new Dictionary<string, string>();
+
             ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
 
@@ -127,6 +184,14 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                 Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
                 Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
             }
+
+            param.Add("page", Request.Form["page"]);
+            ViewBag.param = param;
+
+            ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
+            ViewBag.Select = "/Notice/SelectNotice";
+            ViewBag.InsertForm = "/Notice/InsertFormNotice";
+            ViewBag.Insert = "/Notice/InsertNotice";
 
             return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
         }
@@ -144,13 +209,10 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
             // Notice 데이터 파싱
             param.Add("SelectSubj", notice.SelectSubj);
-            param.Add("SelectChangeYn", notice.SelectChangeYn);
             param.Add("Title", notice.Title);
             param.Add("OthbcAt", notice.OthbcAt);
             param.Add("Content", notice.Content);
             param.Add("AtchFileId", notice.SelectSubj);
-            param.Add("StorageId", notice.SelectSubj);
-            param.Add("Cmd", notice.SelectSubj);
             param.Add("user_id", userInfo.user_id);
 
             string query = "";
@@ -160,7 +222,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                     ", @SelectSubj:VARCHAR" +
                     ", '1000'" +
                     ", @Title:VARCHAR" +
-                    ", TO_CHAR(SYSDATE, 'yyyy/mm/dd')" +
+                    ", TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
                     ", 0" +
                     ", @Content:VARCHAR" +
                     ", @user_id:VARCHAR" +
@@ -186,14 +248,11 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
         // 공지사항 전용 모델 public으로 선언해야 매개변수로 사용가능함
         public class Notice {
-            public string SelectSubj { get; set; }
-            public string SelectChangeYn { get; set; }
-            public string Title { get; set; }
-            public string OthbcAt { get; set; }
-            public string Content { get; set; }
-            public string AtchFileId { get; set; }
-            public string StorageId { get; set; }
-            public string Cmd { get; set; }
+            public string SelectSubj { get; set; }          // 학정번호
+            public string Title { get; set; }               // 제목
+            public string OthbcAt { get; set; }             // 공개여부(중요여부)
+            public string Content { get; set; }             // 내용
+            public string AtchFileId { get; set; }          // 첨부파일 ID
         }
 
 

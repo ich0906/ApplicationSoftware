@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System;
 using Tool;
+using AREA1.Tool;
 
 namespace AREA1.Controllers {
     [LoginActionFilter]
@@ -15,10 +16,12 @@ namespace AREA1.Controllers {
         private readonly ILogger<MainController> _logger;
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
+        private readonly CodeMngTool _codeMngTool;
         public MainController(ILogger<MainController> logger, AppSoftDbContext context) {
             _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);
+            _codeMngTool = new CodeMngTool(context);
         }
         public IActionResult Main() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
@@ -98,7 +101,7 @@ namespace AREA1.Controllers {
             param["USER_ID"] = userInfo.user_id;
 
             
-            if (userInfo.author.Equals("1000")) {
+            if (userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
                 string sql = "";
 
                 // 학기명

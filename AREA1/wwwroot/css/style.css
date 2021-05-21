@@ -1068,7 +1068,7 @@ ul.paging li.active a:focus {
 
 .next_prev_box{border-top: 1px solid #aaa; border-bottom:1px solid #aaa;}
 .next_prev_box dl dt{display:inline-block;width:15%;text-align:center;}
-.next_prev_box dl dt em{background: url(../images/common/dot_bg.png) no-repeat 100% 50%;padding-right:25px;}
+.next_prev_box dl dt em{background: url(/images/lctSport/dot_bg.png) no-repeat 100% 50%;padding-right:25px;}
 .next_prev_box dl dd{display:inline-block;width:80%;}
 
 

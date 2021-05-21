@@ -1,0 +1,75 @@
+﻿@Html.Partial("~/Views/Shared/LctSportHeader.cshtml")
+
+
+<!-- content -->
+<div id="appModule" class="card card-body mb-4 content">
+    <div><p class="contenttitle">@ViewData["pageNm"]</p></div>
+    <div class="board_view">
+        <div class="board_view_header">
+            <h2>@ViewBag.result["TITLE"]</h2>
+            <div class="board_viewInfo">
+                <span>작성자 :</span> @ViewBag.result["NAME"] <span>등록일 :</span>2021-04-16 17:21<span>조회수 :</span> 69
+            </div>
+        </div>
+        <div></div>
+        <div class="board_view_content">
+            <div class="board_viewDetail">
+                <div>
+                    @Html.Raw(@ViewBag.result["CONTENTS"])
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btnCon">
+        <button type="button" class="btn2 btn-gray">목록</button>
+    </div>
+    <div class="next_prev_box">
+        <dl>
+            <dt><em>이전 글</em></dt>
+            @if (!ViewBag.result["PREV_ID"].Equals("")) {
+                <dd style="cursor: pointer;" onclick="goDetail('@(ViewBag.result["PREV_ID"])');"> @ViewBag.result["PREV_TITLE"]</dd>
+            } else {
+                <dd> 이전글이 없습니다.</dd>
+            }
+        </dl>
+        <dl>
+            <dt><em>다음 글</em></dt>
+            @if (!ViewBag.result["NEXT_ID"].Equals("")) {
+                <dd style="cursor: pointer;" onclick="goDetail('@(ViewBag.result["NEXT_ID"])');"> @ViewBag.result["NEXT_TITLE"]</dd>
+            } else {
+                <dd> 다음글이 없습니다.</dd>
+            }
+        </dl>
+    </div>
+</div>
+<!-- content -->
+
+<script type="text/javascript">
+    $(function () {
+        $(".btnCon").find("button").click(function () {
+                        $("#__form__").attr("action", "@ViewBag.SelectPageList");
+                        $("#__form__").submit();
+        });
+
+        $("[name=selectSubj]").change(function () {
+            $("#__form__").attr("action", "@ViewBag.SelectPageList");
+            $("#__form__").submit();
+        });
+
+        $("[name=selectYearhakgi]").change(function () {
+            $("[name=selectSubj]").trigger('change');
+        });
+    });
+
+    function goDetail(bbs_id) {
+        var input = "<input type='hidden' name='bbs_id' />";
+        $("#__form__").append(input);
+
+        $("[name=bbs_id]").val(bbs_id);
+
+        $("#__form__").attr("action", "@ViewBag.Select");
+        $("#__form__").submit();
+    }
+</script>
+
+@Html.Partial("~/Views/Shared/LctSportFooter.cshtml")

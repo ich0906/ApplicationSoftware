@@ -1,9 +1,7 @@
 ﻿@Html.Partial("~/Views/Shared/LctSportHeader.cshtml")
-
-
         <!-- content -->
         <div id="appModule" class="card card-body mb-4 content">
-            <div><p class="contenttitle">강의 공지사항</p></div>
+            <div><p class="contenttitle">@ViewData["pageNm"]</p></div>
             <form id="aform">
                 <div class="con_search">
                     <ul>
@@ -47,11 +45,11 @@
                     @if (ViewBag.ResultCnt > 0) {
                         for (int i = 0; i < ViewBag.ResultList.Count; i++) {
                             <tr>
-                                <td><!----> <span>@(i+1)</span></td>
-                                <td class="lft" style="cursor: pointer;">@ViewBag.ResultList[i]["TITLE"]</td>
+                                <td><!----> <span>@( ViewBag.ResultCnt - 10 * (Convert.ToInt32(ViewBag.param["page"])- 1) - @i )</span></td>
+                                <td class="lft" style="cursor: pointer;" onclick="goDetail(@ViewBag.ResultList[i]["BBS_ID"])">@ViewBag.ResultList[i]["TITLE"]</td>
                                 <td class="disnone"><!----></td>
                                 <td class="disnone">@ViewBag.ResultList[i]["REGISTER"]</td>
-                                <td class="disnone">@ViewBag.ResultList[i]["REGIST_DT"]</td>
+                                <td class="disnone">@ViewBag.ResultList[i]["REGIST_DT"].ToString().Split(' ')[0]</td>
                                 <td class="disnone">@ViewBag.ResultList[i]["RDCNT"]</td>
                             </tr>
                         }
@@ -62,14 +60,90 @@
                     }
                 </tbody>
             </table>
-            <ul data-v-82963a40="" class="paging typeA">
+
+            @{ 
+                int k = 1;
+            }
+            <ul class="paging typeA">
                 <!---->
-                <li data-v-82963a40="" class="go-prev disabled"><a data-v-82963a40="" tabindex="-1">Prev</a></li>
-                <li data-v-82963a40="" class="active"><a data-v-82963a40="" tabindex="0">1</a></li>
-                <li data-v-82963a40="" class="go-next disabled"><a data-v-82963a40="" tabindex="-1">Next</a></li> <!---->
+                <li style="cursor:pointer" class="go-prev
+                                           @if (ViewBag.param["page"].Equals("1")) {
+                                                @:disabled
+                                            }
+                                        ">
+                    <a tabindex="-1">Prev</a>
+                </li>
+                @for (int j = ViewBag.ResultCnt; j > 0; j -= 10, k++) {
+                    <li onclick="goPage(@k);" style="cursor:pointer" class=
+                                @if (ViewBag.param["page"].Equals(k.ToString())) {
+                                    @:"active"
+                                } else {
+                                    @:""
+                                }
+                        >
+                        <a tabindex="0">@k</a>
+                    </li>
+                }
+            <li style="cursor:pointer" class="go-next 
+                                        @if (ViewBag.param["page"].Equals((k-1).ToString())) {
+                                            @:disabled
+                                        }
+                                     ">
+                <a tabindex="-1">Next</a>
+            </li>
+            <!---->
             </ul>
         </div>
         <!-- content -->
+        <script type="text/javascript">
+            $(function () {
+                $(".go-prev").click(function () {
+                    var page = $("[name=page]").val() * 1 - 1;
+                    if (!$(this).hasClass('disabled'))
+                        goPage(page);
+                });
+
+                $(".go-next").click(function () {
+                    var page = $("[name=page]").val() * 1 + 1;
+                    if (!$(this).hasClass('disabled'))
+                        goPage(page);
+                });
+            });
+            function goPage(page) {
+                $("[name=page]").val(page);
+
+                $("#__form__").attr("action", "@ViewBag.SelectPageList");
+                $("#__form__").submit();
+            }
+            function goDetail(bbs_id) {
+                var input = "<input type='hidden' name='bbs_id' />";
+                $("#__form__").append(input);
+
+                $("[name=bbs_id]").val(bbs_id);
+
+                $("#__form__").attr("action", "@ViewBag.Select");
+                $("#__form__").submit();
+            }
+
+
+            $(function () {
+                $(".btnCon").find("button").click(function () {
+                    $("#__form__").attr("action", "@ViewBag.InsertForm");
+                    $("#__form__").submit();
+                });
+
+                $("[name=selectSubj]").change(function () {
+                    $("#__form__").attr("action", "@ViewBag.SelectPageList");
+                    $("#__form__").submit();
+                });
+
+                $("[name=selectYearhakgi]").change(function () {
+                    $("[name=selectSubj]").trigger('change');
+                });
+            });
+        </script>
     </div>
 </div>
+
+        
 @Html.Partial("~/Views/Shared/LctSportFooter.cshtml")
