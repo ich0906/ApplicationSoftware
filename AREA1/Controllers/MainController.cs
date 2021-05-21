@@ -70,22 +70,16 @@ namespace AREA1.Controllers {
 
             bool isSelected = false;
             if (Request.HasFormContentType && !Request.Form["year"].ToString().Equals("")) {
-                for(int i = 0; i < yearHakgiList.Count; ++i) {
-                    if(Request.Form["year"]==yearHakgiList[i]["YEAR"] && Request.Form["hakgi"] == yearHakgiList[i]["SEMESTER"]) {
-                        ViewBag.selectedYear = Request.Form["year"];
-                        ViewBag.selectedHakgi = Request.Form["hakgi"];
+                for (int i = 0; i < yearHakgiList.Count; ++i) {
+                    if (Request.Form["year"] == yearHakgiList[i]["YEAR"] && Request.Form["hakgi"] == yearHakgiList[i]["SEMESTER"]) {
                         ViewBag.selectedIndex = i;
                         isSelected = true;
                     }
                 }
             }
-            if (!isSelected) {
-                ViewBag.selectedYear = yearHakgiList[0]["YEAR"];
-                ViewBag.selectedHakgi = yearHakgiList[0]["SEMESTER"];
-                ViewBag.selectedIndex = 0;
-            }
+            if (!isSelected) ViewBag.selectedIndex = 0;
 
-                if (takes_cnt > 0) {
+            if (takes_cnt > 0) {
                 sql = "SELECT TITLE,NAME,DAY1,DAY2,PERIOD1,PERIOD2,BUILDING,ROOM_NUMBER,USER_ID,ACDMC_NO,A.ID,A.YEAR,A.SEMESTER, "
                     + "(SELECT OP_ADVISOR.I_ID FROM OP_USER JOIN OP_ADVISOR ON OP_USER.USER_ID=OP_ADVISOR.I_ID WHERE OP_ADVISOR.S_ID=A.ID) AS ADVISOR_ID,"
                     + "(SELECT NAME FROM OP_USER JOIN OP_ADVISOR ON OP_USER.USER_ID=OP_ADVISOR.I_ID WHERE OP_ADVISOR.S_ID=A.ID) AS ADVISOR, "
@@ -99,8 +93,8 @@ namespace AREA1.Controllers {
                    + "JOIN OP_COURSE D ON A.COURSE_ID=D.COURSE_ID "
                    + "JOIN OP_USER E ON E.USER_ID=B.ID "
                    + "JOIN OP_TIME_SLOT F on C.TIME_SLOT_ID = F.TIME_SLOT_ID ";
-                if(Request.HasFormContentType && !Request.Form["year"].ToString().Equals("")) sql+= "WHERE A.ID=" + userInfo.user_id + " AND A.YEAR=" + Request.Form["year"] + " AND A.SEMESTER=" + Request.Form["hakgi"];
-                else sql+="WHERE A.ID=" + userInfo.user_id + " AND A.YEAR=" + yearHakgiList[0]["YEAR"] + " AND A.SEMESTER=" + yearHakgiList[0]["SEMESTER"];
+                if (Request.HasFormContentType && !Request.Form["year"].ToString().Equals("")) sql += "WHERE A.ID=" + userInfo.user_id + " AND A.YEAR=" + Request.Form["year"] + " AND A.SEMESTER=" + Request.Form["hakgi"];
+                else sql += "WHERE A.ID=" + userInfo.user_id + " AND A.YEAR=" + yearHakgiList[0]["YEAR"] + " AND A.SEMESTER=" + yearHakgiList[0]["SEMESTER"];
 
                 var resultList = _commonDao.SelectList(sql);
                 ViewBag.ResultList = resultList;
@@ -122,7 +116,7 @@ namespace AREA1.Controllers {
                     + "JOIN OP_TIME_SLOT E on C.TIME_SLOT_ID = E.TIME_SLOT_ID ";
                 if (Request.HasFormContentType && !Request.Form["year"].ToString().Equals("")) sql += "WHERE A.ID=" + userInfo.user_id + " AND A.YEAR=" + Request.Form["year"] + " AND A.SEMESTER=" + Request.Form["hakgi"];
                 else sql += "WHERE A.ID=" + userInfo.user_id + " AND A.YEAR=" + yearHakgiList[0]["YEAR"] + " AND A.SEMESTER=" + yearHakgiList[0]["SEMESTER"];
-                
+
                 var resultList2 = _commonDao.SelectList(sql);
                 ViewBag.ResultListTeacher = resultList2;
                 ViewBag.TeachesCount = resultList2.Count;
