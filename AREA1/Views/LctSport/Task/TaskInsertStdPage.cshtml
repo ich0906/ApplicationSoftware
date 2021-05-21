@@ -21,7 +21,7 @@
             </dt>
             <dd>
                 <!--  데스크톱 화면 시작 -->
-                <div class='tablelistbox'  style="width: 49%">
+                <div class='tablelistbox' style="float:left; margin-right:16px;">
                     <v-date-picker :min-date="new Date()" v-model="sdate" style="float:left;"></v-date-picker>
                     &nbsp;
                     <select v-model="stimeHour" class="form-control form-control-sm" style="width: 80px">
@@ -37,6 +37,7 @@
                             {{ n > 9 ? n : '0' + n }}
                         </option>
                     </select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;~
                 </div>
 
                 <!-- 모바일 화면 시작 -->
@@ -58,7 +59,7 @@
                     </select>
                 </div>
                 <!--  데스크톱 화면 시작 -->
-                <div class='tablelistbox' style="width: 49%">
+                <div class='tablelistbox' style="float:left; margin-right:16px;">
                     <v-date-picker :min-date="new Date()" v-model="edate" style="float:left;"></v-date-picker>
                     &nbsp;
                     <select v-model="etimeHour" class="form-control form-control-sm" style="width: 80px">
@@ -101,8 +102,81 @@
                 추가제출기한
             </dt>
             <dd>
-                
+                <!--  데스크톱 화면 시작 -->
+                <div class='tablelistbox' style="float:left; margin-right:16px;">
+                    <v-date-picker :min-date="new Date()" v-model="sdate" style="float:left;"></v-date-picker>
+                    &nbsp;
+                    <select v-model="stimeHour" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="stimeMin" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;~
+                </div>
 
+                <!-- 모바일 화면 시작 -->
+                <div class='mtablelistbox'>
+                    <v-date-picker :min-date="new Date()" v-model="sdate" style="float:left;width: 90px;"></v-date-picker>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <select v-model="stimeHour" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="stimeMin" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                </div>
+                <!--  데스크톱 화면 시작 -->
+                <div class='tablelistbox' style="float:left; margin-right:16px;">
+                    <v-date-picker :min-date="new Date()" v-model="edate" style="float:left;"></v-date-picker>
+                    &nbsp;
+                    <select v-model="etimeHour" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="etimeMin" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- 모바일 화면 시작 -->
+                <div class='mtablelistbox'>
+                    <v-date-picker :min-date="new Date()" v-model="edate" style="float:left;width: 90px;"></v-date-picker>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <select v-model="etimeHour" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="etimeMin" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                </div>
             </dd>
         </dl>
         <dl>
