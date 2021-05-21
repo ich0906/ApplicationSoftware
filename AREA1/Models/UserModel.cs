@@ -14,5 +14,6 @@ namespace AREA1.Models {
         public string email { get; set; }
         public string password { get; set; }//hash
         public string name { get; set; }
+
     }
 }

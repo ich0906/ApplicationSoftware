@@ -1,0 +1,266 @@
+﻿@Html.Partial("~/Views/Shared/LctSportHeader.cshtml")
+
+<script src="/js/polyfill.min.js?features=Array.prototype.find,Intl"></script>
+
+<link rel="stylesheet" href="/css/v-calendar.min.css">
+<script src="/js/v-calendar.min.js"></script>
+
+<!-- content -->
+<div id="appModule" class="card card-body mb-4 content">
+    <div><p class="contenttitle">@ViewData["pageNm"]</p></div>
+    <div class="board_write_form">
+        <dl>
+            <dt>
+                제목
+            </dt>
+            <dd><input type="text" id="title" v-model="title" class="es" style="width: 100%;"></dd>
+        </dl>
+        <dl>
+            <dt>
+                제출기한
+            </dt>
+            <dd>
+                <!--  데스크톱 화면 시작 -->
+                <div class='tablelistbox'  style="width: 49%">
+                    <v-date-picker :min-date="new Date()" v-model="sdate" style="float:left;"></v-date-picker>
+                    &nbsp;
+                    <select v-model="stimeHour" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="stimeMin" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- 모바일 화면 시작 -->
+                <div class='mtablelistbox'>
+                    <v-date-picker :min-date="new Date()" v-model="sdate" style="float:left;width: 90px;"></v-date-picker>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <select v-model="stimeHour" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="stimeMin" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                </div>
+                <!--  데스크톱 화면 시작 -->
+                <div class='tablelistbox' style="width: 49%">
+                    <v-date-picker :min-date="new Date()" v-model="edate" style="float:left;"></v-date-picker>
+                    &nbsp;
+                    <select v-model="etimeHour" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="etimeMin" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- 모바일 화면 시작 -->
+                <div class='mtablelistbox'>
+                    <v-date-picker :min-date="new Date()" v-model="edate" style="float:left;width: 90px;"></v-date-picker>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <select v-model="etimeHour" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="etimeMin" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                추가제출기한
+            </dt>
+            <dd>
+                
+
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                내용/주의사항
+            </dt>
+            <dd>
+                <textarea id="content" class="es" style="display: none;"></textarea>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                제출양식
+            </dt>
+            <dd><input type="text" id="title" v-model="title" class="es" style="width: 100%;"></dd>
+        </dl>
+        <dl>
+            <dt>
+                파일용량제한
+            </dt>
+            <dd><input type="text" id="title" v-model="title" class="es" style="width: 100%;"></dd>
+        </dl>
+        <dl>
+            <dt>
+                파일 업로드
+            </dt>
+            <dd>
+                <file-upload ref="attach" multiple="true" :storage-id="storageId" :attach-id="atchFileId" params="{ 'masterNo' : '5' }" @@upload-complete="uploadComplete"></file-upload>
+            </dd>
+        </dl>
+    </div>
+    <div class='btnCon'>
+        @if (ViewData["command"].Equals("UPDATE")) {
+            @:<button type="button" class="btn2 btn-darkpurple" @@click="saveData()">수정</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        } else {
+            @:<button type="button" class="btn2 btn-darkpurple" @@click="saveData()">등록</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        }
+        <button type="button" class="btn2 btn-gray" @@click="goList()">목록</button>
+    </div>
+</div>
+<!-- content -->
+<script>
+
+    let appModule = new Vue({
+        el: '#appModule',
+        data: {
+            gubun: '10',
+            grcodeList: [],
+            yearhakgiList: [],
+            subjList: [],
+            selectGrcode: '',
+            selectYearhakgi: '',
+            selectSubj: '',
+            title: '',
+            weightgubun: 'M',
+            place: '',
+            sdate: '',
+            stimeHour: '00',
+            stimeMin: '00',
+            edate: '',
+            etimeHour: '00',
+            etimeMin: '00',
+            contents: '',
+            atchFileId: null,
+            storageId: '1000',
+        },
+        mounted: function () {
+            this.sdate = moment().format('YYYY-MM-DD');
+            this.edate = moment().format('YYYY-MM-DD');
+        },
+        methods: {
+            saveData: function () {
+                            this.$refs.attach.upload();
+                        },
+            uploadComplete: function (attachId) {
+                this.atchFileId = attachId;
+
+
+                oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+
+
+                this.content = $('#content').val();
+                this.content = this.content.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+                if (this.title == null) {
+                    alert('제목은 반드시 입력해주세요');
+                    $("#title").focus();
+                    return false;
+                }
+
+                axios.post('@ViewBag.Insert',
+                    {
+                        'selectSubj': this.$data.selectSubj,
+                        'selectChangeYn': this.$data.selectChangeYn,
+                        'title': this.$data.title,
+                        'othbcAt': this.$data.othbcAt,
+                        'content': this.$data.content,
+                        'atchFileId': this.$data.atchFileId,
+                        'storageId': this.$data.storageId,
+                        'cmd': this.$data.cmd,
+                                     @if (ViewData["command"].Equals("UPDATE")) {
+                                        @:'bbs_id': this.$data.bbs_id
+                                    }
+                    })
+                    .then(function (response) {
+                                    @if (ViewData["command"].Equals("UPDATE")) {
+                                        @:alert("수정되었습니다.");
+                                        @:goDetail('@ViewBag.result["BBS_ID"]');
+                                    } else {
+                                        @:alert("등록되었습니다.");
+                                        @:linkUrl('@ViewBag.SelectPageList', this.$data);
+                                    }
+                    });
+            },
+        }
+    });
+</script>
+
+<script type="text/javascript">
+                //SmartEditor :항상 Textarea보다 아래에 이 스크립트가 있어야 합니다.
+                var oEditors = [];
+                var oContents = new Array(1);
+                oContents[0] = "content";
+
+                $(function () {
+                    @if(ViewData["command"].Equals("UPDATE")) {
+                        @:$("#title").val('@ViewBag.result["TITLE"]');
+                        @:$("#content").html('@Html.Raw(@ViewBag.result["CONTENTS"])');
+                    }
+
+                    $(".btnCon").find("button").eq(1).click(function () {
+                        $("#__form__").attr("action", "@ViewBag.SelectPageList");
+                        $("#__form__").submit();
+                    });
+
+                    $("[name=selectSubj]").change(function () {
+                        $("#__form__").attr("action", "@ViewBag.SelectPageList");
+                        $("#__form__").submit();
+                    });
+
+                    $("[name=selectYearhakgi]").change(function () {
+                        $("[name=selectSubj]").trigger('change');
+                    });
+                });
+
+                function goDetail(bbs_id) {
+                    var input = "<input type='hidden' name='bbs_id' />";
+                    $("#__form__").append(input);
+
+                    $("[name=bbs_id]").val(bbs_id);
+
+                    $("#__form__").attr("action", "@ViewBag.Select");
+                    $("#__form__").submit();
+                }
+</script>
+
+<script type="text/javascript" src="~/lib/smarteditor/HuskyEZCreator.js" charset="utf-8"></script>
+<script type="text/javascript" src="~/lib/smarteditor/smarteditor_basic.js" charset="utf-8"></script>
+        </div>
+    </div>
+
+@Html.Partial("~/Views/Shared/LctSportFooter.cshtml")
