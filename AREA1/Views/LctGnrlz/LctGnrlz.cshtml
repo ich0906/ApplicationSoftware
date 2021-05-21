@@ -1,4 +1,6 @@
-﻿<body>
+﻿@Html.Partial("~/Views/Shared/LctSportHeader.cshtml")
+
+<body>
 
     <script src="/assets/plugins/accordion-menu/jquery-accordion-menu.js"></script>
 
@@ -17,6 +19,20 @@
             </div>
         </div>
     </header>
+
+    <script type="text/javascript">
+        $(function () {
+            $("[name=selectSubj]").change(function () {
+                $("#__form__").attr("action", "/LctGnrlz/LctGnrlz");
+                $("#__form__").submit();
+            });
+
+            $("[name=selectYearhakgi]").change(function () {
+                $("[name=selectSubj]").trigger('change');
+            });
+        });
+    </script>
+
     <script type="text/javascript">
         var deviceAgent = navigator.userAgent.toLowerCase();
         var ios = deviceAgent.match(/(iphone|ipod|ipad)/);
@@ -153,9 +169,6 @@
         <input type="hidden" name="selectedSubj" value="U202111110H030013">
     </form>
     <section>
-
-        <div id="appHeaderSubj" class="subjectnameba"><div class="container"><div class="row mg0" style="height: 37px;"><div class="col-md-10 subtitle" style="cursor: pointer;"><span class="subjectname">운영체제 (H030-3-1110-01) - 안우현</span> <span class="subjecttime">화 5교시미지정, 목 6교시/새빛204</span></div> <div class="col-md-2 subtap"></div></div></div></div>
-
         <script>
 
             let appHeaderSubj = new Vue({
@@ -210,83 +223,25 @@
         </script><div class="py-4 bg-light">
             <div class="container ">
 
-                <div class="card card-body selectsemester">
-                    <!-- style="border:1px solid #585858;" -->
-
-                    <div id="appSelectSubj" class="row">
-                        <div class="col-md-5">
-                            <div class="row">
-                                <div class="col-3 aC">수강학기</div> <div class="col-9">
-                                    <select name="selectYearhakgi" class="form-control form-control-sm">
-                                        <option value="[object Object]">
-                                            2021년도 1학기
-                                        </option>
-                                        <option value="[object Object]">
-                                            2020년도 2학기
-                                        </option>
-                                        <option value="[object Object]">
-                                            2020년도 1학기
-                                        </option>
-                                        <option value="[object Object]">
-                                            2017년도 2학기
-                                        </option>
-                                        <option value="[object Object]">
-                                            2017년도 1학기
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div> <div class="col-md-7">
-                            <div class="row">
-                                <div class="col-3 aC">과목명</div> <div class="col-9">
-                                    <select name="selectSubj" class="form-control form-control-sm" style="width: 100%;">
-                                        <option value="[object Object]">
-                                            알고리즘 (H030-3-0969-02) - 김용혁
-                                        </option>
-                                        <option value="[object Object]">
-                                            운영체제 (H030-3-1110-01) - 안우현
-                                        </option>
-                                        <option value="[object Object]">
-                                            취업전략 (0000-3-3240-01) - 김정권
-                                        </option>
-                                        <option value="[object Object]">
-                                            데이터베이스 (H030-3-3663-01) - 문승현
-                                        </option>
-                                        <option value="[object Object]">
-                                            데이터통신 (H030-3-4534-01) - 최웅철
-                                        </option>
-                                        <option value="[object Object]">
-                                            휴먼컴퓨터인터페이스 (H030-3-6899-01) - 이강훈
-                                        </option>
-                                        <option value="[object Object]">
-                                            응용소프트웨어실습 (H030-3-8485-03) - 이윤구
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
                 <div id="appModule">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="card card-body notice-list  mb-4">
                                 <div class="bodtitle">
                                     <p class="title-text">Notice</p> <a href="#" class="more_btn"><i class="fas fa-list"></i></a>
-                                </div> 
-                                    <div class="board_notice">
-                                        <dl class="notice_list_top">
-                                            <dt><p><a href="#">[중요] 과제2 관련 정보 </a></p> <span class="date">2021-05-13</span></dt>
-                                            <dt><p><a href="#">과제2 동영상 끊김 부분 업로드</a></p> <span class="date">2021-05-13</span></dt>
-                                            <dt><p><a href="#">중간고사 출제 정보</a></p> <span class="date">2021-04-21</span></dt>
-                                            <dt><p><a href="#">[중요] 대면 시험 장소 및 유의사항 </a></p> <span class="date">2021-04-20</span></dt>
-                                        </dl>
-                                    </div>
                                 </div>
-                            </div> 
-                                <div class="col-md-6"><div class="card card-body subjectpresentbox  mb-4"><div class="bodtitle"><p class="title-text">과목현황</p></div> <div class="tablelistbox"><div class="row"><div class="col-6"><ul class="subjectpresent"><li><a href="#none">강의 <span class="oval"><span class="ftred">23</span>/24</span></a></li> <li><a href="#none">팀프로젝트<!----> <span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">시험<!----> <span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">설문 <!----><span class="oval"><span class="ftred">1</span>/1</span></a></li></ul></div> <div class="col-6"><ul class="subjectpresent"><li><a href="#none">토론 <!----><span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">과제 <!----><span class="oval"><span class="ftred">1</span>/1</span></a></li> <li><a href="#none">퀴즈 <!----><span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">자료 <span class="oval">23</span></a></li></ul></div></div></div> <div class="mtablelistbox"><div class="row"><div class="col-6"><ul class="subjectpresent"><li><a href="#none">강의 <span class="oval"><span class="ftred">23</span>/24</span></a></li> <li><a href="#none">팀프로젝트<!----> <span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">시험<!----> <span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">설문 <!----><span class="oval"><span class="ftred">1</span>/1</span></a></li></ul></div> <div class="col-6"><ul class="subjectpresent"><li><a href="#none">토론 <!----><span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">과제 <!----><span class="oval"><span class="ftred">1</span>/1</span></a></li> <li><a href="#none">퀴즈 <!----><span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">자료<span class="oval">23</span></a></li></ul></div></div></div></div></div></div> <div class="row">
+                                <div class="board_notice">
+                                    <dl class="notice_list_top">
+                                        <dt><p><a href="#">[중요] 과제2 관련 정보 </a></p> <span class="date">2021-05-13</span></dt>
+                                        <dt><p><a href="#">과제2 동영상 끊김 부분 업로드</a></p> <span class="date">2021-05-13</span></dt>
+                                        <dt><p><a href="#">중간고사 출제 정보</a></p> <span class="date">2021-04-21</span></dt>
+                                        <dt><p><a href="#">[중요] 대면 시험 장소 및 유의사항 </a></p> <span class="date">2021-04-20</span></dt>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6"><div class="card card-body subjectpresentbox  mb-4"><div class="bodtitle"><p class="title-text">과목현황</p></div> <div class="tablelistbox"><div class="row"><div class="col-6"><ul class="subjectpresent"><li><a href="#none">강의 <span class="oval"><span class="ftred">23</span>/24</span></a></li> <li><a href="#none">팀프로젝트<!----> <span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">시험<!----> <span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">설문 <!----><span class="oval"><span class="ftred">1</span>/1</span></a></li></ul></div> <div class="col-6"><ul class="subjectpresent"><li><a href="#none">토론 <!----><span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">과제 <!----><span class="oval"><span class="ftred">1</span>/1</span></a></li> <li><a href="#none">퀴즈 <!----><span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">자료 <span class="oval">23</span></a></li></ul></div></div></div> <div class="mtablelistbox"><div class="row"><div class="col-6"><ul class="subjectpresent"><li><a href="#none">강의 <span class="oval"><span class="ftred">23</span>/24</span></a></li> <li><a href="#none">팀프로젝트<!----> <span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">시험<!----> <span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">설문 <!----><span class="oval"><span class="ftred">1</span>/1</span></a></li></ul></div> <div class="col-6"><ul class="subjectpresent"><li><a href="#none">토론 <!----><span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">과제 <!----><span class="oval"><span class="ftred">1</span>/1</span></a></li> <li><a href="#none">퀴즈 <!----><span class="oval"><span class="ftred">0</span>/0</span></a></li> <li><a href="#none">자료<span class="oval">23</span></a></li></ul></div></div></div></div></div>
+                    </div> <div class="row">
                         <div class="col-md-6  mb-4">
                             <div class="card card-body">
                                 <div class="listtitle"><p class="title-text">출석</p></div> <table class="tablegw  tablegwtd"><tbody><tr><th>주차</th> <th>1회차</th> <th>2회차</th> <th>3회차</th> <th>4회차</th></tr> <tr><td>1</td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr><td>2</td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr><td>3</td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr><td>4</td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr><td>5</td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr><td>6</td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr><td>7</td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr><td>8</td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr><td>9</td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr><td>10</td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr><td>11</td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr><td>12</td> <td><span class="memberft01">O</span> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr><td>13</td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr><td>14</td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr><td>15</td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr><td>16</td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td> <td><!----> <!----> <!----> <!----> <!----></td></tr><tr></tr></tbody></table> <p class="mt5">
@@ -337,3 +292,4 @@
         </div>
     </section>
 </body>
+@Html.Partial("~/Views/Shared/LctSportFooter.cshtml")

@@ -78,24 +78,6 @@
     <input type="hidden" name="selectedSubj" />
 </form>
 
-<script type="text/javascript">
-    $(function () {
-        $(".btnCon").find("button").click(function () {
-            $("#__form__").attr("action", "/Notice/InsertFormNotice");
-            $("#__form__").submit();
-        });
-
-        $("[name=selectSubj]").change(function () {
-            $("#__form__").attr("action", "/Notice/SelectPageListNotice");
-            $("#__form__").submit();
-        });
-
-        $("[name=selectYearhakgi]").change(function () {
-            $("[name=selectSubj]").trigger('change');
-        });
-    });
-</script>
-
 <section>
 
     <div id="appHeaderSubj" class="subjectnameba">
