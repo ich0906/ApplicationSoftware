@@ -19,6 +19,24 @@
                 </div>
             </div>
         </div>
+        @if (ViewData["pageNm"].Equals("강의 묻고답하기"))
+        {
+            <div class="board_view_comment">
+
+                @for (int i = 0; i < ViewBag.commentList.Count; i++)
+                {
+                    <ul class="board_viewcomment">
+                        <li class="name first">@ViewBag.commentList[i]["NAME"]</li>
+                        <li class="text first">
+                            <div>
+                                @Html.Raw(ViewBag.commentList[i]["CONTENTS"])
+                            </div><label><span style="color: rgb(2, 105, 202);">(@ViewBag.commentList[i]["REGIST_DT"])</span><button type="button" class="btn2 btn-white btnsmall" style="display: none;">삭제</button></label>
+                        </li>
+                    </ul>
+                }
+
+            </div>
+        }
     </div>
     <div class="btnCon">
         @if (ViewData["fs_at"].Equals("Y")) {
