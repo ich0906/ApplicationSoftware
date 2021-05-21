@@ -1,6 +1,6 @@
 ﻿@Html.Partial("~/Views/Shared/LctSportHeader.cshtml")
 
-
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <!-- content -->
 <div id="appModule" class="card card-body mb-4 content">
     <div><p class="contenttitle">@ViewData["pageNm"]</p></div>
@@ -8,7 +8,7 @@
         <div class="board_view_header">
             <h2>@ViewBag.result["TITLE"]</h2>
             <div class="board_viewInfo">
-                <span>작성자 :</span> @ViewBag.result["NAME"] <span>등록일 :</span>2021-04-16 17:21<span>조회수 :</span> 69
+                <span>작성자 :</span> @ViewBag.result["NAME"] <span>등록일 :</span>@ViewBag.result["REGIST_DT"] <span>조회수 :</span> @ViewBag.result["RDCNT"]
             </div>
         </div>
         <div></div>
@@ -21,6 +21,10 @@
         </div>
     </div>
     <div class="btnCon">
+        @if (ViewData["fs_at"].Equals("Y")) {
+            <button type="button" class="btn2 btn-gray">수정</button>
+            <button type="button" class="btn2 btn-gray">삭제</button>
+        }
         <button type="button" class="btn2 btn-gray">목록</button>
     </div>
     <div class="next_prev_box">
@@ -43,12 +47,46 @@
     </div>
 </div>
 <!-- content -->
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" crossorigin="anonymous"></script>
 <script type="text/javascript">
     $(function () {
-        $(".btnCon").find("button").click(function () {
-                        $("#__form__").attr("action", "@ViewBag.SelectPageList");
-                        $("#__form__").submit();
+        // 수정 버튼
+        $(".btnCon").find("button").eq(0).click(function () {
+            $("#__form__").attr("action", "@ViewBag.SelectPageList");
+            $("#__form__").submit();
+        });
+
+        // 삭제 버튼
+        $(".btnCon").find("button").eq(1).click(function () {
+            var input = "<input type='hidden' name='bbs_id' />";
+            $("#__form__").append(input);
+
+            $("[name=bbs_id]").val(@ViewBag.result["BBS_ID"]);
+
+            if (confirm("삭제하시겠습니까?")) {
+                $("#__form__").attr("action", "@ViewBag.Delete");
+                $("#aform").attr("method", "POST");
+
+                $("#__form__").ajaxForm({
+                    success: function (data) {
+                        if (data == 'ok') {
+                            alert("삭제하였습니다.");
+                            $('#__form__').ajaxFormUnbind();
+                            $(".btnCon").find("button").eq(2).trigger("click");
+                        } else {
+                            alert("에러가 발생헀습니다.");
+                        }
+                    }
+                });
+
+                $("#__form__").submit();
+            }
+        });
+
+        // 목록 버튼
+        $(".btnCon").find("button").eq(2).click(function () {
+            $("#__form__").attr("action", "@ViewBag.SelectPageList");
+            $("#__form__").submit();
         });
 
         $("[name=selectSubj]").change(function () {

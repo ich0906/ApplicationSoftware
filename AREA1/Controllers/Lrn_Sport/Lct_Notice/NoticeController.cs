@@ -82,23 +82,21 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
             // 만약 조회된 공지사항이 있으면 값을 가져온다.
             if (bbsCnt > 0) {
-                sql = "SELECT * FROM (SELECT ROWNUM AS RNUM"
-                                    + ", A.TITLE"                                                                                                                   // 게시글 제목
-                                   /* + ", (SELECT DECODE(COUNT(*), 0, 'N', 'Y') FROM OP_FILE WHERE DOC_ID = A.DOC_ID) AS FILE_AT"                          // 파일 여부
-                                    + ", (SELECT DECODE(COUNT(*), 0, '', FILE_ID) FROM OP_FILE WHERE DOC_ID = A.DOC_ID AND SNO = 1) AS FILE_ID"             // 첫번째 첨부파일 ID*/
-                                    + ", B.NAME AS REGISTER"                                                                                                // 작성자명
-                                    + ", A.REGIST_DT"                                                                                                       // 작성일
-                                    + ", A.RDCNT"                                                                                                          // 조회수
-                                    + ", A.BBS_ID "
-                              + "FROM OP_BBS A "
-                              + "JOIN OP_USER B "
-                              + "ON A.REGISTER = B.USER_ID "
-                              + "WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' "
-                              + "AND ACDMC_NO = @selectedSubj:VARCHAR "
-                              + "ORDER BY BBS_ID DESC, REGIST_DT DESC) "
-                              + "WHERE 1=1 " 
-                              + (param.ContainsKey("page") ? "AND RNUM > " + (Convert.ToInt32(param["page"]) - 1) + " * 10 " : "AND RNUM > 0 ")
-                              + (param.ContainsKey("page") ? "AND RNUM <= " + param["page"] + "0" : "AND RNUM <= 10");
+                sql = "SELECT *                                                                         "
+                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID                                  "
+                    + "      FROM(SELECT A.TITLE,                                                                             "
+                    + "                   B.NAME AS REGISTER,                                                                 "
+                    + "                   A.REGIST_DT,                                                                        "
+                    + "                   A.RDCNT,                                                                            "
+                    + "                   A.BBS_ID                                                                            "
+                    + "            FROM OP_BBS A                                                                              "
+                    + "                     JOIN OP_USER B                                                                    "
+                    + "                          ON A.REGISTER = B.USER_ID                                                    "
+                    + "            WHERE BBS_CODE = '1000'                                                                    "
+                    + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                     "
+                    + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                  "
+                    + (param.ContainsKey("page") ? "AND RNUM > " + (Convert.ToInt32(param["page"]) - 1) + " * 10 " : "AND RNUM > 0 ")
+                    + (param.ContainsKey("page") ? "AND RNUM <= " + param["page"] + "0" : "AND RNUM <= 10");
 
                 // Form이 존재하지 않으면 오류가 나기 때문에 분기해주어야한다.
                 if (Request.HasFormContentType) {
@@ -129,12 +127,24 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
             ViewData["pageNm"] = "강의 공지사항";
+            ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";      
             ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
 
+
+            // 조회수 증가 쿼리
+            string sql = "UPDATE OP_BBS SET RDCNT = (SELECT RDCNT+1 AS RDCNT FROM OP_BBS WHERE BBS_ID = @BBS_ID:VARCHAR) WHERE BBS_ID = @BBS_ID:VARCHAR";
+
+            //cud 처리할 때는 트랜잭션 시작해주어야함
+            using var transaction = _context.Database.BeginTransaction();
+
+            _commonDao.Update(sql, Request.Form);
+
+            transaction.Commit();
+
             param.Add("page", Request.Form["page"]);
 
-            string sql = "SELECT * FROM ("
+            sql = "SELECT * FROM ("
                        + "SELECT A.ACDMC_NO AS SelectSubj"
                        + ", A.TITLE"
                        + ", A.OTHBC_AT"
@@ -142,6 +152,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                        + ", A.REGIST_DT "
                        + ", B.NAME "
                        + ", A.BBS_ID "
+                       + ", A.RDCNT "
                        + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
                        + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
                        + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
@@ -151,7 +162,8 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                        + "ON A.REGISTER = B.USER_ID "
                        + "WHERE 1=1 "
                        + "AND ACDMC_NO = @selectedSubj:VARCHAR "
-                       + "AND BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "')"
+                       + "AND BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' "
+                       + "ORDER BY BBS_ID DESC)"
                        + "WHERE BBS_ID = @BBS_ID:VARCHAR";
 
             var result = _commonDao.SelectOne(sql, Request.Form);
@@ -160,6 +172,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewBag.param = param;
             ViewBag.Select = "/Notice/SelectNotice";
             ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
+            ViewBag.Delete = "/Notice/DeleteNotice";
 
             return View("/Views/LctSport/BoardViewStdPage.cshtml");
         }
@@ -242,8 +255,30 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
         public IActionResult UpdateNotice() {
             return View();
         }
-        public IActionResult DeleteNotice() {
-            return View();
+        public string DeleteNotice() {
+            UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
+
+            if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
+                Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
+                Response.WriteAsync("<script language=\"javascript\">window.location=\"/Notice/SelectPageListNotice\"</script>");
+            }
+
+            string query = "";
+
+            query = "DELETE FROM OP_BBS WHERE BBS_ID = @bbs_id:NUMBER";
+
+            //cud 처리할 때는 트랜잭션 시작해주어야함
+            using var transaction = _context.Database.BeginTransaction();
+
+            string resultCode = "ok";
+
+            if (_commonDao.Delete(query, Request.Form) == 0) {
+                resultCode = "false";
+            }
+
+            transaction.Commit();
+
+            return resultCode;
         }
 
         // 공지사항 전용 모델 public으로 선언해야 매개변수로 사용가능함
