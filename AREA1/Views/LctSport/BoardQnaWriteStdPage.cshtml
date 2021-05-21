@@ -3,13 +3,13 @@
 
             <!-- content -->
             <div id="appModule" class="card card-body mb-4 content">
-                <div><p class="contenttitle">강의 묻고답하기</p></div>
+                <div><p class="contenttitle">@ViewData["pageNm"]</p></div>
                 <div class="board_write_form">
                     <dl>
                         <dt>
                             제목
                         </dt>
-                        <dd><input type="text" v-model="title" class="es" style="width: 100%;"></dd>
+                        <dd><input type="text" id="title" v-model="title" class="es" style="width: 100%;"></dd>
                     </dl>
                     <dl>
                         <dt>
@@ -40,7 +40,11 @@
                     </dl>
                 </div>
                 <div class='btnCon'>
-                    <button type="button" class="btn2 btn-darkpurple" @@click="saveData()">등록</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    @if (ViewData["command"].Equals("UPDATE")) {
+                        @:<button type="button" class="btn2 btn-darkpurple" @@click="saveData()">수정</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    } else {
+                        @:<button type="button" class="btn2 btn-darkpurple" @@click="saveData()">등록</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    }
                     <button type="button" class="btn2 btn-gray" @@click="goList()">목록</button>
                 </div>
             </div>
@@ -58,15 +62,23 @@
                         searchCondition: 'ALL',
                         searchKeyword: '',
                         boardNo: '',
-                        title: null,
+                        @if (ViewData["command"].Equals("UPDATE")) {
+                            @: title: '@ViewBag.result["TITLE"]',
+                            @: content: '@Html.Raw(@ViewBag.result["CONTENTS"])',
+                        } else {
+                            @: title: null,
+                            @: content: null,
+                        }
                         othbcAt: 'Y',
                         preOthbcAt: 'Y',
-                        content: null,
                         atchFileId: null,
                         storageId: '1000',
                         cmd: 'insert',
                         sortOrdr: null,
-                        upperNo: null
+                        upperNo: null,
+                        @if (ViewData["command"].Equals("UPDATE")) {
+                            @:bbs_id: '@ViewBag.result["BBS_ID"]'
+                        }
                     },
                     mounted: function () {
                         let self = this;
@@ -109,7 +121,7 @@
                                 return false;
                             }
 
-                            axios.post('InsertNotice',
+                            axios.post('@ViewBag.Insert',
                                 {
                                     'selectSubj': this.$data.selectSubj,
                                     'selectChangeYn': this.$data.selectChangeYn,
@@ -119,20 +131,28 @@
                                     'atchFileId': this.$data.atchFileId,
                                     'storageId': this.$data.storageId,
                                     'cmd': this.$data.cmd,
-                                })
+                                     @if (ViewData["command"].Equals("UPDATE")) {
+                                        @:'bbs_id': this.$data.bbs_id
+                                    }
+                                 })
                                 .then(function (response) {
-                                    alert("등록되었습니다.");
-                                    linkUrl('SelectPageListNotice', this.$data);
+                                    @if(ViewData["command"].Equals("UPDATE")) {
+                                        @:alert("수정되었습니다.");
+                                        @:goDetail('@ViewBag.result["BBS_ID"]');
+                                    } else {
+                                        @:alert("등록되었습니다.");
+                                        @:linkUrl('@ViewBag.SelectPageList', this.$data);
+                                    }
                                 });
                         },
 
                         getData: function (param) {
-                            axios.post('SelectNotice', param)
+                            axios.post('@ViewBag.Select', param)
                                 .then(function (response) {
                                 }.bind(this));
                         },
                         goList: function () {
-                            linkUrl('SelectPageListNotice', this.$data);
+                            linkUrl('@ViewBag.SelectPageList', this.$data);
                         }
                     }
                 });
@@ -144,6 +164,37 @@
                 var oEditors = [];
                 var oContents = new Array(1);
                 oContents[0] = "content";
+
+                $(function () {
+                    if ("@ViewData["command"]" == "UPDATE") {
+                        $("#title").val('@ViewBag.result["TITLE"]');
+                        $("#content").html('@Html.Raw(@ViewBag.result["CONTENTS"])');
+                    }
+
+                    $(".btnCon").find("button").eq(1).click(function () {
+                        $("#__form__").attr("action", "@ViewBag.SelectPageList");
+                        $("#__form__").submit();
+                    });
+
+                    $("[name=selectSubj]").change(function () {
+                        $("#__form__").attr("action", "@ViewBag.SelectPageList");
+                        $("#__form__").submit();
+                    });
+
+                    $("[name=selectYearhakgi]").change(function () {
+                        $("[name=selectSubj]").trigger('change');
+                    });
+                });
+
+                function goDetail(bbs_id) {
+                    var input = "<input type='hidden' name='bbs_id' />";
+                    $("#__form__").append(input);
+
+                    $("[name=bbs_id]").val(bbs_id);
+
+                    $("#__form__").attr("action", "@ViewBag.Select");
+                    $("#__form__").submit();
+                }
             </script>
 
             <script type="text/javascript" src="~/lib/smarteditor/HuskyEZCreator.js" charset="utf-8"></script>
