@@ -166,9 +166,9 @@
                 oContents[0] = "content";
 
                 $(function () {
-                    if ("@ViewData["command"]" == "UPDATE") {
-                        $("#title").val('@ViewBag.result["TITLE"]');
-                        $("#content").html('@Html.Raw(@ViewBag.result["CONTENTS"])');
+                    @if(ViewData["command"].Equals("UPDATE")) {
+                        @:$("#title").val('@ViewBag.result["TITLE"]');
+                        @:$("#content").html('@Html.Raw(@ViewBag.result["CONTENTS"])');
                     }
 
                     $(".btnCon").find("button").eq(1).click(function () {
