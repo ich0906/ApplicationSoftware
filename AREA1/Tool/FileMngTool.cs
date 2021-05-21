@@ -14,15 +14,13 @@ using System.Security.Cryptography;
 
 namespace Tool
 {
-    public class FileMngTool {
-
-        private readonly ILogger<FileMngTool> _logger;
+    public class FileMngTool
+    {
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
 
-        public FileMngTool(ILogger<FileMngTool> logger, AppSoftDbContext context)
+        public FileMngTool(AppSoftDbContext context)
         {
-            _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);
         }
@@ -54,23 +52,23 @@ namespace Tool
                 //속성마다 값 넣어주기
                 Dictionary<string, string> files = new Dictionary<string, string>();
                 files.Add("file_id", fileHash);
+                files.Add("file_name", fileNameSplit);
                 files.Add("file_extsn", fileEXTSN);
                 files.Add("upload_time", FileTimeNow);
-                files.Add("file_name", fileNameSplit);
 
                 //INSERT 쿼리
                 using var transaction = _context.Database.BeginTransaction();
 
-                string query = "INSERT INTO FILES VALUES(@file_id:VARCHAR,"
+                string query = "INSERT INTO OP_FILE VALUES(@file_id:VARCHAR,"
+                                                   + "@file_name:VARCHAR,"
                                                    + "@file_extsn:VARCHAR,"
-                                                   + "@upload_time:VARCHAR,"
-                                                   + "@file_name:VARCHAR"
+                                                   + "@upload_time:VARCHAR"
                                                    + ")";
                 _commonDao.Insert(query, files);
 
                 transaction.Commit();
 
-                //파일 업로드
+                //폴더에 파일쓰기
                 if (file.Length > 0)
                 {
                     string filePath = Path.Combine(@"C:\filestream\uploads", fileHash);
@@ -83,8 +81,10 @@ namespace Tool
                     }
                 }
             }
-           // Response.WriteAsync("<script language=\"javascript\">alert('" + fileName + " is uploaded!');</script>");
-           // Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
+
+            //Response.WriteAsync("<script language=\"javascript\">alert('" + fileName + " is uploaded!');</script>");
+            //Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
+
         }
         public void Downloads(IFormCollection param)
         {
@@ -92,7 +92,7 @@ namespace Tool
             //HTML input값과 동일한 해쉬값을 가진 튜플에서 파일네임과 확장자 가져오기
             using var transaction = _context.Database.BeginTransaction();
 
-            string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM FILES WHERE FILE_ID = @file_id:VARCHAR";
+            string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM OP_FILE WHERE FILE_ID = @file_id:VARCHAR";
 
             fileData = _commonDao.SelectOne(query, param);
 
@@ -115,8 +115,8 @@ namespace Tool
             }
             fileName = tmpName + "." + tmpEXTSN;
 
-            // Response.WriteAsync("<script language=\"javascript\">alert('" + fileName + " is downloaded!');</script>");
-            // Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
+            //Response.WriteAsync("<script language=\"javascript\">alert('" + fileName + " is downloaded!');</script>");
+            //Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
 
             //파일 다운로드(카피)
             string sourcePath = @"c:\filestream\uploads";
@@ -126,7 +126,8 @@ namespace Tool
             string destFile = System.IO.Path.Combine(targetPath, fileName);
 
             System.IO.Directory.CreateDirectory(targetPath);
-            System.IO.File.Copy(sourceFile, destFile, true); //true : 파일 덮어쓰기허용
+            System.IO.File.Copy(sourceFile, destFile, true);
+
         }
     }
 }
