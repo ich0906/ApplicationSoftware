@@ -1,0 +1,219 @@
+﻿@Html.Partial("~/Views/Shared/LctSportHeader.cshtml")
+
+<div id="appModule" class="card card-body mb-4 content">
+<div class="popWindow">
+    <p class="contenttitle">
+        과제 제출
+    </p>
+    <div id="btnCon" class="btnCon">
+        @if (ViewData["fs_at"].Equals("Y")) {
+        <button type="button" class="btn2 btn-white">과제 등록</button>
+        } else {
+        <button type="button" class="btn2 btn-white">과제 이력</button>
+        }
+    </div>
+    <div style="color: red;">
+        ※ 과제목록 <b>조회 순서</b>가 <b>변경</b>되었으니 반드시 <b>확인</b>하시기 바랍니다. <b><u>(최근 출제순)</u></b>
+    </div>
+    <div class="tablelistbox">
+        <table class="AType">
+            <colgroup>
+                <col width="10%" class="wid10pro  wid65px">
+                <col width="*">
+                <col width="16%">
+                <col width="6%">
+                <col width="8%" class="wid10pro  wid65px">
+                <col width="8%" class="wid10pro  wid65px">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th rowspan="2">No</th>
+                    <th rowspan="2">과제 제목</th>
+                    <th>제출기한</th>
+                    <th rowspan="2">상태</th>
+                    <th rowspan="2">조회</th>
+                    <th rowspan="2">공개과제</th>
+                </tr>
+                <tr>
+                    <th>추가제출기한</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="2">2</td>
+                    <td rowspan="2" class="lft">과제2: Huffman 복호화(Decompression) 프로그램 구현 및 실험</td>
+                    <td><font color="blue">2021-05-06 00:00:00 ~ 2021-05-26 23:59:59</font></td>
+                    <td rowspan="2">미제출</td>
+                    <td rowspan="2">
+                        <button type="button" class="btn2 btn-gray">조회</button>
+                    </td>
+                    <td rowspan="2">
+                        <button type="button" class="btn2 btn-gray">비공개</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2021-05-27 00:00:00 ~ 2021-05-28 23:59:59</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td rowspan="2">1</td>
+                    <td rowspan="2" class="lft">과제1: Huffman 코드를 이용한 파일 압축(Compression) 구현 및 실험</td>
+                    <td>2021-05-06 00:00:00 ~ 2021-05-19 23:59:59</td>
+                    <td rowspan="2">제출</td>
+                    <td rowspan="2">
+                        <button type="button" class="btn2 btn-gray">조회</button>
+                    </td>
+                    <td rowspan="2">
+                        <button type="button" class="btn2 btn-gray">비공개</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><font color="blue">2021-05-20 00:00:00 ~ 2021-05-21 23:59:59</font></td>
+                </tr>
+            </tbody> <!---->
+        </table>
+    </div>
+    <div class="mtablelistbox">
+        <table class="AType">
+            <colgroup>
+                <col width="13%">
+                <col width="*">
+                <col width="15%">
+                <col width="20%">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>과제 제목</th>
+                    <th>상태</th>
+                    <th>공개<br>과제</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2</td>
+                    <td class="lft">
+                        <a href="javascript:void(0);">
+                            과제2: Huffman 복호화(Decompression) 프로그램 구현 및 실험
+                        </a>
+                    </td>
+                    <td>미제출</td>
+                    <td>
+                        <button type="button" class="btn2 btn-gray">비공개</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td class="lft">
+                        <a href="javascript:void(0);">
+                            과제1: Huffman 코드를 이용한 파일 압축(Compression) 구현 및 실험
+                        </a>
+                    </td>
+                    <td>제출</td>
+                    <td>
+                        <button type="button" class="btn2 btn-gray">비공개</button>
+                    </td>
+                </tr> <!---->
+            </tbody>
+        </table>
+    </div>
+    <div style="color: blue; font-weight: bold;">
+        *보관기간이 만료된 강의 및 학생 자료파일은 다운로드 할 수 없습니다.<br>
+        *보관기간: 강의 및 학생 자료파일은 해당학기 종료 후 1년간 보관<br>
+        예) 2019년 기준 - &gt; 2018,2019년도 자료보관<br>
+        ※졸업생은 KLAS 사용이 불가하오니 자료백업은 졸업전에 하시기 바랍니다.
+    </div>
+</div>
+</div>
+
+<script>
+    $(function () {
+        $(".btnCon").find("button").click(function () {
+            $("#__form__").attr("action", "@ViewBag.InsertForm");
+            $("#__form__").submit();
+        });
+
+        $("[name=selectSubj]").change(function () {
+            $("#__form__").attr("action", "@ViewBag.SelectPageList");
+            $("#__form__").submit();
+        });
+
+        $("[name=selectYearhakgi]").change(function () {
+            $("[name=selectSubj]").trigger('change');
+        });
+    });
+
+    let appModule = new Vue({
+        el: '#appModule',
+        data: {
+            selectChangeYn: 'Y',
+            list: [],
+            seq: '',
+            ordseq: null,
+            weeklySeq: null,
+            weeklySubSeq: null,
+            isopen: '',
+            selectYearhakgi: null,
+            selectSubj: null,
+        },
+        mounted: function () {
+            let self = this;
+
+            appEvents.$on('eventSubjChange', function (param) {
+                self.selectYearhakgi = param.selectYearhakgi;
+                self.selectSubj = param.selectSubj;
+                self.getData(param);
+            });
+        },
+        methods: {
+            getData: function (param) {
+                param = Object.assign({}, param);
+                param.currentPage -= 1;
+                axios.post('/std/lis/evltn/TaskStdList.do', param)
+                    .then(function (response) {
+                        this.list = response.data;
+                    }.bind(this));
+            },
+            linkHistory: function () {
+                linkUrl('TaskRcordListStdPage.do', this.$data);
+            },
+            linkView: function (a) {
+
+                this.ordseq = a;
+
+                linkUrl('TaskViewStdPage.do', this.$data);
+            },
+            linkInsertPage: function (a, b, c) {
+                this.ordseq = a;
+                this.weeklySeq = b;
+                this.weeklySubSeq = c;
+                linkUrl('TaskInsertStdPage.do', this.$data);
+            },
+            linkBestReport: function (ordseq, isopen) {
+                this.ordseq = ordseq;
+                this.isopen = isopen;
+
+                linkUrl('TaskBestReportListStdPage.do', this.$data);
+            },
+            linkAllReport: function (ordseq, isopen) {
+                this.ordseq = ordseq;
+                this.isopen = isopen;
+
+                linkUrl('TaskAllReportListStdPage.do', this.$data);
+            },
+            linkBasicScorePage: function (ordseq, weeklySeq, weeklySubseq) {
+                this.ordseq = ordseq;
+                this.weeklySeq = weeklySeq;
+                this.weeklySubSeq = weeklySubseq;
+                linkUrl('TaskViewBasicScoreStdPage.do', this.$data);
+            }
+        }
+    });
+
+</script>
+
+</div>
+</div>
+
+@Html.Partial("~/Views/Shared/LctSportFooter.cshtml")

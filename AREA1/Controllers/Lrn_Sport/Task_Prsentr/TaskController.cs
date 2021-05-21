@@ -10,15 +10,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Tool;
 
-namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
+namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
     [LoginActionFilter]
-    public class NoticeController : Controller {
-        private readonly ILogger<NoticeController> _logger;
+    public class TaskController : Controller {
+        private readonly ILogger<TaskController> _logger;
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
         private readonly CodeMngTool _codeMngTool;
 
-        public NoticeController(ILogger<NoticeController> logger, AppSoftDbContext context) {
+        public TaskController(ILogger<TaskController> logger, AppSoftDbContext context) {
             _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);
@@ -30,7 +30,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
          * 작성자 : 김정원
          * 기능 : 공지사항 리스트 페이지 호출
          * */
-        public IActionResult SelectPageListNotice() {
+        public IActionResult SelectPageListTask() {
             Dictionary<string, string> param = new Dictionary<string, string>();
 
             // User 정보 파싱
@@ -49,7 +49,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                       + "ON A.REGISTER = B.USER_ID "
                       /*+ "JOIN OP_FILE C "
                       + "ON A.DOC_ID = C.DOC_ID AND C.FILE_NUM = 1 "*/
-                      + "WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' " 
+                      + "WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "Task") + "' "
                       + "AND ACDMC_NO = @selectedSubj:VARCHAR";
 
 
@@ -63,7 +63,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                 ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
                 ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
 
-            // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
+                // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
             } else {
                 // 디폴트 과목을 선택함
                 string sql2 = "SELECT B.ACDMC_NO AS selectedSubj, YEAR || ',' || SEMESTER AS YEAR_HAKGI"
@@ -102,7 +102,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                 if (Request.HasFormContentType) {
                     var resultList = _commonDao.SelectList(sql, Request.Form);
                     ViewBag.ResultList = resultList;
-                // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
+                    // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
                 } else {
                     var resultList = _commonDao.SelectList(sql, param);
                     ViewBag.ResultList = resultList;
@@ -112,21 +112,21 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
             ViewBag.ResultCnt = bbsCnt;
             ViewBag.param = param;
-            ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
-            ViewBag.Select = "/Notice/SelectNotice";
-            ViewBag.InsertForm = "/Notice/InsertFormNotice";
+            ViewBag.SelectPageList = "/Task/SelectPageListTask";
+            ViewBag.Select = "/Task/SelectTask";
+            ViewBag.InsertForm = "/Task/InsertFormTask";
 
-            return View("/Views/LctSport/BoardListStdPage.cshtml");
+            return View("/Views/LctSport/Task/BoardListTaskPage.cshtml");
         }
 
-        public IActionResult SelectNotice() {
+        public IActionResult SelectTask() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             Dictionary<string, string> param = new Dictionary<string, string>();
 
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
             ViewData["pageNm"] = "강의 공지사항";
-            ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";      
+            ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";
             ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
 
@@ -155,13 +155,13 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                        + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
                        + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
                        + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
-                       + ", LAG(TITLE) OVER(ORDER BY BBS_ID) AS PREV_TITLE " 
+                       + ", LAG(TITLE) OVER(ORDER BY BBS_ID) AS PREV_TITLE "
                        + "FROM OP_BBS A "
                        + "JOIN OP_USER B "
                        + "ON A.REGISTER = B.USER_ID "
                        + "WHERE 1=1 "
                        + "AND ACDMC_NO = @selectedSubj:VARCHAR "
-                       + "AND BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' "
+                       + "AND BBS_CODE = '" + _codeMngTool.getCode("BBS", "Task") + "' "
                        + "ORDER BY BBS_ID DESC)"
                        + "WHERE BBS_ID = @BBS_ID:VARCHAR";
 
@@ -169,10 +169,10 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
             ViewBag.result = result;
             ViewBag.param = param;
-            ViewBag.Select = "/Notice/SelectNotice";
-            ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
-            ViewBag.UpdateForm = "/Notice/UpdateFormNotice";
-            ViewBag.Delete = "/Notice/DeleteNotice";
+            ViewBag.Select = "/Task/SelectTask";
+            ViewBag.SelectPageList = "/Task/SelectPageListTask";
+            ViewBag.UpdateForm = "/Task/UpdateFormTask";
+            ViewBag.Delete = "/Task/DeleteTask";
 
             return View("/Views/LctSport/BoardViewStdPage.cshtml");
         }
@@ -182,10 +182,11 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
          * 작성자 : 김정원
          * 기능 : 공지사항 작성 페이지 호출
          * */
-        public IActionResult InsertFormNotice() {
+        public IActionResult InsertFormTask() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
+            ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";         // 교수 여부
             ViewData["pageNm"] = "강의 공지사항";
             ViewData["command"] = "INSERT";
 
@@ -202,13 +203,13 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             param.Add("page", Request.Form["page"]);
             ViewBag.param = param;
 
-            ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
-            ViewBag.Select = "/Notice/SelectNotice";
-            ViewBag.InsertForm = "/Notice/InsertFormNotice";
-            ViewBag.Insert = "/Notice/InsertNotice";
-            
+            ViewBag.SelectPageList = "/Task/SelectPageListTask";
+            ViewBag.Select = "/Task/SelectTask";
+            ViewBag.InsertForm = "/Task/InsertFormTask";
+            ViewBag.Insert = "/Task/InsertTask";
 
-            return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
+
+            return View("/Views/LctSport/Task/TaskInsertStdPage.cshtml");
         }
 
 
@@ -218,22 +219,22 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
          * 기능 : 공지사항 작성 로직
          * */
         [HttpPost]
-        public string InsertNotice([FromBody]Notice notice) {
+        public string InsertTask([FromBody] Task Task) {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             Dictionary<string, string> param = new Dictionary<string, string>();
 
-            // Notice 데이터 파싱
-            param.Add("SelectSubj", notice.SelectSubj);
-            param.Add("Title", notice.Title);
-            param.Add("OthbcAt", notice.OthbcAt);
-            param.Add("Content", notice.Content);
-            param.Add("AtchFileId", notice.SelectSubj);
+            // Task 데이터 파싱
+            param.Add("SelectSubj", Task.SelectSubj);
+            param.Add("Title", Task.Title);
+            param.Add("OthbcAt", Task.OthbcAt);
+            param.Add("Content", Task.Content);
+            param.Add("AtchFileId", Task.SelectSubj);
             param.Add("user_id", userInfo.user_id);
 
             string query = "";
 
             query = "INSERT INTO OP_BBS " +
-                    "VALUES(NOTICE_SEQ.NEXTVAL" +
+                    "VALUES(Task_SEQ.NEXTVAL" +
                     ", @SelectSubj:VARCHAR" +
                     ", '1000'" +
                     ", @Title:VARCHAR" +
@@ -253,7 +254,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
             return "ok";
         }
-        public IActionResult UpdateFormNotice() {
+        public IActionResult UpdateFormTask() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
@@ -290,7 +291,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                         + "ON A.REGISTER = B.USER_ID "
                         + "WHERE 1=1 "
                         + "AND ACDMC_NO = @selectedSubj:VARCHAR "
-                        + "AND BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' "
+                        + "AND BBS_CODE = '" + _codeMngTool.getCode("BBS", "Task") + "' "
                         + "ORDER BY BBS_ID DESC)"
                         + "WHERE BBS_ID = @BBS_ID:VARCHAR";
 
@@ -299,25 +300,25 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewBag.result = result;
             ViewBag.param = param;
 
-            ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
-            ViewBag.Select = "/Notice/SelectNotice";
-            ViewBag.InsertForm = "/Notice/InsertFormNotice";
-            ViewBag.Insert = "/Notice/UpdateNotice";
+            ViewBag.SelectPageList = "/Task/SelectPageListTask";
+            ViewBag.Select = "/Task/SelectTask";
+            ViewBag.InsertForm = "/Task/InsertFormTask";
+            ViewBag.Insert = "/Task/UpdateTask";
 
             return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
         }
 
-        public string UpdateNotice([FromBody] Notice notice) {
+        public string UpdateTask([FromBody] Task Task) {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             Dictionary<string, string> param = new Dictionary<string, string>();
 
-            // Notice 데이터 파싱
-            param.Add("SelectSubj", notice.SelectSubj);
-            param.Add("Title", notice.Title);
-            param.Add("OthbcAt", notice.OthbcAt);
-            param.Add("Content", notice.Content);
-            param.Add("bbs_id", notice.Bbs_id);
-            param.Add("AtchFileId", notice.SelectSubj);
+            // Task 데이터 파싱
+            param.Add("SelectSubj", Task.SelectSubj);
+            param.Add("Title", Task.Title);
+            param.Add("OthbcAt", Task.OthbcAt);
+            param.Add("Content", Task.Content);
+            param.Add("bbs_id", Task.Bbs_id);
+            param.Add("AtchFileId", Task.SelectSubj);
             param.Add("user_id", userInfo.user_id);
             string query = "";
 
@@ -337,12 +338,12 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
             return "ok";
         }
-        public string DeleteNotice() {
+        public string DeleteTask() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
 
             if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
                 Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
-                Response.WriteAsync("<script language=\"javascript\">window.location=\"/Notice/SelectPageListNotice\"</script>");
+                Response.WriteAsync("<script language=\"javascript\">window.location=\"/Task/SelectPageListTask\"</script>");
             }
 
             string query = "";
@@ -364,7 +365,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
         }
 
         // 공지사항 전용 모델 public으로 선언해야 매개변수로 사용가능함
-        public class Notice {
+        public class Task {
             public string SelectSubj { get; set; }          // 학정번호
             public string Title { get; set; }               // 제목
             public string OthbcAt { get; set; }             // 공개여부(중요여부)
