@@ -397,3 +397,4 @@
 /AREA1/bin/Debug/netcoreapp3.1/AREA1.dll
 /AREA1/obj/Debug/netcoreapp3.1/Razor/Views/LctSport/Task/BoardListTaskPage.cshtml.g.cs
 /AREA1/obj/Debug/netcoreapp3.1/Razor/Views/LctSport/BoardViewStdPage.cshtml.g.cs
+*.cs
