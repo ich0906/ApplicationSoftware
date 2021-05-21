@@ -145,26 +145,4 @@
     </div>
 </div>
 
-<<<<<<< HEAD
-<script type="text/javascript">
-    $(function () {
-        $(".btnCon").find("button").click(function () {
-            $("#__form__").attr("action", "/Notice/InsertFormNotice");
-            $("#__form__").submit();
-        });
-
-        $("[name=selectSubj]").change(function () {
-            $("#__form__").attr("action", "/Notice/SelectPageListNotice");
-            $("#__form__").submit();
-        });
-
-        $("[name=selectYearhakgi]").change(function () {
-            $("[name=selectSubj]").trigger('change');
-        });
-    });
-</script>
-
-=======
-        
->>>>>>> e2895eaf94cba48b079b58896257fff20e8eca6a
 @Html.Partial("~/Views/Shared/LctSportFooter.cshtml")
