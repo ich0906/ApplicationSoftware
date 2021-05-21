@@ -246,7 +246,7 @@
                         </div>
                         @if (ViewBag.userinfo.author == "1000") {
                             <div class="card card-body mb-4">
-                                <div class="listtitle"><p class="title-text">강의과목 <span>( 2021학년도 1학기 )</span></p></div> <ul class="subjectlist listbox">
+                                <div class="listtitle"><p class="title-text">강의과목 <span>( @{@ViewBag.selectedYear}학년도 @{@ViewBag.selectedHakgi}학기 )</span></p></div> <ul class="subjectlist listbox">
                                     @if (ViewBag.TeachesCount > 0) {
                                         @for (int i = 0; i < ViewBag.TeachesCount; ++i) {
                                             <li>
@@ -266,10 +266,11 @@
                                                             / @ViewBag.ResultListTeacher[i]["BUILDING"]@ViewBag.ResultListTeacher[i]["ROOM_NUMBER"]
                                                         </span>
                                                     </div>
-                                                </a> <!----> <div class="right"><button type="button" class="btn2 btn-lightgreen btnsmall" onclick="javascript: page_move('/Notice/SelectPageListNotice','@ViewBag.ResultList[i]["ACDMC_NO"]')">공지사항 </button> 
-                                                    <button type="button" class="btn2 btn-lightpurple btnsmall" onclick="javascript: page_move('/Notice/SelectPageListNotice','@ViewBag.ResultList[i]["ACDMC_NO"]')">강의자료실 </button> 
-                                                    <button type="button" class="btn2 btn-lightbrown btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[i]["ACDMC_NO"]')">강의Q&amp;A </button> 
-                                                    <button type="button" class="btn2 btn-lightblue btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[i]["ACDMC_NO"]')">학습톡톡 </button>
+                                                </a> <!----> <div class="right">
+                                                <button type="button" class="btn2 btn-lightgreen btnsmall" onclick="javascript: page_move('/Notice/SelectPageListNotice','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]');">공지사항</button>
+                                                <button type="button" class="btn2 btn-lightpurple btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]');">강의자료실 </button> 
+                                                <button type="button" class="btn2 btn-lightbrown btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]');">강의Q&amp;A </button> 
+                                                <button type="button" class="btn2 btn-lightblue btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]');">학습톡톡</button>
                                                       </div> <!---->
                                             </li>
                                         }
@@ -280,9 +281,9 @@
                                     }
                                 </ul>
                             </div>
-                        } else {
+    } else {
                             <div class="card card-body mb-4">
-                                <div class="listtitle"><p class="title-text">수강과목 <span>( 2021학년도 1학기 )</span></p></div> <ul class="subjectlist listbox">
+                                <div class="listtitle"><p class="title-text">수강과목 <span>( @{@ViewBag.selectedYear}학년도 @{@ViewBag.selectedHakgi}학기 )</span></p></div> <ul class="subjectlist listbox">
                                     @if (ViewBag.ResultCount > 0) {
                                         @for (int i = 0; i < ViewBag.ResultCount; ++i) {
                                             <li>
