@@ -375,9 +375,11 @@ C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\ne
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.RazorCoreGenerate.cache
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\Home\Privacy.cshtml.g.cs
-C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LctGnrlz\LctGnrlz.cshtml.g.cs
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LctSport\BoardListStdPage.cshtml.g.cs
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LctSport\BoardQnaWriteStdPage.cshtml.g.cs
+C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LctSport\BoardViewStdPage.cshtml.g.cs
+C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LctSport\Task\BoardListTaskPage.cshtml.g.cs
+C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LctSport\Task\TaskInsertStdPage.cshtml.g.cs
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\Login\Login.cshtml.g.cs
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\Main.cshtml.g.cs
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
@@ -396,4 +398,4 @@ C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\ne
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.dll
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.pdb
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.genruntimeconfig.cache
-C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LctSport\BoardViewStdPage.cshtml.g.cs
+C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LctGnrlz\LctGnrlz.cshtml.g.cs
