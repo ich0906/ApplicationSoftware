@@ -52,7 +52,12 @@
     $(function () {
         // 수정 버튼
         $(".btnCon").find("button").eq(0).click(function () {
-            $("#__form__").attr("action", "@ViewBag.SelectPageList");
+            var input = "<input type='hidden' name='bbs_id' />";
+            $("#__form__").append(input);
+
+            $("[name=bbs_id]").val(@ViewBag.result["BBS_ID"]);
+
+            $("#__form__").attr("action", "@ViewBag.UpdateForm");
             $("#__form__").submit();
         });
 

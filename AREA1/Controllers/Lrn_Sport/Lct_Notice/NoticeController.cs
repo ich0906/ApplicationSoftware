@@ -172,6 +172,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewBag.param = param;
             ViewBag.Select = "/Notice/SelectNotice";
             ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
+            ViewBag.UpdateForm = "/Notice/UpdateFormNotice";
             ViewBag.Delete = "/Notice/DeleteNotice";
 
             return View("/Views/LctSport/BoardViewStdPage.cshtml");
@@ -205,6 +206,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewBag.Select = "/Notice/SelectNotice";
             ViewBag.InsertForm = "/Notice/InsertFormNotice";
             ViewBag.Insert = "/Notice/InsertNotice";
+            
 
             return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
         }
@@ -251,9 +253,89 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
             return "ok";
         }
+        public IActionResult UpdateFormNotice() {
+            UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
+            ViewData["name"] = userInfo.name;
+            ViewData["user_id"] = userInfo.user_id;
+            ViewData["pageNm"] = "강의 공지사항";
+            ViewData["command"] = "UPDATE";
 
-        public IActionResult UpdateNotice() {
-            return View();
+            Dictionary<string, string> param = new Dictionary<string, string>();
+
+            ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
+            ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
+
+            if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
+                Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
+                Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
+            }
+
+            param.Add("page", Request.Form["page"]);
+
+            string sql = "SELECT * FROM ("
+                        + "SELECT A.ACDMC_NO AS SelectSubj"
+                        + ", A.TITLE"
+                        + ", A.OTHBC_AT"
+                        + ", A.CONTENTS"
+                        + ", A.REGIST_DT "
+                        + ", B.NAME "
+                        + ", A.BBS_ID "
+                        + ", A.RDCNT "
+                        + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
+                        + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
+                        + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
+                        + ", LAG(TITLE) OVER(ORDER BY BBS_ID) AS PREV_TITLE "
+                        + "FROM OP_BBS A "
+                        + "JOIN OP_USER B "
+                        + "ON A.REGISTER = B.USER_ID "
+                        + "WHERE 1=1 "
+                        + "AND ACDMC_NO = @selectedSubj:VARCHAR "
+                        + "AND BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' "
+                        + "ORDER BY BBS_ID DESC)"
+                        + "WHERE BBS_ID = @BBS_ID:VARCHAR";
+
+            var result = _commonDao.SelectOne(sql, Request.Form);
+
+            ViewBag.result = result;
+            ViewBag.param = param;
+
+            ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
+            ViewBag.Select = "/Notice/SelectNotice";
+            ViewBag.InsertForm = "/Notice/InsertFormNotice";
+            ViewBag.Insert = "/Notice/UpdateNotice";
+
+            return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
+        }
+
+        public string UpdateNotice([FromBody] Notice notice) {
+            UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
+            Dictionary<string, string> param = new Dictionary<string, string>();
+
+            // Notice 데이터 파싱
+            param.Add("SelectSubj", notice.SelectSubj);
+            param.Add("Title", notice.Title);
+            param.Add("OthbcAt", notice.OthbcAt);
+            param.Add("Content", notice.Content);
+            param.Add("bbs_id", notice.Bbs_id);
+            param.Add("AtchFileId", notice.SelectSubj);
+            param.Add("user_id", userInfo.user_id);
+            string query = "";
+
+            query = "UPDATE OP_BBS SET " +
+                    "TITLE = @Title:VARCHAR" +
+                    ", UPDATE_DT = TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
+                    ", CONTENTS = @Content:VARCHAR" +
+                    ", UPDUSR = @user_id:VARCHAR" +
+                    ", OTHBC_AT = @OthbcAt:VARCHAR WHERE BBS_ID = @bbs_id:NUMBER";
+
+            //cud 처리할 때는 트랜잭션 시작해주어야함
+            using var transaction = _context.Database.BeginTransaction();
+
+            _commonDao.Update(query, param);
+
+            transaction.Commit();
+
+            return "ok";
         }
         public string DeleteNotice() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
@@ -288,6 +370,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             public string OthbcAt { get; set; }             // 공개여부(중요여부)
             public string Content { get; set; }             // 내용
             public string AtchFileId { get; set; }          // 첨부파일 ID
+            public string Bbs_id { get; set; }              // 게시판 ID
         }
 
 
