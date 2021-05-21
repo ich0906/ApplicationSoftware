@@ -72,12 +72,18 @@ namespace AREA1.Controllers {
             if (Request.HasFormContentType && !Request.Form["year"].ToString().Equals("")) {
                 for (int i = 0; i < yearHakgiList.Count; ++i) {
                     if (Request.Form["year"] == yearHakgiList[i]["YEAR"] && Request.Form["hakgi"] == yearHakgiList[i]["SEMESTER"]) {
+                        ViewBag.selectedYear = Request.Form["year"];
+                        ViewBag.selectedHakgi = Request.Form["hakgi"];
                         ViewBag.selectedIndex = i;
                         isSelected = true;
                     }
                 }
             }
-            if (!isSelected) ViewBag.selectedIndex = 0;
+            if (!isSelected) {
+                ViewBag.selectedYear = yearHakgiList[0]["YEAR"];
+                ViewBag.selectedHakgi = yearHakgiList[0]["SEMESTER"];
+                ViewBag.selectedIndex = 0;
+            }
 
             if (takes_cnt > 0) {
                 sql = "SELECT TITLE,NAME,DAY1,DAY2,PERIOD1,PERIOD2,BUILDING,ROOM_NUMBER,USER_ID,ACDMC_NO,A.ID,A.YEAR,A.SEMESTER, "
