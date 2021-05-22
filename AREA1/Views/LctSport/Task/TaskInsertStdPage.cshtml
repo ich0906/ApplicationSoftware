@@ -104,16 +104,16 @@
             <dd>
                 <!--  데스크톱 화면 시작 -->
                 <div class='tablelistbox' style="float:left; margin-right:16px;">
-                    <v-date-picker :min-date="new Date()" v-model="sdate" style="float:left;"></v-date-picker>
+                    <v-date-picker :min-date="new Date()" v-model="adit_sdate" style="float:left;"></v-date-picker>
                     &nbsp;
-                    <select v-model="stimeHour" class="form-control form-control-sm" style="width: 80px">
+                    <select v-model="adit_stimeHour" class="form-control form-control-sm" style="width: 80px">
                         <option value="00">00</option>
                         <option v-for="n in 23" v-bind:value="n > 9 ? n : '0' + n ">
                             {{ n > 9 ? n : '0' + n }}
                         </option>
                     </select>
                     &#58;
-                    <select v-model="stimeMin" class="form-control form-control-sm" style="width: 80px">
+                    <select v-model="adit_stimeMin" class="form-control form-control-sm" style="width: 80px">
                         <option value="00">00</option>
                         <option v-for="n in 59" v-bind:value="n > 9 ? n : '0' + n ">
                             {{ n > 9 ? n : '0' + n }}
@@ -124,16 +124,16 @@
 
                 <!-- 모바일 화면 시작 -->
                 <div class='mtablelistbox'>
-                    <v-date-picker :min-date="new Date()" v-model="sdate" style="float:left;width: 90px;"></v-date-picker>
+                    <v-date-picker :min-date="new Date()" v-model="adit_sdate" style="float:left;width: 90px;"></v-date-picker>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <select v-model="stimeHour" class="form-control form-control-sm" style="width: 75px">
+                    <select v-model="adit_stimeHour" class="form-control form-control-sm" style="width: 75px">
                         <option value="00">00</option>
                         <option v-for="n in 23" v-bind:value="n > 9 ? n : '0' + n ">
                             {{ n > 9 ? n : '0' + n }}
                         </option>
                     </select>
                     &#58;
-                    <select v-model="stimeMin" class="form-control form-control-sm" style="width: 75px">
+                    <select v-model="adit_stimeMin" class="form-control form-control-sm" style="width: 75px">
                         <option value="00">00</option>
                         <option v-for="n in 59" v-bind:value="n > 9 ? n : '0' + n ">
                             {{ n > 9 ? n : '0' + n }}
@@ -142,16 +142,16 @@
                 </div>
                 <!--  데스크톱 화면 시작 -->
                 <div class='tablelistbox' style="float:left; margin-right:16px;">
-                    <v-date-picker :min-date="new Date()" v-model="edate" style="float:left;"></v-date-picker>
+                    <v-date-picker :min-date="new Date()" v-model="adit_edate" style="float:left;"></v-date-picker>
                     &nbsp;
-                    <select v-model="etimeHour" class="form-control form-control-sm" style="width: 80px">
+                    <select v-model="adit_etimeHour" class="form-control form-control-sm" style="width: 80px">
                         <option value="00">00</option>
                         <option v-for="n in 23" v-bind:value="n > 9 ? n : '0'+n ">
                             {{n > 9 ? n : '0'+n }}
                         </option>
                     </select>
                     &#58;
-                    <select v-model="etimeMin" class="form-control form-control-sm" style="width: 80px">
+                    <select v-model="adit_etimeMin" class="form-control form-control-sm" style="width: 80px">
                         <option value="00">00</option>
                         <option v-for="n in 59" v-bind:value="n > 9 ? n : '0'+n ">
                             {{n > 9 ? n : '0'+n }}
@@ -161,16 +161,16 @@
 
                 <!-- 모바일 화면 시작 -->
                 <div class='mtablelistbox'>
-                    <v-date-picker :min-date="new Date()" v-model="edate" style="float:left;width: 90px;"></v-date-picker>
+                    <v-date-picker :min-date="new Date()" v-model="adit_edate" style="float:left;width: 90px;"></v-date-picker>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <select v-model="etimeHour" class="form-control form-control-sm" style="width: 75px">
+                    <select v-model="adit_etimeHour" class="form-control form-control-sm" style="width: 75px">
                         <option value="00">00</option>
                         <option v-for="n in 23" v-bind:value="n > 9 ? n : '0'+n ">
                             {{n > 9 ? n : '0'+n }}
                         </option>
                     </select>
                     &#58;
-                    <select v-model="etimeMin" class="form-control form-control-sm" style="width: 75px">
+                    <select v-model="adit_etimeMin" class="form-control form-control-sm" style="width: 75px">
                         <option value="00">00</option>
                         <option v-for="n in 59" v-bind:value="n > 9 ? n : '0'+n ">
                             {{n > 9 ? n : '0'+n }}
@@ -191,13 +191,13 @@
             <dt>
                 제출양식
             </dt>
-            <dd><input type="text" id="title" v-model="title" class="es" style="width: 100%;"></dd>
+            <dd><input type="text" id="present_form" v-model="title" class="es" style="width: 100%;"></dd>
         </dl>
         <dl>
             <dt>
                 파일용량제한
             </dt>
-            <dd><input type="text" id="title" v-model="title" class="es" style="width: 100%;"></dd>
+            <dd><input type="text" id="file_cpcty_lmt" v-model="title" class="es" style="width: 100%;"></dd>
         </dl>
         <dl>
             <dt>
@@ -239,13 +239,23 @@
             edate: '',
             etimeHour: '00',
             etimeMin: '00',
+            adit_sdate: '',
+            adit_stimeHour: '00',
+            adit_stimeMin: '00',
+            adit_edate: '',
+            adit_etimeHour: '00',
+            adit_etimeMin: '00',
             contents: '',
             atchFileId: null,
             storageId: '1000',
+            present_form: '1000',
+            file_cpcty_lmt: '1000'
         },
         mounted: function () {
             this.sdate = moment().format('YYYY-MM-DD');
+            this.adit_sdate = moment().format('YYYY-MM-DD');
             this.edate = moment().format('YYYY-MM-DD');
+            this.adit_edate = moment().format('YYYY-MM-DD');
         },
         methods: {
             saveData: function () {
