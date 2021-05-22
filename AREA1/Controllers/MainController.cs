@@ -105,7 +105,7 @@ namespace AREA1.Controllers {
                 var resultList = _commonDao.SelectList(sql);
                 ViewBag.ResultList = resultList;
                 ViewBag.ResultCount = resultList.Count;
-            } 
+            }
 
             sql = "SELECT COUNT(*) AS TEACHES_CNT "
                 + "FROM OP_TEACHES "
@@ -115,7 +115,7 @@ namespace AREA1.Controllers {
             teaches_cnt = Convert.ToInt32(_commonDao.SelectOne(sql)["TEACHES_CNT"]);
 
             if (teaches_cnt > 0 && userInfo.author.Equals("1000")) {
-                sql = "SELECT TITLE,ACDMC_NO,DAY1,DAY2,PERIOD1,PERIOD2,BUILDING,ROOM_NUMBER,NAME,ID FROM OP_TEACHES A "
+                sql = "SELECT TITLE,ACDMC_NO,DAY1,DAY2,PERIOD1,PERIOD2,BUILDING,ROOM_NUMBER,NAME,ID,A.YEAR,A.SEMESTER FROM OP_TEACHES A "
                     + "JOIN OP_USER B ON A.ID = B.USER_ID "
                     + "JOIN OP_SECTION C on A.SEC_ID = C.SEC_ID and A.COURSE_ID = C.COURSE_ID and A.SEMESTER = C.SEMESTER and A.YEAR = C.YEAR "
                     + "JOIN OP_COURSE D ON C.COURSE_ID = D.COURSE_ID "
