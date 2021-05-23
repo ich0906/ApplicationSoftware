@@ -49,7 +49,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                       + "ON A.REGISTER = B.USER_ID "
                       /*+ "JOIN OP_FILE C "
                       + "ON A.DOC_ID = C.DOC_ID AND C.FILE_NUM = 1 "*/
-                      + "WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' " 
+                      + "WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' "
                       + "AND ACDMC_NO = @selectedSubj:VARCHAR";
 
 
@@ -63,11 +63,14 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                 ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
                 ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
 
-            // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
+                // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
             } else {
                 // 디폴트 과목을 선택함
-                string sql2 = "SELECT B.ACDMC_NO AS selectedSubj, YEAR || ',' || SEMESTER AS YEAR_HAKGI"
-                    + $" FROM OP_TEACHES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' AND semester='1' AND YEAR = '2021' AND ROWNUM = 1 ORDER BY COURSE_ID";
+                string sql2 = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))
+                    ? "SELECT * FROM (SELECT ROWNUM, AA.* FROM (SELECT B.ACDMC_NO AS selectedSubj, YEAR || ',' || SEMESTER AS YEAR_HAKGI"
+                    + $" FROM OP_TEACHES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' ORDER BY YEAR DESC, SEMESTER DESC, COURSE_ID) AA) AAA WHERE ROWNUM = 1"
+                    : "SELECT * FROM (SELECT ROWNUM, AA.* FROM (SELECT B.ACDMC_NO AS selectedSubj, YEAR || ',' || SEMESTER AS YEAR_HAKGI"
+                    + $" FROM OP_TAKES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' ORDER BY YEAR DESC, SEMESTER DESC, COURSE_ID) AA) AAA WHERE ROWNUM = 1";
 
                 param = _commonDao.SelectOne(sql2);
                 param.Add("selectedSubj", param["SELECTEDSUBJ"]);
@@ -102,7 +105,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                 if (Request.HasFormContentType) {
                     var resultList = _commonDao.SelectList(sql, Request.Form);
                     ViewBag.ResultList = resultList;
-                // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
+                    // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
                 } else {
                     var resultList = _commonDao.SelectList(sql, param);
                     ViewBag.ResultList = resultList;
@@ -126,7 +129,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
             ViewData["pageNm"] = "강의 공지사항";
-            ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";      
+            ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";
             ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
 
@@ -155,7 +158,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                        + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
                        + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
                        + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
-                       + ", LAG(TITLE) OVER(ORDER BY BBS_ID) AS PREV_TITLE " 
+                       + ", LAG(TITLE) OVER(ORDER BY BBS_ID) AS PREV_TITLE "
                        + "FROM OP_BBS A "
                        + "JOIN OP_USER B "
                        + "ON A.REGISTER = B.USER_ID "
@@ -206,7 +209,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewBag.Select = "/Notice/SelectNotice";
             ViewBag.InsertForm = "/Notice/InsertFormNotice";
             ViewBag.Insert = "/Notice/InsertNotice";
-            
+
 
             return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
         }
@@ -218,7 +221,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
          * 기능 : 공지사항 작성 로직
          * */
         [HttpPost]
-        public string InsertNotice([FromBody]Notice notice) {
+        public string InsertNotice([FromBody] Notice notice) {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             Dictionary<string, string> param = new Dictionary<string, string>();
 

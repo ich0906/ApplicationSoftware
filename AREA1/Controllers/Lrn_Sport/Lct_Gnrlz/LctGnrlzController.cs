@@ -16,6 +16,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
         private readonly CodeMngTool _codeMngTool;
+        static int MAX_INFO_NUM = 4;
 
         public LctGnrlzController(ILogger<LctGnrlzController> logger, AppSoftDbContext context) {
             _logger = logger;
@@ -115,6 +116,27 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
                 ViewBag.ResultList = param;
                 ViewBag.YEAR_HAKGI = param["YEAR"] + "," + param["SEMESTER"];
                 ViewBag.ACDMC_NO = param["ACDMC_NO"];
+            }
+
+            //공지사항 4개 채워 넣는 부분
+            if (acdmc_no.Equals("")) { //Form 도착 없이 이동한 경우
+                
+            } else {
+                sql = "SELECT COUNT(*) AS NOTICE_CNT " +
+                    "FROM OP_BBS " +
+                    "WHERE ACDMC_NO='" + acdmc_no+"'";
+                int noticeCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["NOTICE_CNT"]);
+
+                //공지사항이 존재하면
+                if (noticeCnt > 0) {
+                    sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
+                    "FROM OP_BBS " +
+                    "WHERE ACDMC_NO='" + acdmc_no + "' AND OTHBC_AT='Y'" + " ORDER BY REGIST_DT DESC";
+
+                    var noticeList = _commonDao.SelectList(sql);
+                    ViewBag.noticeList = noticeList;
+                }
+                ViewBag.noticeCount = noticeCnt;
             }
 
             return View("/Views/LctGnrlz/LctGnrlz.cshtml");
