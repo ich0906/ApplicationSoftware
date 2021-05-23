@@ -394,3 +394,7 @@ C:\Users\djfwk\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AR
 C:\Users\djfwk\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.Views.pdb
 C:\Users\djfwk\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.csproj.CopyComplete
 C:\Users\djfwk\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.genruntimeconfig.cache
+C:\Users\djfwk\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LctGnrlz\LctGnrlz.cshtml.g.cs
+C:\Users\djfwk\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LctSport\BoardViewStdPage.cshtml.g.cs
+C:\Users\djfwk\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LctSport\Task\BoardListTaskPage.cshtml.g.cs
+C:\Users\djfwk\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LctSport\Task\TaskInsertStdPage.cshtml.g.cs
