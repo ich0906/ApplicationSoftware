@@ -120,14 +120,24 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
 
             //공지사항 4개 채워 넣는 부분
             if (acdmc_no.Equals("")) { //Form 도착 없이 이동한 경우
-                
+                sql = "SELECT COUNT(*) AS NOTICE_CNT " +
+                   "FROM OP_BBS " +
+                   "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "'";
+                int noticeCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["NOTICE_CNT"]);
+                if (noticeCnt > 0) {
+                    sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
+                    "FROM OP_BBS " +
+                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND OTHBC_AT='Y'" + " ORDER BY REGIST_DT DESC";
+
+                    var noticeList = _commonDao.SelectList(sql);
+                    ViewBag.noticeList = noticeList;
+                }
+                ViewBag.noticeCount = noticeCnt;
             } else {
                 sql = "SELECT COUNT(*) AS NOTICE_CNT " +
-                    "FROM OP_BBS " +
-                    "WHERE ACDMC_NO='" + acdmc_no+"'";
+                  "FROM OP_BBS " +
+                  "WHERE ACDMC_NO='" + acdmc_no + "'";
                 int noticeCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["NOTICE_CNT"]);
-
-                //공지사항이 존재하면
                 if (noticeCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +
