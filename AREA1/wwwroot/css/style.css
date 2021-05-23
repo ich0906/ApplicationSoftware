@@ -359,7 +359,7 @@ ul.tab-list-col5  li{width:20%;text-align:center;}
 
 .contsubtitle { font-weight: 500; font-size:1rem; line-height: 25px; padding-top:0.5rem; padding-bottom:0.5rem;}
 .contsubtitle span{ font-weight: 300; font-size:0.8571rem; line-height: 25px; position:absolute; right:20px;}
-.contsubtitle.icon{background: #fff url('../images/common/icon_01.png')no-repeat  0px center; padding-left:18px; }
+.contsubtitle.icon{background: #fff url('/images/lctSport/icon_01.png')no-repeat  0px center; padding-left:18px; }
 
 
 .contsmallsubtxt {line-height: 25px; padding:0.5rem 0}
@@ -1068,7 +1068,7 @@ ul.paging li.active a:focus {
 
 .next_prev_box{border-top: 1px solid #aaa; border-bottom:1px solid #aaa;}
 .next_prev_box dl dt{display:inline-block;width:15%;text-align:center;}
-.next_prev_box dl dt em{background: url(../images/common/dot_bg.png) no-repeat 100% 50%;padding-right:25px;}
+.next_prev_box dl dt em{background: url(/images/lctSport/dot_bg.png) no-repeat 100% 50%;padding-right:25px;}
 .next_prev_box dl dd{display:inline-block;width:80%;}
 
 

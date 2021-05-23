@@ -353,25 +353,19 @@
 
     <script src="/js/common-vue.js"></script>
 
-    <script>
-        Vue.use(VueLoading);
+    <script>Vue.use(VueLoading);
         Vue.component('loading', VueLoading);
 
         Vue.use(Toasted);
-        Vue.component('paginate', VuejsPaginate);
-    </script>
+        Vue.component('paginate', VuejsPaginate);</script>
 
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/jquery.fileDownload.js"></script>
     <script src="/js/main.js"></script>
-    <script>
-
-        moment.locale('ko', {
+    <script>moment.locale('ko', {
             weekdays: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
             weekdaysShort: ['일', '월', '화', '수', '목', '금', '토']
-        });
-
-    </script><!-- Bootstrap core CSS -->
+        });</script><!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles-->
     <link href="/css/style.css" rel="stylesheet">
@@ -498,13 +492,13 @@
                                 <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;&#39;);">학습지원실</a>
                                 <ul class="depth03ul">
                                     <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/evltn/LctrumHomeStdPage.do&#39;);">강의종합</a>
+                                        <a href="/LctGnrlz/LctGnrlz">강의종합</a>
                                     </li>
                                     <li>
                                         <a href="/Notice/SelectPageListNotice">강의 공지사항</a>
                                     </li>
                                     <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/sport/573f918c23984ae8a88c398051bb1263/BoardQnaListStdPage.do&#39;);">강의 묻고답하기</a>
+                                        <a href="/QNA/SelectPageListNotice">강의 묻고답하기</a>
                                     </li>
                                     <li>
                                         <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/sport/6972896bfe72408eb72926780e85d041/BoardListStdPage.do&#39;);">강의 자료실</a>
@@ -994,8 +988,7 @@
             </div>
         </div>
     </header>
-    <script type="text/javascript">
-        var deviceAgent = navigator.userAgent.toLowerCase();
+    <script type="text/javascript">var deviceAgent = navigator.userAgent.toLowerCase();
         var ios = deviceAgent.match(/(iphone|ipod|ipad)/);
         var android = deviceAgent.match(/(android)/);
 
@@ -1050,8 +1043,7 @@
 
 
 
-        }
-    </script>
+        }</script>
     @RenderBody()
     <footer>
         <div class="container">
