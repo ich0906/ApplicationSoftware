@@ -120,7 +120,7 @@ axios.interceptors.response.use(function (response) {
     
     return response;
 }, function (error) {
-    alert('?�류가 발생?��??�니??');
+    alert('오류가 발생하였습니다.');
     reqCnt = 0;
     hideLoader();
     
@@ -134,7 +134,7 @@ axios.interceptors.response.use(function (response) {
 Vue.component('file-view-list', {
     template: '<div>' + 
               '<div v-for="item in fileList" class="board_viewfile">' +
-              '<span>?�일 : </span><a href="#" @click="fileDownload(item.download)">{{ item.fileName }}</a>' + 
+              '<span>파일 : </span><a href="#" @click="fileDownload(item.download)">{{ item.fileName }}</a>' + 
               '<span class="format">[ {{ item.fileSize | prettyBytes }} ]</span> ' + 
               '</div>' + 
               '</div>',
@@ -170,9 +170,9 @@ Vue.component('file-view-list', {
 Vue.component('file-upload-list', {
 	template: '<div>' + 
 	'<div v-for="item in fileList" class="board_viewfile">' +
-	'<span>?�일 : </span><a href="#" @click="fileDownload(item.download)">{{ item.fileName }}</a>' + 
+	'<span>파일 : </span><a href="#" @click="fileDownload(item.download)">{{ item.fileName }}</a>' + 
 	'<span class="format">[ {{ item.fileSize | prettyBytes }} ]</span> ' + 
-	'<span v-show="viewMode === \'false\'"><a href="#" @click="deleteFile(item.storageId, item.attachId, item.fileSn)">[??��]</a></span>' +
+	'<span v-show="viewMode === \'false\'"><a href="#" @click="deleteFile(item.storageId, item.attachId, item.fileSn)">[삭제]</a></span>' +
 	'</div>' + 
 	'</div>',
 	props: {
@@ -269,7 +269,7 @@ Vue.component('file-upload', {
                 for (let i = 0, len = $fileInput.files.length; i < len; i++) {
                     formData.append('files[' + i + ']', $fileInput.files[i]);
                 }
-                axios.post('/File/UserUploadFile', formData, {
+                axios.post('/common/file/UserUploadFile.do', formData, {
                     headers: { 
                         'Content-Type': 'multipart/form-data;'
                     },
@@ -286,7 +286,7 @@ Vue.component('file-upload', {
                     this.$emit('upload-fail', attachId);
                 });
             } else {
-                //console.log('?�로???�???�일???�습?�다!!');
+                //console.log('업로드 대상 파일이 없습니다!!');
                 this.$emit('upload-complete');
             }
         }

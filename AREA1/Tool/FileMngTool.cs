@@ -12,31 +12,25 @@ using System.Text;
 using System;
 using System.Security.Cryptography;
 
-namespace Tool
-{
-    public class FileMngTool
-    {
+namespace Tool {
+    public class FileMngTool {
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
 
-        public FileMngTool(AppSoftDbContext context)
-        {
+        public FileMngTool(AppSoftDbContext context) {
             _context = context;
             _commonDao = new CommonDao(context);
         }
 
-     
-        public string Uploads(IFormCollection param)
-        {
+
+        public string Uploads(IFormCollection param) {
             string fileName = "";
             string fileEXTSN = "";
-            string docId;
-            if (param["atchFileId"].Equals("")) docId = getRandomString();
-            else docId = param["atchFileId"];
+            string docId = getRandomString();
             DateTime timeNow = DateTime.Now;
 
-            foreach (IFormFile file in param.Files)
-            {
+
+            foreach (IFormFile file in param.Files) {
                 fileName = file.FileName;
                 string[] result = fileName.Split(new string[] { "." }, System.StringSplitOptions.None);
                 //파일명 해쉬
@@ -73,13 +67,11 @@ namespace Tool
                 transaction.Commit();
 
                 //폴더에 파일쓰기
-                if (file.Length > 0)
-                {
+                if (file.Length > 0) {
                     string folder = System.IO.Directory.GetCurrentDirectory() + @"\wwwroot\upload";
                     string filePath = Path.Combine(folder, fileHash);
 
-                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
-                    {
+                    using (Stream fileStream = new FileStream(filePath, FileMode.Create)) {
                         file.CopyTo(fileStream);
 
                         fileStream.Flush();
@@ -91,8 +83,7 @@ namespace Tool
             //Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
 
         }
-        public void Downloads(IFormCollection param)
-        {
+        public void Downloads(IFormCollection param) {
             var fileData = new Dictionary<string, string>();
             //HTML input값과 동일한 해쉬값을 가진 튜플에서 파일네임과 확장자 가져오기
             using var transaction = _context.Database.BeginTransaction();
@@ -109,8 +100,7 @@ namespace Tool
             string tmpName = "";
             string tmpEXTSN = "";
 
-            foreach (KeyValuePair<string, string> keyValues in fileData)
-            {
+            foreach (KeyValuePair<string, string> keyValues in fileData) {
                 if (fileData.TryGetValue("FILE_ID", out string id))
                     fileID = id;
                 if (fileData.TryGetValue("FILE_EXTSN", out string extsn))

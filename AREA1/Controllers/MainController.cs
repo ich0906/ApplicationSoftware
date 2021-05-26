@@ -35,8 +35,6 @@ namespace AREA1.Controllers {
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
 
-            ViewData["Title"] = HttpContext.Session.GetString("_Key");
-
             ViewData["Today"] = DateTime.Now.ToString().Split(' ')[0];
 
             ViewBag.userinfo = userInfo;
@@ -85,11 +83,11 @@ namespace AREA1.Controllers {
                 ViewBag.selectedIndex = 0;
             }
 
-            if (takes_cnt > 0) {
+            if (takes_cnt > 0 && userInfo.author.Equals("2000")) {
                 sql = "SELECT TITLE,NAME,DAY1,DAY2,PERIOD1,PERIOD2,BUILDING,ROOM_NUMBER,USER_ID,ACDMC_NO,A.ID,A.YEAR,A.SEMESTER, "
-                    + "(SELECT OP_ADVISOR.I_ID FROM OP_USER JOIN OP_ADVISOR ON OP_USER.USER_ID=OP_ADVISOR.I_ID WHERE OP_ADVISOR.S_ID=A.ID) AS ADVISOR_ID,"
+                    + "(SELECT OP_ADVISOR.I_ID FROM OP_USER JOIN OP_ADVISOR ON OP_USER.USER_ID=OP_ADVISOR.I_ID WHERE OP_ADVISOR.S_ID=A.ID) AS ADVISOR_ID, "
                     + "(SELECT NAME FROM OP_USER JOIN OP_ADVISOR ON OP_USER.USER_ID=OP_ADVISOR.I_ID WHERE OP_ADVISOR.S_ID=A.ID) AS ADVISOR, "
-                    + "(SELECT EMAIL FROM OP_USER JOIN OP_ADVISOR ON OP_USER.USER_ID=OP_ADVISOR.I_ID WHERE OP_ADVISOR.S_ID=A.ID) AS AD_EMAIL,"
+                    + "(SELECT EMAIL FROM OP_USER JOIN OP_ADVISOR ON OP_USER.USER_ID=OP_ADVISOR.I_ID WHERE OP_ADVISOR.S_ID=A.ID) AS AD_EMAIL, "
                     + "(SELECT PHONE FROM OP_USER JOIN OP_ADVISOR ON OP_USER.USER_ID=OP_ADVISOR.I_ID WHERE OP_ADVISOR.S_ID=A.ID) AS AD_PHONE "
                    + "FROM OP_TAKES A "
                    + "JOIN OP_TEACHES B "
@@ -114,8 +112,8 @@ namespace AREA1.Controllers {
             int teaches_cnt = 0;
             teaches_cnt = Convert.ToInt32(_commonDao.SelectOne(sql)["TEACHES_CNT"]);
 
-            if (teaches_cnt > 0) {
-                sql = "SELECT TITLE,ACDMC_NO,DAY1,DAY2,PERIOD1,PERIOD2,BUILDING,ROOM_NUMBER,NAME,ID FROM OP_TEACHES A "
+            if (teaches_cnt > 0 && userInfo.author.Equals("1000")) {
+                sql = "SELECT TITLE,ACDMC_NO,DAY1,DAY2,PERIOD1,PERIOD2,BUILDING,ROOM_NUMBER,NAME,ID,A.YEAR,A.SEMESTER FROM OP_TEACHES A "
                     + "JOIN OP_USER B ON A.ID = B.USER_ID "
                     + "JOIN OP_SECTION C on A.SEC_ID = C.SEC_ID and A.COURSE_ID = C.COURSE_ID and A.SEMESTER = C.SEMESTER and A.YEAR = C.YEAR "
                     + "JOIN OP_COURSE D ON C.COURSE_ID = D.COURSE_ID "
