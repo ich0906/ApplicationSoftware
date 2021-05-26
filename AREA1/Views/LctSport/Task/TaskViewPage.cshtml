@@ -1,0 +1,170 @@
+﻿@Html.Partial("~/Views/Shared/LctSportHeader.cshtml")
+
+<div id="appModule" class="card card-body mb-4 content">
+    <div>
+        <p class="contenttitle">
+            @ViewData["pageNm"]
+        </p>
+    </div>
+    <div class="contsubtitle icon">출제 과제 정보</div>
+    <table class="tablegw">
+        <colgroup>
+            <col style="width: 20%;">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <th>제목</th>
+                <td class="lft">@ViewBag.result["TITLE"]</td>
+            </tr>
+            <tr>
+                <th>제출기한</th>
+                <td class="lft">@ViewBag.result["BEGIN_TMLMT"] ~ @ViewBag.result["END_TMLMT"]</td>
+            </tr>
+            <tr>
+                <th>추가제출기한</th>
+                <td class="lft">@ViewBag.result["BEGIN_ADIT_TMLMT"] ~ @ViewBag.result["END_ADIT_TMLMT"]</td>
+            </tr>
+            <tr>
+                <th>제출방법</th>
+                <td class="lft">
+                    개인별
+                </td>
+            </tr>
+            @if (ViewData["fs_at"].Equals("Y")) {
+                <tr>
+                    <th>상태</th>
+                    <td class="lft">
+                        미제출
+                    </td>
+                </tr>
+            }
+            <tr>
+                <th>내용/주의사항</th>
+                <td colspan="5" class="lft">@Html.Raw(@ViewBag.result["CONTENT"])</td>
+            </tr>
+            <tr>
+                <th>제출양식</th>
+                <td colspan="5" class="lft">
+                    @ViewBag.result["PRESENT_FORM"]
+                </td>
+            </tr>
+            <tr>
+                <th>첨부파일</th>
+                <td colspan="5" class="lft">
+                    <div></div>
+                </td>
+            </tr>
+            <tr>
+                <th>파일용량제한</th>
+                <td colspan="5" class="lft">@ViewBag.result["FILE_CPCTY_LMT"]MB</td>
+            </tr>
+        </tbody>
+    </table>
+    @if (ViewData["fs_at"].Equals("N")) {
+        <div class="contsubtitle icon">과제제출</div>
+        <table class="AType">
+            <colgroup>
+                <col style="width: 20%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th>파일</th>
+                    <td>
+                        <div><input type="file" multiple="" accept="*/*" style="width: 100%;"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>제목</th>
+                    <td><input type="text" size="50"></td>
+                </tr>
+                <tr>
+                    <th>내용</th>
+                    <td><textarea cols="10" rows="3" id="textarea"></textarea></td>
+                </tr>
+            </tbody>
+        </table>
+    }
+    <div class="btnCon">
+        @if (ViewData["fs_at"].Equals("N")) {
+            <button type="button" class="btn2 btn-gray">제출</button>
+            <button type="button" class="btn2 btn-gray">다시</button>
+        } else {
+            <button type="button" class="btn2 btn-gray">수정</button>
+        }
+            <button type="button" class="btn2 btn-gray">삭제</button>
+            <button type="button" class="btn2 btn-gray">뒤로</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        // 수정 버튼
+        $(".btnCon").find("button").eq(0).click(function () {
+            var input = "<input type='hidden' name='bbs_id' />";
+            $("#__form__").append(input);
+
+            $("[name=bbs_id]").val(@ViewBag.result["TASK_SEQ"]);
+
+            $("#__form__").attr("action", "@ViewBag.UpdateForm");
+            $("#__form__").submit();
+        });
+
+        // 삭제 버튼
+        $(".btnCon").find("button").eq(1).click(function () {
+            var input = "<input type='hidden' name='bbs_id' />";
+            $("#__form__").append(input);
+
+            $("[name=bbs_id]").val(@ViewBag.result["TASK_SEQ"]);
+
+            if (confirm("삭제하시겠습니까?")) {
+                $("#__form__").attr("action", "@ViewBag.Delete");
+                $("#aform").attr("method", "POST");
+
+                $("#__form__").ajaxForm({
+                    success: function (data) {
+                        if (data == 'ok') {
+                            alert("삭제하였습니다.");
+                            $('#__form__').ajaxFormUnbind();
+                            $(".btnCon").find("button").eq(2).trigger("click");
+                        } else {
+                            alert("에러가 발생헀습니다.");
+                        }
+                    }
+                });
+
+                $("#__form__").submit();
+            }
+        });
+
+        // 목록 버튼
+        $(".btnCon").find("button").eq(2).click(function () {
+            $("#__form__").attr("action", "@ViewBag.SelectPageList");
+            $("#__form__").submit();
+        });
+
+        $("[name=selectSubj]").change(function () {
+            $("#__form__").attr("action", "@ViewBag.SelectPageList");
+            $("#__form__").submit();
+        });
+
+        $("[name=selectYearhakgi]").change(function () {
+            $("[name=selectSubj]").trigger('change');
+        });
+    });
+
+    function goDetail(bbs_id) {
+        var input = "<input type='hidden' name='bbs_id' />";
+        $("#__form__").append(input);
+
+        $("[name=bbs_id]").val(bbs_id);
+
+        $("#__form__").attr("action", "@ViewBag.Select");
+        $("#__form__").submit();
+    }
+</script>
+
+@Html.Partial("~/Views/Shared/LctSportFooter.cshtml")
