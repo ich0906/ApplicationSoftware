@@ -191,13 +191,13 @@
             <dt>
                 제출양식
             </dt>
-            <dd><input type="text" id="present_form" v-model="title" class="es" style="width: 100%;"></dd>
+            <dd><input type="text" id="present_form" v-model="present_form" class="es" style="width: 100%;"></dd>
         </dl>
         <dl>
             <dt>
                 파일용량제한
             </dt>
-            <dd><input type="text" id="file_cpcty_lmt" v-model="title" class="es" style="width: 100%;"></dd>
+            <dd><input type="text" id="file_cpcty_lmt" v-model="file_cpcty_lmt" class="es" style="width: 97%;"> MB</dd>
         </dl>
         <dl>
             <dt>
@@ -223,45 +223,97 @@
     let appModule = new Vue({
         el: '#appModule',
         data: {
-            gubun: '10',
-            grcodeList: [],
-            yearhakgiList: [],
-            subjList: [],
-            selectGrcode: '',
-            selectYearhakgi: '',
-            selectSubj: '',
-            title: '',
-            weightgubun: 'M',
-            place: '',
-            sdate: '',
-            stimeHour: '00',
-            stimeMin: '00',
-            edate: '',
-            etimeHour: '00',
-            etimeMin: '00',
-            adit_sdate: '',
-            adit_stimeHour: '00',
-            adit_stimeMin: '00',
-            adit_edate: '',
-            adit_etimeHour: '00',
-            adit_etimeMin: '00',
-            contents: '',
+            selectYearhakgi: null,
+            selectSubj: null,
+            @if (ViewData["command"].Equals("UPDATE")) {
+                @: title: '@ViewBag.result["TITLE"]',
+                @: content: '@Html.Raw(@ViewBag.result["CONTENT"])',
+                @: present_form: '@ViewBag.result["PRESENT_FORM"]',
+                @: file_cpcty_lmt: '@ViewBag.result["FILE_CPCTY_LMT"]',
+                @:task_id: '@ViewBag.result["TASK_SEQ"]',
+                @:sdate: new Date('@ViewBag.result["SDATE"]'),
+                @:stimeHour: '@ViewBag.result["STIMEHOUR"]',
+                @:stimeMin: '@ViewBag.result["STIMEMIN"]',
+                @:edate: new Date('@ViewBag.result["EDATE"]'),
+                @:etimeHour: '@ViewBag.result["ETIMEHOUR"]',
+                @:etimeMin: '@ViewBag.result["ETIMEMIN"]',
+                @:adit_sdate: new Date('@ViewBag.result["ADIT_SDATE"]'),
+                @:adit_stimeHour: '@ViewBag.result["ADIT_STIMEHOURE"]',
+                @:adit_stimeMin: '@ViewBag.result["ADIT_STIMEMIN"]',
+                @:adit_edate: new Date('@ViewBag.result["ADIT_EDATE"]'),
+                @:adit_etimeHour: '@ViewBag.result["ADIT_ETIMEHOUR"]',
+                @:adit_etimeMin: '@ViewBag.result["ADIT_ETIMEMIN"]',
+            } else {
+                @: title: null,
+                @: content: null,
+                @: present_form: '',
+                @: file_cpcty_lmt: '',
+                @:sdate: '',
+                @:stimeHour: '00',
+                @:stimeMin: '00',
+                @:edate: '',
+                @:etimeHour: '00',
+                @:etimeMin: '00',
+                @:adit_sdate: '',
+                @:adit_stimeHour: '00',
+                @:adit_stimeMin: '00',
+                @:adit_edate: '',
+                @:adit_etimeHour: '00',
+                @:adit_etimeMin: '00',
+            }
             atchFileId: null,
-            storageId: '1000',
-            present_form: '1000',
-            file_cpcty_lmt: '1000'
+            storageId: '1000'
         },
         mounted: function () {
-            this.sdate = moment().format('YYYY-MM-DD');
-            this.adit_sdate = moment().format('YYYY-MM-DD');
-            this.edate = moment().format('YYYY-MM-DD');
-            this.adit_edate = moment().format('YYYY-MM-DD');
+            @if (ViewData["command"].Equals("INSERT")) {
+                @:this.sdate = moment().format('YYYY-MM-DD');
+                @:this.adit_sdate = moment().format('YYYY-MM-DD');
+                @:this.edate = moment().format('YYYY-MM-DD');
+                @:this.adit_edate = moment().format('YYYY-MM-DD');
+            }
+            let self = this;
+            appEvents.$on('eventSubjChange', function (param) {
+
+            self.selectYearhakgi = param.selectYearhakgi;
+            self.selectSubj = param.selectSubj;
+
+            });
         },
         methods: {
             saveData: function () {
-                            this.$refs.attach.upload();
-                        },
+                this.$refs.attach.upload();
+            },
             uploadComplete: function (attachId) {
+                if (this.title.trim() == "") {
+                    alert('제목을 입력하세요');
+                    this.$refs.title.focus();
+                    return;
+                }
+
+                if (this.content.trim() == "") {
+                    alert('내용을 입력하세요');
+                    this.$refs.content.focus();
+                    return;
+                }
+                if (this.getBytes(this.title) > 100) {
+                    alert('제목은 한글 기준 50자를 초과하지 못합니다.');
+                    this.$refs.title.focus();
+                    return;
+                }
+
+                if (this.getBytes(this.content) > 600) {
+                    alert('내용은 한글 기준 300자를 초과하지 못합니다.');
+                    this.$refs.content.focus();
+                    return;
+                }
+
+                if (isNaN(this.file_cpcty_lmt)) {
+                    alert('숫자로 입력해 주세요.');
+                    $("#file_cpcty_lmt").focus();
+                    return;
+                }
+
+
                 this.atchFileId = attachId;
 
 
@@ -269,77 +321,111 @@
 
 
                 this.content = $('#content').val();
+                this.present_form = $('#present_form').val();
+                this.file_cpcty_lmt = $('#file_cpcty_lmt').val();
                 this.content = this.content.replace(/(?:\r\n|\r|\n)/g, '<br/>');
-                if (this.title == null) {
-                    alert('제목은 반드시 입력해주세요');
-                    $("#title").focus();
-                    return false;
-                }
 
                 axios.post('@ViewBag.Insert',
                     {
                         'selectSubj': this.$data.selectSubj,
-                        'selectChangeYn': this.$data.selectChangeYn,
                         'title': this.$data.title,
-                        'othbcAt': this.$data.othbcAt,
                         'content': this.$data.content,
+                        'sdate': this.$data.sdate.format("yyyyMMdd") + this.$data.stimeHour + this.$data.stimeMin,
+                        'edate': this.$data.edate.format("yyyyMMdd") + this.$data.etimeHour + this.$data.etimeMin,
+                        'adit_sdate': this.$data.adit_sdate.format("yyyyMMdd") + this.$data.adit_stimeHour + this.$data.adit_stimeMin,
+                        'adit_edate': this.$data.adit_edate.format("yyyyMMdd") + this.$data.adit_etimeHour + this.$data.adit_etimeMin,
                         'atchFileId': this.$data.atchFileId,
-                        'storageId': this.$data.storageId,
-                        'cmd': this.$data.cmd,
-                                     @if (ViewData["command"].Equals("UPDATE")) {
-                                        @:'bbs_id': this.$data.bbs_id
-                                    }
+                        'presentForm': this.$data.present_form,
+                        'fileCpctyLlmt': this.$data.file_cpcty_lmt,
+                        @if (ViewData["command"].Equals("UPDATE")) {
+                            @:'taskId': this.$data.task_id
+                        }
                     })
                     .then(function (response) {
-                                    @if (ViewData["command"].Equals("UPDATE")) {
-                                        @:alert("수정되었습니다.");
-                                        @:goDetail('@ViewBag.result["BBS_ID"]');
-                                    } else {
-                                        @:alert("등록되었습니다.");
-                                        @:linkUrl('@ViewBag.SelectPageList', this.$data);
-                                    }
+                        @if (ViewData["command"].Equals("UPDATE")) {
+                            @:alert("수정되었습니다.");
+                            @:goDetail('@ViewBag.result["TASK_SEQ"]');
+                        } else {
+                            @:alert("등록되었습니다.");
+                            @:linkUrl('@ViewBag.SelectPageList', this.$data);
+                        }
                     });
             },
+            getBytes: function (str) {
+                var length = 0;
+                for (var i = 0; i < str.length; i++) {
+                    length += (str.charCodeAt(i) > 128) ? 2 : 1;
+                }
+                return length;
+            }
         }
     });
 </script>
 
 <script type="text/javascript">
-                //SmartEditor :항상 Textarea보다 아래에 이 스크립트가 있어야 합니다.
-                var oEditors = [];
-                var oContents = new Array(1);
-                oContents[0] = "content";
+    //SmartEditor :항상 Textarea보다 아래에 이 스크립트가 있어야 합니다.
+    var oEditors = [];
+    var oContents = new Array(1);
+    oContents[0] = "content";
 
-                $(function () {
-                    @if(ViewData["command"].Equals("UPDATE")) {
-                        @:$("#title").val('@ViewBag.result["TITLE"]');
-                        @:$("#content").html('@Html.Raw(@ViewBag.result["CONTENTS"])');
-                    }
+    $(function () {
+        @if (ViewData["command"].Equals("UPDATE")) {
+            @:$("#title").val('@ViewBag.result["TITLE"]');
+            @:$("#content").html('@Html.Raw(@ViewBag.result["CONTENT"])');
+        }
 
-                    $(".btnCon").find("button").eq(1).click(function () {
-                        $("#__form__").attr("action", "@ViewBag.SelectPageList");
-                        $("#__form__").submit();
-                    });
+        $(".btnCon").find("button").eq(1).click(function () {
+            $("#__form__").attr("action", "@ViewBag.SelectPageList");
+            $("#__form__").submit();
+        });
 
-                    $("[name=selectSubj]").change(function () {
-                        $("#__form__").attr("action", "@ViewBag.SelectPageList");
-                        $("#__form__").submit();
-                    });
+        $("[name=selectSubj]").change(function () {
+            $("#__form__").attr("action", "@ViewBag.SelectPageList");
+            $("#__form__").submit();
+        });
 
-                    $("[name=selectYearhakgi]").change(function () {
-                        $("[name=selectSubj]").trigger('change');
-                    });
-                });
+        $("[name=selectYearhakgi]").change(function () {
+            $("[name=selectSubj]").trigger('change');
+        });
+    });
 
-                function goDetail(bbs_id) {
-                    var input = "<input type='hidden' name='bbs_id' />";
-                    $("#__form__").append(input);
+    function goDetail(task_seq) {
+        var input = "<input type='hidden' name='task_id' />";
+        $("#__form__").append(input);
 
-                    $("[name=bbs_id]").val(bbs_id);
+        $("[name=task_id]").val(task_seq);
 
-                    $("#__form__").attr("action", "@ViewBag.Select");
-                    $("#__form__").submit();
-                }
+        $("#__form__").attr("action", "@ViewBag.Select");
+        $("#__form__").submit();
+    }
+
+    Date.prototype.format = function (f) {
+        if (!this.valueOf()) return " ";
+
+        var weekName = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+        var d = this;
+
+        return f.replace(/(yyyy|yy|MM|dd|E|hh|mm|ss|a\/p)/gi, function ($1) {
+            switch ($1) {
+                case "yyyy": return d.getFullYear();
+                case "yy": return (d.getFullYear() % 1000).zf(2);
+                case "MM": return (d.getMonth() + 1).zf(2);
+                case "dd": return d.getDate().zf(2);
+                case "E": return weekName[d.getDay()];
+                case "HH": return d.getHours().zf(2);
+                case "hh": return ((h = d.getHours() % 12) ? h : 12).zf(2);
+                case "mm": return d.getMinutes().zf(2);
+                case "ss": return d.getSeconds().zf(2);
+                case "a/p": return d.getHours() < 12 ? "오전" : "오후";
+                default: return $1;
+            }
+        });
+    };
+
+    String.prototype.string = function (len) { var s = '', i = 0; while (i++ < len) { s += this; } return s; };
+    String.prototype.zf = function (len) { return "0".string(len - this.length) + this; };
+    Number.prototype.zf = function (len) { return this.toString().zf(len); };
+
 </script>
 
 <script type="text/javascript" src="~/lib/smarteditor/HuskyEZCreator.js" charset="utf-8"></script>

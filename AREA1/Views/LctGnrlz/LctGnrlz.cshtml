@@ -1,0 +1,167 @@
+﻿@Html.Partial("~/Views/Shared/LctSportHeader.cshtml")
+
+<form id="__form2__" method="post" style="display: none;">
+    <input type="hidden" name="selectedGrcode" />
+    <input id="yearhakgi" type="hidden" name="selectedYearhakgi" />
+    <input id="_selectedSubj" type="hidden" name="selectedSubj" />
+    <input id="_BBS_ID" type="hidden" name="BBS_ID"/>
+    <input type="hidden" name="page" value="@ViewBag.param["page"]" />
+</form>
+
+<script>
+    function page_move(url, acdmc_no, yearhakgi,bbs_id) {
+        var form = document.getElementById("__form2__");
+        var yh = document.getElementById("yearhakgi");
+        var subj = document.getElementById("_selectedSubj");
+        var bbs = document.getElementById("_BBS_ID");
+        form.action = url;
+        form.method = "post";
+        yh.setAttribute("value", yearhakgi);
+        subj.setAttribute("value", acdmc_no);
+        bbs.setAttribute("value", bbs_id);
+        form.submit();
+    }
+</script>
+
+<div id="appModule">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-body notice-list  mb-4">
+                <div class="bodtitle">
+                    <p class="title-text">Notice</p> <a href="#" class="more_btn" onclick="javascript: page_move('/Notice/SelectPageListNotice', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI')"><i class="fas fa-list"></i></a>
+                </div>
+                <div class="board_notice">
+                    <dl class="notice_list_top">
+                        @for (int i = 0; i < 4; ++i) {
+                            if (i < ViewBag.noticeCount) {
+                                <dt><p><a href="#" onclick="javascript: page_move('/Notice/SelectNotice', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI', '@ViewBag.noticeList[i]["BBS_ID"]')">@ViewBag.noticeList[i]["TITLE"]</a></p> <span class="date">@ViewBag.noticeList[i]["REGIST_DT"]</span></dt>
+                            } else {
+                                <dt><p><a href="#"></a></p> <span class="date"></span></dt>
+                            }
+                        }
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-body subjectpresentbox  mb-4">
+                <div class="bodtitle"><p class="title-text">과목현황</p></div>
+                <div class="tablelistbox">
+                    <div class="row">
+                        <div class="col-6">
+                            <ul class="subjectpresent">
+                                <li><a href="#none">강의 <span class="oval"><span class="ftred">23</span>/24</span></a></li>
+                                <li><a href="#none">공지사항 <span class="oval">@ViewBag.noticeCount</span></a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <ul class="subjectpresent">
+                                <li><a href="#none">과제 <span class="oval"><span class="ftred">1</span>/1</span></a></li>
+                                <li><a href="#none">자료 <span class="oval">23</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div> <div class="row">
+        <div class="col-md-6  mb-4">
+            <div class="card card-body notice-list  mb-4">
+                <div class="bodtitle">
+                    <p class="title-text">Q&amp;A</p> <a href="#" class="more_btn"><i class="fas fa-list"></i></a>
+                </div>
+                <div class="board_notice">
+                    <dl class="notice_list_top">
+                        <dt><p><a href="#">[중요] 과제2 관련 정보 </a></p> <span class="date">2021-05-13</span></dt>
+                        <dt><p><a href="#">과제2 동영상 끊김 부분 업로드</a></p> <span class="date">2021-05-13</span></dt>
+                        <dt><p><a href="#">중간고사 출제 정보</a></p> <span class="date">2021-04-21</span></dt>
+                        <dt><p><a href="#">[중요] 대면 시험 장소 및 유의사항 </a></p> <span class="date">2021-04-20</span></dt>
+                    </dl>
+                </div>
+            </div>
+        </div> <div class="col-md-6  mb-4">
+            <div class="card card-body notice-list  mb-4">
+                <div class="bodtitle">
+                    <p class="title-text">과제</p> <a href="#" class="more_btn"><i class="fas fa-list"></i></a>
+                </div>
+                <div class="board_notice">
+                    <dl class="notice_list_top">
+                        <dt><p><a href="#">[중요] 과제2 관련 정보 </a></p> <span class="date">2021-05-13</span></dt>
+                        <dt><p><a href="#">과제2 동영상 끊김 부분 업로드</a></p> <span class="date">2021-05-13</span></dt>
+                        <dt><p><a href="#">중간고사 출제 정보</a></p> <span class="date">2021-04-21</span></dt>
+                        <dt><p><a href="#">[중요] 대면 시험 장소 및 유의사항 </a></p> <span class="date">2021-04-20</span></dt>
+                    </dl>
+                </div>
+            </div>
+        </div> <!----> <div class="card card-body mt-4 mb-4">
+            <div class=" tablelistbox">
+                <div class="listtitle">
+                    <p class="title-text">
+                        온라인 강의리스트
+                        <button type="button" class="btn2 btn-learn btn-cooltime">2분 쿨타임 제거</button>
+                        <button type="button" class="btn2 btn-gray btn-clean">강의 숨기기 On / Off</button>
+                    </p>
+                </div> <table class="tablegw">
+                    <tbody>
+                        <tr><th class="disnone">주차</th> <th class="disnone">회차</th> <th>제목</th> <th>학습목차</th> <th>학습기간</th> <th>[진도율]학습시간</th> <th class="disnone">강의보기</th></tr>
+                        <tr>
+                            <td> 1</td>
+                            <td class="disnone">1</td>
+                            <td class="lft">Introduction</td>
+                            <td class="lft">Introduction</td>
+                            <td class="pro" style="width: 120px;">
+                                2021-03-02 00:00 <br>~ 2021-03-08 23:59
+                            </td>
+                            <td class="pro" style="width: 120px;">
+                                [100%]&nbsp;49분
+                                <!---->
+                            </td>
+                            <td><button type="button" class="btn2 btn-gray">보기</button> <!----> <!----></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> <div class="mtablelistbox">
+                <div class="listtitle">
+                    <p class="title-text">
+                        온라인 강의리스트
+                        <button type="button" class="btn2 btn-gray btn-clean">강의 숨기기 On / Off</button>
+                    </p>
+                </div>
+                <table class="tablegw">
+                    <tbody>
+                        <tr>
+                            <th>제목</th>
+                            <th>학습목차</th>
+                            <th>학습기간</th>
+                            <th>[진도율]학습시간</th>
+                        </tr>
+                        <tr>
+                            <td>Introduction</td>
+                            <td>Introduction</td>
+                            <td class="pro">2021-03-02 00:00 <br>~ 2021-03-08 23:59</td>
+                            <td class="pro">[100%]&nbsp;49분</td>
+                        </tr>
+                        <!---->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> <form id="viewForm" name="viewForm" method="post"><input id="grcode" name="grcode" type="hidden"><input id="subj" name="subj" type="hidden"><input id="year" name="year" type="hidden"><input id="hakgi" name="hakgi" type="hidden"><input id="bunban" name="bunban" type="hidden"><input id="module" name="module" type="hidden"><input id="lesson" name="lesson" type="hidden"><input id="oid" name="oid" type="hidden"><input id="ptime" name="ptime" type="hidden"><input id="weeklyseq" name="weeklyseq" type="hidden"><input id="weeklysubseq" name="weeklysubseq" type="hidden"><input id="totalTime" name="totalTime" type="hidden"><input id="prog" name="prog" type="hidden"><input id="profYN" name="profYN" type="hidden" value="N"><input id="previewYN" name="previewYN" type="hidden" value="N"></form>
+</div>
+            </div>
+
+        </div>
+
+<script type="text/javascript">
+    $(function () {
+        $("[name=selectSubj]").change(function () {
+            $("#__form__").attr("action", "/LctGnrlz/LctGnrlz");
+            $("#__form__").submit();
+        });
+
+        $("[name=selectYearhakgi]").change(function () {
+            $("[name=selectSubj]").trigger('change');
+        });
+    });</script>
+@Html.Partial("~/Views/Shared/LctSportFooter.cshtml")

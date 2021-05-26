@@ -24,7 +24,7 @@
 
                         let selectedIndex = 0;
                         for (let i = 0; i < this.yearhakgiList.length; i++) {
-                            if (this.yearhakgiList[i]['subjList'][this.yearhakgiList.length - 1]['YEAR_HAKGI'] === selectedYearhakgi) {
+                            if (this.yearhakgiList[i]["subjList"][this.yearhakgiList[i]["subjList"]["length"] - 1]['YEAR_HAKGI'] === selectedYearhakgi) {
                                 selectedIndex = i;
                                 break;
                             }
@@ -50,7 +50,7 @@
                             if (this.subjList[j]["ACDMC_NO"] === selectedSubj) {
                                 selectedIndex = j;
                                 break;
-                            } 
+                            }
                         }
                     }
                 }
