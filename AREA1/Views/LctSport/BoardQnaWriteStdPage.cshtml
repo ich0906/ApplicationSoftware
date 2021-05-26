@@ -65,13 +65,14 @@
                         @if (ViewData["command"].Equals("UPDATE")) {
                             @: title: '@ViewBag.result["TITLE"]',
                             @: content: '@Html.Raw(@ViewBag.result["CONTENTS"])',
+                            @: atchFileId: '@ViewBag.result["DOC_ID"]',
                         } else {
                             @: title: null,
                             @: content: null,
+                            @: atchFileId: null,
                         }
                         othbcAt: 'Y',
                         preOthbcAt: 'Y',
-                        atchFileId: null,
                         storageId: '1000',
                         cmd: 'insert',
                         sortOrdr: null,

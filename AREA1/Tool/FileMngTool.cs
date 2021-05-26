@@ -30,9 +30,10 @@ namespace Tool
         {
             string fileName = "";
             string fileEXTSN = "";
-            string docId = getRandomString();
+            string docId;
+            if (param["atchFileId"].Equals("")) docId = getRandomString();
+            else docId = param["atchFileId"];
             DateTime timeNow = DateTime.Now;
-
 
             foreach (IFormFile file in param.Files)
             {
