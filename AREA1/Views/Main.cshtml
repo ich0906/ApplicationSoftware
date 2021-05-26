@@ -7,8 +7,11 @@
             <link rel="stylesheet" href="/assets/plugins/vue/v-calendar/v-calendar.min.css">
             <script src="/assets/plugins/vue/v-calendar/v-calendar.min.js"></script>
 
-            <form id="sbject" name="sbjectForm" method="post" style="display:none">
-                <input id="acdmc_no" name="selectedSubj" type="hidden" value="" />
+            <form id="__form__" method="post" style="display: none;">
+                <input type="hidden" name="selectedGrcode" />
+                <input id="yearhakgi" type="hidden" name="selectedYearhakgi"/>
+                <input id="_selectedSubj" type="hidden" name="selectedSubj" />
+                <input type="hidden" name="page" value="1" />
             </form>
 
             <form id="yearHakgiForm" name="selectedYearHakgi" method="post" style="display:none">
@@ -17,12 +20,14 @@
             </form>
 
             <script>
-                function page_move(url, acdmc_no) {
-                    var form = document.getElementById("sbject");
-                    var input = document.getElementById("acdmc_no");
+                function page_move(url, acdmc_no, yearhakgi) {
+                    var form = document.getElementById("__form__");
+                    var yh = document.getElementById("yearhakgi");
+                    var subj = document.getElementById("_selectedSubj");
                     form.action = url;
                     form.method = "post";
-                    input.setAttribute("value", acdmc_no);
+                    yh.setAttribute("value", yearhakgi);
+                    subj.setAttribute("value", acdmc_no);
                     form.submit();
                 }
 
@@ -69,7 +74,7 @@
                                             <text>
                                                 <tr style="border-bottom: 1px solid #dce3eb; height: 30px">
                                                     <td style="font-weight: bold">
-                                                        <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[i]["ACDMC_NO"]');">
+                                                        <a href="" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[i]["ACDMC_NO"]','@ViewBag.ResultList[i]["YEAR"],@ViewBag.ResultList[i]["SEMESTER"]');">
                                                             <span style="cursor: pointer">@ViewBag.ResultList[i]["TITLE"]</span>
                                                         </a>
                                                     </td>
@@ -123,7 +128,7 @@
                                                                     <text>
                                                                         @{clsStr = "namecol0" + (k + 1) + " lessontime1";}
                                                                         <td>
-                                                                            <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[k]["ACDMC_NO"]');">
+                                                                            <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[k]["ACDMC_NO"]','@ViewBag.ResultList[k]["YEAR"],@ViewBag.ResultList[k]["SEMESTER"]');">
                                                                                 <div class="@clsStr" style="cursor: pointer;">
                                                                                     <p>
                                                                                         @ViewBag.ResultList[k]["TITLE"]
@@ -140,7 +145,7 @@
                                                                         <text>
                                                                             <td>
                                                                                 @{clsStr = "namecol0" + (k + 1) + " lessontime2";}
-                                                                                <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[k]["ACDMC_NO"]');">
+                                                                                <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[k]["ACDMC_NO"]','@ViewBag.ResultList[k]["YEAR"],@ViewBag.ResultList[k]["SEMESTER"]');">
                                                                                     <div class="@clsStr" style="cursor: pointer;">
                                                                                         <p>
                                                                                             @ViewBag.ResultList[k]["TITLE"]
@@ -154,7 +159,7 @@
                                                                         <text>
                                                                             <td>
                                                                                 @{clsStr = "namecol0" + (k + 1) + " lessontime1";}
-                                                                                <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[k]["ACDMC_NO"]');">
+                                                                                <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[k]["ACDMC_NO"]','@ViewBag.ResultList[k]["YEAR"],@ViewBag.ResultList[k]["SEMESTER"]');">
                                                                                     <div class="@clsStr" style="cursor: pointer;">
                                                                                         <p>
                                                                                             @ViewBag.ResultList[k]["TITLE"]
@@ -184,7 +189,7 @@
                                                                     <text>
                                                                         @{clsStr = "namecol0" + (k + 1) + " lessontime1";}
                                                                         <td>
-                                                                            <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[k]["ACDMC_NO"]');">
+                                                                            <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[k]["ACDMC_NO"]','@ViewBag.ResultListTeacher[k]["YEAR"],@ViewBag.ResultListTeacher[k]["SEMESTER"]');">
                                                                                 <div class="@clsStr" style="cursor: pointer;">
                                                                                     <p>
                                                                                         @ViewBag.ResultListTeacher[k]["TITLE"]
@@ -201,7 +206,7 @@
                                                                         <text>
                                                                             <td>
                                                                                 @{clsStr = "namecol0" + (k + 1) + " lessontime2";}
-                                                                                <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[k]["ACDMC_NO"]');">
+                                                                                <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[k]["ACDMC_NO"]','@ViewBag.ResultListTeacher[k]["YEAR"],@ViewBag.ResultListTeacher[k]["SEMESTER"]');">
                                                                                     <div class="@clsStr" style="cursor: pointer;">
                                                                                         <p>
                                                                                             @ViewBag.ResultListTeacher[k]["TITLE"]
@@ -215,7 +220,7 @@
                                                                         <text>
                                                                             <td>
                                                                                 @{clsStr = "namecol0" + (k + 1) + " lessontime1";}
-                                                                                <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[k]["ACDMC_NO"]');">
+                                                                                <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[k]["ACDMC_NO"]','@ViewBag.ResultListTeacher[k]["YEAR"],@ViewBag.ResultListTeacher[k]["SEMESTER"]');">
                                                                                     <div class="@clsStr" style="cursor: pointer;">
                                                                                         <p>
                                                                                             @ViewBag.ResultListTeacher[k]["TITLE"]
@@ -267,10 +272,11 @@
                                                         </span>
                                                     </div>
                                                 </a> <!----> <div class="right">
-                                                <button type="button" class="btn2 btn-lightgreen btnsmall" onclick="javascript: page_move('/Notice/SelectPageListNotice','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]');">공지사항</button>
-                                                <button type="button" class="btn2 btn-lightpurple btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]');">강의자료실 </button> 
-                                                <button type="button" class="btn2 btn-lightbrown btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]');">강의Q&amp;A </button> 
-                                                <button type="button" class="btn2 btn-lightblue btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]');">학습톡톡</button>
+                                                @{string yh= @ViewBag.ResultListTeacher[i]["YEAR"]+","+@ViewBag.ResultListTeacher[i]["SEMESTER"];}
+                                                <button type="button" class="btn2 btn-lightgreen btnsmall" onclick="javascript: page_move('/Notice/SelectPageListNotice','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]',@yh);">공지사항</button>
+                                                <button type="button" class="btn2 btn-lightpurple btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]',@yh);">강의자료실 </button> 
+                                                <button type="button" class="btn2 btn-lightbrown btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]',@yh);">강의Q&amp;A </button> 
+                                                <button type="button" class="btn2 btn-lightblue btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]',@yh);">학습톡톡</button>
                                                       </div> <!---->
                                             </li>
                                         }
@@ -299,10 +305,10 @@
                                                         </span>
                                                     </div>
                                                 </a> <!----> <div class="right">
-                                                <button type="button" class="btn2 btn-lightgreen btnsmall" onclick="javascript: page_move('/Notice/SelectPageListNotice','@ViewBag.ResultList[i]["ACDMC_NO"]');">공지사항</button>
-                                                <button type="button" class="btn2 btn-lightpurple btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[i]["ACDMC_NO"]');">강의자료실 </button> 
-                                                <button type="button" class="btn2 btn-lightbrown btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[i]["ACDMC_NO"]');">강의Q&amp;A </button> 
-                                                <button type="button" class="btn2 btn-lightblue btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[i]["ACDMC_NO"]');">학습톡톡</button>
+                                                <button type="button" class="btn2 btn-lightgreen btnsmall" onclick="javascript: page_move('/Notice/SelectPageListNotice','@ViewBag.ResultList[i]["ACDMC_NO"]','@ViewBag.ResultList[i]["YEAR"],@ViewBag.ResultList[i]["SEMESTER"]');">공지사항</button>
+                                                <button type="button" class="btn2 btn-lightpurple btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[i]["ACDMC_NO"]','@ViewBag.ResultList[i]["YEAR"],@ViewBag.ResultList[i]["SEMESTER"]');">강의자료실 </button> 
+                                                <button type="button" class="btn2 btn-lightbrown btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[i]["ACDMC_NO"]','@ViewBag.ResultList[i]["YEAR"],@ViewBag.ResultList[i]["SEMESTER"]');">강의Q&amp;A </button> 
+                                                <button type="button" class="btn2 btn-lightblue btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[i]["ACDMC_NO"]','@ViewBag.ResultList[i]["YEAR"],@ViewBag.ResultList[i]["SEMESTER"]');">학습톡톡</button>
                                                       </div> <!---->
                                             </li>
                                         }

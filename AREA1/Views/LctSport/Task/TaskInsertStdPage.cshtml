@@ -223,41 +223,59 @@
     let appModule = new Vue({
         el: '#appModule',
         data: {
-            yearhakgiList: [],
-            subjList: [],
-            selectGrcode: '',
-            selectYearhakgi: '',
-            selectSubj: '',
-            title: '',
-            sdate: '',
-            stimeHour: '00',
-            stimeMin: '00',
-            edate: '',
-            etimeHour: '00',
-            etimeMin: '00',
-            adit_sdate: '',
-            adit_stimeHour: '00',
-            adit_stimeMin: '00',
-            adit_edate: '',
-            adit_etimeHour: '00',
-            adit_etimeMin: '00',
-            content: '',
+            selectYearhakgi: null,
+            selectSubj: null,
+            @if (ViewData["command"].Equals("UPDATE")) {
+                @: title: '@ViewBag.result["TITLE"]',
+                @: content: '@Html.Raw(@ViewBag.result["CONTENT"])',
+                @: present_form: '@ViewBag.result["PRESENT_FORM"]',
+                @: file_cpcty_lmt: '@ViewBag.result["FILE_CPCTY_LMT"]',
+                @:task_id: '@ViewBag.result["TASK_SEQ"]',
+                @:sdate: new Date('@ViewBag.result["SDATE"]'),
+                @:stimeHour: '@ViewBag.result["STIMEHOUR"]',
+                @:stimeMin: '@ViewBag.result["STIMEMIN"]',
+                @:edate: new Date('@ViewBag.result["EDATE"]'),
+                @:etimeHour: '@ViewBag.result["ETIMEHOUR"]',
+                @:etimeMin: '@ViewBag.result["ETIMEMIN"]',
+                @:adit_sdate: new Date('@ViewBag.result["ADIT_SDATE"]'),
+                @:adit_stimeHour: '@ViewBag.result["ADIT_STIMEHOURE"]',
+                @:adit_stimeMin: '@ViewBag.result["ADIT_STIMEMIN"]',
+                @:adit_edate: new Date('@ViewBag.result["ADIT_EDATE"]'),
+                @:adit_etimeHour: '@ViewBag.result["ADIT_ETIMEHOUR"]',
+                @:adit_etimeMin: '@ViewBag.result["ADIT_ETIMEMIN"]',
+            } else {
+                @: title: null,
+                @: content: null,
+                @: present_form: '',
+                @: file_cpcty_lmt: '',
+                @:sdate: '',
+                @:stimeHour: '00',
+                @:stimeMin: '00',
+                @:edate: '',
+                @:etimeHour: '00',
+                @:etimeMin: '00',
+                @:adit_sdate: '',
+                @:adit_stimeHour: '00',
+                @:adit_stimeMin: '00',
+                @:adit_edate: '',
+                @:adit_etimeHour: '00',
+                @:adit_etimeMin: '00',
+            }
             atchFileId: null,
-            present_form: '',
-            file_cpcty_lmt: '',
-            storageId: '1000',
+            storageId: '1000'
         },
         mounted: function () {
-            this.sdate = moment().format('YYYY-MM-DD');
-            this.adit_sdate = moment().format('YYYY-MM-DD');
-            this.edate = moment().format('YYYY-MM-DD');
-            this.adit_edate = moment().format('YYYY-MM-DD');
-
+            @if (ViewData["command"].Equals("INSERT")) {
+                @:this.sdate = moment().format('YYYY-MM-DD');
+                @:this.adit_sdate = moment().format('YYYY-MM-DD');
+                @:this.edate = moment().format('YYYY-MM-DD');
+                @:this.adit_edate = moment().format('YYYY-MM-DD');
+            }
             let self = this;
             appEvents.$on('eventSubjChange', function (param) {
 
-                self.selectYearhakgi = param.selectYearhakgi;
-                self.selectSubj = param.selectSubj;
+            self.selectYearhakgi = param.selectYearhakgi;
+            self.selectSubj = param.selectSubj;
 
             });
         },
@@ -318,12 +336,15 @@
                         'adit_edate': this.$data.adit_edate.format("yyyyMMdd") + this.$data.adit_etimeHour + this.$data.adit_etimeMin,
                         'atchFileId': this.$data.atchFileId,
                         'presentForm': this.$data.present_form,
-                        'fileCpctyLlmt': this.$data.file_cpcty_lmt
+                        'fileCpctyLlmt': this.$data.file_cpcty_lmt,
+                        @if (ViewData["command"].Equals("UPDATE")) {
+                            @:'taskId': this.$data.task_id
+                        }
                     })
                     .then(function (response) {
                         @if (ViewData["command"].Equals("UPDATE")) {
                             @:alert("수정되었습니다.");
-                            @:goDetail('@ViewBag.result["BBS_ID"]');
+                            @:goDetail('@ViewBag.result["TASK_SEQ"]');
                         } else {
                             @:alert("등록되었습니다.");
                             @:linkUrl('@ViewBag.SelectPageList', this.$data);
@@ -350,7 +371,7 @@
     $(function () {
         @if (ViewData["command"].Equals("UPDATE")) {
             @:$("#title").val('@ViewBag.result["TITLE"]');
-            @:$("#content").html('@Html.Raw(@ViewBag.result["CONTENTS"])');
+            @:$("#content").html('@Html.Raw(@ViewBag.result["CONTENT"])');
         }
 
         $(".btnCon").find("button").eq(1).click(function () {
@@ -368,11 +389,11 @@
         });
     });
 
-    function goDetail(bbs_id) {
-        var input = "<input type='hidden' name='bbs_id' />";
+    function goDetail(task_seq) {
+        var input = "<input type='hidden' name='task_id' />";
         $("#__form__").append(input);
 
-        $("[name=bbs_id]").val(bbs_id);
+        $("[name=task_id]").val(task_seq);
 
         $("#__form__").attr("action", "@ViewBag.Select");
         $("#__form__").submit();

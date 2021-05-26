@@ -263,27 +263,30 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
 
             param.Add("page", Request.Form["page"]);
 
-            string sql = "SELECT * FROM ("
-                        + "SELECT A.ACDMC_NO AS SelectSubj"
-                        + ", A.TITLE"
-                        + ", A.OTHBC_AT"
-                        + ", A.CONTENTS"
-                        + ", A.REGIST_DT "
-                        + ", B.NAME "
-                        + ", A.BBS_ID "
-                        + ", A.RDCNT "
-                        + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
-                        + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
-                        + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
-                        + ", LAG(TITLE) OVER(ORDER BY BBS_ID) AS PREV_TITLE "
-                        + "FROM OP_BBS A "
-                        + "JOIN OP_USER B "
-                        + "ON A.REGISTER = B.USER_ID "
-                        + "WHERE 1=1 "
-                        + "AND ACDMC_NO = @selectedSubj:VARCHAR "
-                        + "AND BBS_CODE = '" + _codeMngTool.getCode("BBS", "Task") + "' "
-                        + "ORDER BY BBS_ID DESC)"
-                        + "WHERE BBS_ID = @BBS_ID:VARCHAR";
+            string sql = "SELECT A.ACDMC_NO AS SelectSubj"
+                      + ", A.TITLE"
+                      + ", A.CONTENT"
+                      + ", A.PRESENT_FORM"
+                      + ", A.FILE_CPCTY_LMT"
+                      + ", TO_CHAR(A.BEGIN_TMLMT, 'MONTH DD, YYYY hh24:mi:ss', 'NLS_DATE_LANGUAGE=ENGLISH') AS SDATE "
+                      + ", TO_CHAR(A.BEGIN_TMLMT, 'hh24') AS STIMEHOUR "
+                      + ", TO_CHAR(A.BEGIN_TMLMT, 'mi') AS STIMEMIN "
+                      + ", TO_CHAR(A.END_TMLMT, 'MONTH DD, YYYY hh24:mi:ss', 'NLS_DATE_LANGUAGE=ENGLISH') AS EDATE "
+                      + ", TO_CHAR(A.END_TMLMT, 'hh24') AS ETIMEHOUR "
+                      + ", TO_CHAR(A.END_TMLMT, 'mi') AS ETIMEMIN "
+                      + ", TO_CHAR(A.BEGIN_ADIT_TMLMT, 'MONTH DD, YYYY hh24:mi:ss', 'NLS_DATE_LANGUAGE=ENGLISH')  AS ADIT_SDATE "
+                      + ", TO_CHAR(A.BEGIN_ADIT_TMLMT, 'hh24')  AS ADIT_STIMEHOURE "
+                      + ", TO_CHAR(A.BEGIN_ADIT_TMLMT, 'mi')  AS ADIT_STIMEMIN "
+                      + ", TO_CHAR(A.END_ADIT_TMLMT, 'MONTH DD, YYYY hh24:mi:ss', 'NLS_DATE_LANGUAGE=ENGLISH')   AS ADIT_EDATE "
+                      + ", TO_CHAR(A.END_ADIT_TMLMT, 'hh24')   AS ADIT_ETIMEHOUR "
+                      + ", TO_CHAR(A.END_ADIT_TMLMT, 'mi')   AS ADIT_ETIMEMIN "
+                      + ", B.NAME "
+                      + ", A.TASK_SEQ "
+                      + "FROM OP_TASK A "
+                      + "JOIN OP_USER B "
+                      + "ON A.REGISTER = B.USER_ID "
+                      + "AND ACDMC_NO = @selectedSubj:VARCHAR "
+                      + "WHERE TASK_SEQ = @task_id:VARCHAR";
 
             var result = _commonDao.SelectOne(sql, Request.Form);
 
@@ -295,7 +298,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             ViewBag.InsertForm = "/Task/InsertFormTask";
             ViewBag.Insert = "/Task/UpdateTask";
 
-            return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
+            return View("/Views/LctSport/Task/TaskInsertStdPage.cshtml");
         }
 
         public string UpdateTask([FromBody] Task Task) {
@@ -309,17 +312,24 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             param.Add("Sdate", Task.Sdate);
             param.Add("Edate", Task.Edate);
             param.Add("Adit_sdate", Task.Adit_sdate);
-            param.Add("Adit_edate", Task.Adit_sdate);
-            param.Add("AtchFileId", Task.Adit_sdate);
+            param.Add("Adit_edate", Task.Adit_edate);
+            param.Add("AtchFileId", Task.AtchFileId);
+            param.Add("PresentForm", Task.PresentForm);
+            param.Add("FileCpctyLlmt", Task.FileCpctyLlmt);
+            param.Add("TaskId", Task.TaskId);
             param.Add("user_id", userInfo.user_id);
             string query = "";
 
-            query = "UPDATE OP_BBS SET " +
+            query = "UPDATE OP_TASK SET " +
                     "TITLE = @Title:VARCHAR" +
-                    ", UPDATE_DT = TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
-                    ", CONTENTS = @Content:VARCHAR" +
-                    ", UPDUSR = @user_id:VARCHAR" +
-                    ", OTHBC_AT = @OthbcAt:VARCHAR WHERE BBS_ID = @bbs_id:NUMBER";
+                    ", BEGIN_TMLMT = TO_DATE(@Sdate:VARCHAR, 'YYYYMMDDHH24MI')" +
+                    ", END_TMLMT = TO_DATE(@Edate:VARCHAR, 'YYYYMMDDHH24MI')" +
+                    ", BEGIN_ADIT_TMLMT = TO_DATE(@Adit_sdate:VARCHAR, 'YYYYMMDDHH24MI')" +
+                    ", END_ADIT_TMLMT = TO_DATE(@Adit_edate:VARCHAR, 'YYYYMMDDHH24MI')" +
+                    ", CONTENT = @Content:VARCHAR" +
+                    ", PRESENT_FORM = @PresentForm:VARCHAR" +
+                    ", FILE_CPCTY_LMT = @FileCpctyLlmt:VARCHAR" +
+                    " WHERE TASK_SEQ = @TaskId:NUMBER";
 
             //cud 처리할 때는 트랜잭션 시작해주어야함
             using var transaction = _context.Database.BeginTransaction();
@@ -340,7 +350,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
 
             string query = "";
 
-            query = "DELETE FROM OP_BBS WHERE BBS_ID = @bbs_id:NUMBER";
+            query = "DELETE FROM OP_TASK WHERE TASK_SEQ = @task_id:NUMBER";
 
             //cud 처리할 때는 트랜잭션 시작해주어야함
             using var transaction = _context.Database.BeginTransaction();
@@ -368,6 +378,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             public string AtchFileId { get; set; }              // 첨부파일 ID
             public string PresentForm { get; set; }              // 첨부파일 ID
             public string FileCpctyLlmt { get; set; }              // 첨부파일 ID
+            public string TaskId { get; set; }              // 첨부파일 ID
         }
 
 
