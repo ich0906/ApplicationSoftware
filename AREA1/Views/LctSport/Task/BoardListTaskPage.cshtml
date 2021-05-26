@@ -3,7 +3,7 @@
 <div id="appModule" class="card card-body mb-4 content">
 <div class="popWindow">
     <p class="contenttitle">
-        과제 제출
+        @ViewData["pageNm"]
     </p>
     <div id="btnCon" class="btnCon">
         @if (ViewData["fs_at"].Equals("Y")) {
@@ -38,40 +38,48 @@
                     <th>추가제출기한</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td rowspan="2">2</td>
-                    <td rowspan="2" class="lft">과제2: Huffman 복호화(Decompression) 프로그램 구현 및 실험</td>
-                    <td><font color="blue">2021-05-06 00:00:00 ~ 2021-05-26 23:59:59</font></td>
-                    <td rowspan="2">미제출</td>
-                    <td rowspan="2">
-                        <button type="button" class="btn2 btn-gray">조회</button>
-                    </td>
-                    <td rowspan="2">
-                        <button type="button" class="btn2 btn-gray">비공개</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2021-05-27 00:00:00 ~ 2021-05-28 23:59:59</td>
-                </tr>
-            </tbody>
-            <tbody>
-                <tr>
-                    <td rowspan="2">1</td>
-                    <td rowspan="2" class="lft">과제1: Huffman 코드를 이용한 파일 압축(Compression) 구현 및 실험</td>
-                    <td>2021-05-06 00:00:00 ~ 2021-05-19 23:59:59</td>
-                    <td rowspan="2">제출</td>
-                    <td rowspan="2">
-                        <button type="button" class="btn2 btn-gray">조회</button>
-                    </td>
-                    <td rowspan="2">
-                        <button type="button" class="btn2 btn-gray">비공개</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td><font color="blue">2021-05-20 00:00:00 ~ 2021-05-21 23:59:59</font></td>
-                </tr>
-            </tbody> <!---->
+            @if (ViewBag.ResultCnt > 0) {
+                @for (int i = 0; i < ViewBag.ResultCnt; i++) {
+                <tbody>
+                    <tr>
+                        <td rowspan="2">@(ViewBag.ResultCnt - i)</td>
+                        <td rowspan="2" class="lft">@ViewBag.ResultList[i]["TITLE"]</td>
+                        <td>
+                            @if (ViewBag.ResultList[i]["B1"].Equals("Y")) {
+                                <font color="blue"> @ViewBag.ResultList[i]["BEGIN_TMLMT"] ~ @ViewBag.ResultList[i]["END_TMLMT"] </font>
+                            } else {
+                                @ViewBag.ResultList[i]["BEGIN_TMLMT"] 
+                                @:~ 
+                                @ViewBag.ResultList[i]["END_TMLMT"]
+                             }
+                        </td>
+                        <td rowspan="2">미제출</td>
+                        <td rowspan="2">
+                            <button type="button" class="btn2 btn-gray" onclick="goDetail(@ViewBag.ResultList[i]["TASK_SEQ"])">조회</button>
+                        </td>
+                        <td rowspan="2">
+                            <button type="button" class="btn2 btn-gray">비공개</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @if (ViewBag.ResultList[i]["B2"].Equals("Y")) {
+                                <font color="blue">@ViewBag.ResultList[i]["BEGIN_ADIT_TMLMT"] ~ @ViewBag.ResultList[i]["END_ADIT_TMLMT"]</font>
+                            } else {
+                                @ViewBag.ResultList[i]["BEGIN_ADIT_TMLMT"] 
+                                @:~ 
+                                @ViewBag.ResultList[i]["END_ADIT_TMLMT"]
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+                    }
+                } else {
+            <tr>
+                <td colspan="6" class="disnone">출제된 레포트가 없습니다.</td>
+            </tr>
+            }
+            <!---->
         </table>
     </div>
     <div class="mtablelistbox">
@@ -91,30 +99,25 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>2</td>
-                    <td class="lft">
-                        <a href="javascript:void(0);">
-                            과제2: Huffman 복호화(Decompression) 프로그램 구현 및 실험
-                        </a>
-                    </td>
-                    <td>미제출</td>
-                    <td>
-                        <button type="button" class="btn2 btn-gray">비공개</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td class="lft">
-                        <a href="javascript:void(0);">
-                            과제1: Huffman 코드를 이용한 파일 압축(Compression) 구현 및 실험
-                        </a>
-                    </td>
-                    <td>제출</td>
-                    <td>
-                        <button type="button" class="btn2 btn-gray">비공개</button>
-                    </td>
-                </tr> <!---->
+                @if (ViewBag.ResultCnt > 0) {
+                    @for (int i = 0; i < ViewBag.ResultCnt; i++) {
+                        <tr>
+                            <td>@(ViewBag.ResultCnt - i)</td>
+                            <td class="lft">
+                                <a href="javascript:void(0);" onclick="goDetail(@ViewBag.ResultList[i]["TASK_SEQ"])">
+                                    @ViewBag.ResultList[i]["TITLE"]
+                                </a>
+                            </td>
+                            <td>미제출</td>
+                            <td>
+                                <button type="button" class="btn2 btn-gray">비공개</button>
+                            </td>
+                        </tr>
+                    }
+                } else {
+                        <tr><td colspan="4">출제된 레포트가 없습니다.</td></tr>
+                }
+                <!---->
             </tbody>
         </table>
     </div>
@@ -144,72 +147,15 @@
         });
     });
 
-    let appModule = new Vue({
-        el: '#appModule',
-        data: {
-            selectChangeYn: 'Y',
-            list: [],
-            seq: '',
-            ordseq: null,
-            weeklySeq: null,
-            weeklySubSeq: null,
-            isopen: '',
-            selectYearhakgi: null,
-            selectSubj: null,
-        },
-        mounted: function () {
-            let self = this;
+    function goDetail(task_id) {
+        var input = "<input type='hidden' name='task_id' />";
+        $("#__form__").append(input);
 
-            appEvents.$on('eventSubjChange', function (param) {
-                self.selectYearhakgi = param.selectYearhakgi;
-                self.selectSubj = param.selectSubj;
-                self.getData(param);
-            });
-        },
-        methods: {
-            getData: function (param) {
-                param = Object.assign({}, param);
-                param.currentPage -= 1;
-                axios.post('/std/lis/evltn/TaskStdList.do', param)
-                    .then(function (response) {
-                        this.list = response.data;
-                    }.bind(this));
-            },
-            linkHistory: function () {
-                linkUrl('TaskRcordListStdPage.do', this.$data);
-            },
-            linkView: function (a) {
+        $("[name=task_id]").val(task_id);
 
-                this.ordseq = a;
-
-                linkUrl('TaskViewStdPage.do', this.$data);
-            },
-            linkInsertPage: function (a, b, c) {
-                this.ordseq = a;
-                this.weeklySeq = b;
-                this.weeklySubSeq = c;
-                linkUrl('TaskInsertStdPage.do', this.$data);
-            },
-            linkBestReport: function (ordseq, isopen) {
-                this.ordseq = ordseq;
-                this.isopen = isopen;
-
-                linkUrl('TaskBestReportListStdPage.do', this.$data);
-            },
-            linkAllReport: function (ordseq, isopen) {
-                this.ordseq = ordseq;
-                this.isopen = isopen;
-
-                linkUrl('TaskAllReportListStdPage.do', this.$data);
-            },
-            linkBasicScorePage: function (ordseq, weeklySeq, weeklySubseq) {
-                this.ordseq = ordseq;
-                this.weeklySeq = weeklySeq;
-                this.weeklySubSeq = weeklySubseq;
-                linkUrl('TaskViewBasicScoreStdPage.do', this.$data);
-            }
-        }
-    });
+        $("#__form__").attr("action", "@ViewBag.Select");
+        $("#__form__").submit();
+    }
 
 </script>
 

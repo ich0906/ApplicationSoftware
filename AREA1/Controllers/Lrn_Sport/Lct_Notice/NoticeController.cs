@@ -66,8 +66,11 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
             } else {
                 // 디폴트 과목을 선택함
-                string sql2 = "SELECT B.ACDMC_NO AS selectedSubj, YEAR || ',' || SEMESTER AS YEAR_HAKGI"
-                    + $" FROM OP_TEACHES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' AND semester='1' AND YEAR = '2021' AND ROWNUM = 1 ORDER BY COURSE_ID";
+                string sql2 = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) 
+                    ? "SELECT * FROM (SELECT ROWNUM, AA.* FROM (SELECT B.ACDMC_NO AS selectedSubj, YEAR || ',' || SEMESTER AS YEAR_HAKGI"
+                    + $" FROM OP_TEACHES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' ORDER BY YEAR DESC, SEMESTER DESC, COURSE_ID) AA) AAA WHERE ROWNUM = 1"
+                    : "SELECT * FROM (SELECT ROWNUM, AA.* FROM (SELECT B.ACDMC_NO AS selectedSubj, YEAR || ',' || SEMESTER AS YEAR_HAKGI"
+                    + $" FROM OP_TAKES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' ORDER BY YEAR DESC, SEMESTER DESC, COURSE_ID) AA) AAA WHERE ROWNUM = 1";
 
                 param = _commonDao.SelectOne(sql2);
                 param.Add("selectedSubj", param["SELECTEDSUBJ"]);
