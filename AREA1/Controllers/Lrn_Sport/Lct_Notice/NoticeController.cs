@@ -245,7 +245,10 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                     ", @Content:VARCHAR" +
                     ", @user_id:VARCHAR" +
                     ", ''" +
-                    ", @OthbcAt:VARCHAR)";
+                    ", @OthbcAt:VARCHAR" +
+                    ", NULL" +
+                    ", NULL" +
+                    ", NULL)";
 
             //cud 처리할 때는 트랜잭션 시작해주어야함
             using var transaction = _context.Database.BeginTransaction();

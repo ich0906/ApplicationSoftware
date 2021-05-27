@@ -19,7 +19,7 @@
             </ul>
         </div>
     </form>
-    @if (ViewData["fs_at"].Equals("Y")) {
+    @if (ViewData["fs_at"].Equals("Y") || ViewData["pageNm"].Equals("강의 묻고답하기")) {
         <div class="btnCon"><button type="button" class="btn2 btn-gray">글쓰기</button></div>
     }
     <table class="AType">
@@ -63,7 +63,7 @@
                 {
                     <td><!----> <span>@ViewBag.ResultList[i]["OTHBC"]</span></td>
                 }
-                @if (ViewData["pageNm"].Equals("강의 묻고답하기") && ViewBag.ResultList[i]["OTHBC"].Equals("비공개")) { <td class="lft" style="cursor: pointer;" onclick="test()">@ViewBag.ResultList[i]["TITLE"]</td>}
+                @if (ViewData["pageNm"].Equals("강의 묻고답하기") && ViewBag.ResultList[i]["OTHBC"].Equals("비공개") && !ViewData["name"].Equals(ViewBag.ResultList[i]["REGISTER"])) { <td class="lft" style="cursor: pointer;" onclick="test()">@ViewBag.ResultList[i]["TITLE"]</td>}
                 else { <td class="lft" style="cursor: pointer;" onclick="goDetail(@ViewBag.ResultList[i]["BBS_ID"])">@ViewBag.ResultList[i]["TITLE"]</td>}
                 <td class="disnone"><!----></td>
                 <td class="disnone">@ViewBag.ResultList[i]["REGISTER"]</td>
