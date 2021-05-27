@@ -5,6 +5,7 @@ using AREA1.Tool;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -63,8 +64,11 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                 // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
             } else {
                 // 디폴트 과목을 선택함
-                string sql2 = "SELECT B.ACDMC_NO AS selectedSubj, YEAR || ',' || SEMESTER AS YEAR_HAKGI"
-                    + $" FROM OP_TEACHES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' AND semester='1' AND YEAR = '2021' AND ROWNUM = 1 ORDER BY COURSE_ID";
+                string sql2 = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))
+                    ? "SELECT * FROM (SELECT ROWNUM, AA.* FROM (SELECT B.ACDMC_NO AS selectedSubj, YEAR || ',' || SEMESTER AS YEAR_HAKGI"
+                    + $" FROM OP_TEACHES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' ORDER BY YEAR DESC, SEMESTER DESC, COURSE_ID) AA) AAA WHERE ROWNUM = 1"
+                    : "SELECT * FROM (SELECT ROWNUM, AA.* FROM (SELECT B.ACDMC_NO AS selectedSubj, YEAR || ',' || SEMESTER AS YEAR_HAKGI"
+                    + $" FROM OP_TAKES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' ORDER BY YEAR DESC, SEMESTER DESC, COURSE_ID) AA) AAA WHERE ROWNUM = 1";
 
                 param = _commonDao.SelectOne(sql2);
                 param.Add("selectedSubj", param["SELECTEDSUBJ"]);
@@ -140,6 +144,8 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                        + ", TO_CHAR(A.END_TMLMT, 'YYYY-MM-DD hh24:mi:ss')  AS END_TMLMT "
                        + ", TO_CHAR(A.BEGIN_ADIT_TMLMT, 'YYYY-MM-DD hh24:mi:ss')  AS BEGIN_ADIT_TMLMT "
                        + ", TO_CHAR(A.END_ADIT_TMLMT, 'YYYY-MM-DD hh24:mi:ss')   AS END_ADIT_TMLMT "
+                       + ", CASE WHEN A.BEGIN_TMLMT <= SYSDATE THEN CASE WHEN A.END_TMLMT >= SYSDATE THEN  'Y' ELSE 'N' END ELSE 'N' END AS B1 "
+                       + ", CASE WHEN A.BEGIN_ADIT_TMLMT <= SYSDATE THEN CASE WHEN A.END_ADIT_TMLMT >= SYSDATE THEN  'Y' ELSE 'N' END ELSE 'N' END AS B2 "
                        + ", B.NAME "
                        + ", A.TASK_SEQ "
                        + "FROM OP_TASK A "
@@ -150,12 +156,22 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
 
             var result = _commonDao.SelectOne(sql, Request.Form);
 
+            if(ViewData["fs_at"].Equals("N")) {
+                sql = $"SELECT TASK_SEQ, REGISTER, TITLE, CONTENT, PRSENTR_AT, REGIST_DT FROM OP_TASK_PRSENTR WHERE REGISTER = '{userInfo.user_id}' AND TASK_SEQ = @task_id:VARCHAR";
+                var resultPrsentr = _commonDao.SelectOne(sql, Request.Form);
+                if(Request.Form.ContainsKey("prsentr_at") && Request.Form["prsentr_at"] == "N") {
+                    resultPrsentr["PRSENTR_AT"] = "N";
+                }
+                ViewBag.ResultPrsentr = resultPrsentr;
+            }
+
             ViewBag.result = result;
             ViewBag.param = param;
             ViewBag.Select = "/Task/SelectTask";
             ViewBag.SelectPageList = "/Task/SelectPageListTask";
             ViewBag.UpdateForm = "/Task/UpdateFormTask";
             ViewBag.Delete = "/Task/DeleteTask";
+            ViewBag.Prsentr = "/Task/PrsentrTask";
 
             return View("/Views/LctSport/Task/TaskViewPage.cshtml");
         }
@@ -343,14 +359,18 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
         public string DeleteTask() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
 
-            if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
-                Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
-                Response.WriteAsync("<script language=\"javascript\">window.location=\"/Task/SelectPageListTask\"</script>");
-            }
 
             string query = "";
 
-            query = "DELETE FROM OP_TASK WHERE TASK_SEQ = @task_id:NUMBER";
+            if(userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
+                if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
+                    Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
+                    Response.WriteAsync("<script language=\"javascript\">window.location=\"/Task/SelectPageListTask\"</script>");
+                }
+                query = "DELETE FROM OP_TASK WHERE TASK_SEQ = @task_id:NUMBER";
+            } else {
+                query = $"DELETE FROM OP_TASK_PRSENTR WHERE REGISTER = '{userInfo.user_id}' AND TASK_SEQ = @task_id:NUMBER";
+            }
 
             //cud 처리할 때는 트랜잭션 시작해주어야함
             using var transaction = _context.Database.BeginTransaction();
@@ -365,6 +385,56 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
 
             return resultCode;
         }
+
+        public string PrsentrTask() {
+            string resultCode = "ok";
+
+            UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
+
+            string query = "";
+
+            query = $"SELECT COUNT(*) AS CNT FROM OP_TAKES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' AND ACDMC_NO = '" + Request.Form["selectedSubj"] + "'";
+
+            // 해당 강의를 수강하는 학생이 아니라면 
+            if(!_commonDao.SelectOne(query)["CNT"].Equals("1")) {
+                resultCode = "false";
+            }
+
+            query = "INSERT INTO OP_TASK_PRSENTR VALUES(" +
+                    "@task_id:VARCHAR " +
+                    $", '{userInfo.user_id}' " +
+                    ", '' " +
+                    ", @prsentr_title:VARCHAR " +
+                    ", @prsentr_content:VARCHAR " +
+                    ", 'Y'" +
+                    ", SYSDATE)";
+
+            //cud 처리할 때는 트랜잭션 시작해주어야함
+            using var transaction = _context.Database.BeginTransaction();
+
+            try {
+                if (_commonDao.Insert(query, Request.Form) == 0) {
+                    resultCode = "false";
+                }
+            // 한번 제출한 과제는 insert 시 에러가 나기 때문에 catch 문으로 받고 업데이트문으로 바꾸어준다.
+            } catch(OracleException e) {
+                query = "UPDATE OP_TASK_PRSENTR SET " +
+                   "DOC_ID = '' " +
+                   ", TITLE = @prsentr_title:VARCHAR " +
+                   ", CONTENT = @prsentr_content:VARCHAR " +
+                   " WHERE TASK_SEQ = @task_id:VARCHAR";
+
+                if (_commonDao.Insert(query, Request.Form) == 0) {
+                    resultCode = "false";
+                }
+            }
+
+            transaction.Commit();
+
+            return resultCode;
+        }
+
+
 
         // 과제 전용 모델 public으로 선언해야 매개변수로 사용가능함
         public class Task {
