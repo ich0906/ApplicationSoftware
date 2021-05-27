@@ -353,7 +353,8 @@
 
     <script src="/js/common-vue.js"></script>
 
-    <script>Vue.use(VueLoading);
+    <script>
+    Vue.use(VueLoading);
         Vue.component('loading', VueLoading);
 
         Vue.use(Toasted);
@@ -362,7 +363,8 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/jquery.fileDownload.js"></script>
     <script src="/js/main.js"></script>
-    <script>moment.locale('ko', {
+    <script>
+    moment.locale('ko', {
             weekdays: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
             weekdaysShort: ['일', '월', '화', '수', '목', '금', '토']
         });</script><!-- Bootstrap core CSS -->
@@ -417,7 +419,7 @@
                                 <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;&#39;);">수강관리</a>
                                 <ul class="depth03ul">
                                     <li>
-                                        <a href="/Main/Main" );">수업시간표</a>
+                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/cps/atnlc/TimetableStdPage.do&#39;);">수업시간표</a>
                                     </li>
                                 </ul>
                             </li>
@@ -777,7 +779,8 @@
             </div>
         </div>
     </header>
-    <script type="text/javascript">var deviceAgent = navigator.userAgent.toLowerCase();
+    <script type="text/javascript">
+    var deviceAgent = navigator.userAgent.toLowerCase();
         var ios = deviceAgent.match(/(iphone|ipod|ipad)/);
         var android = deviceAgent.match(/(android)/);
 

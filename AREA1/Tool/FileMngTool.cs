@@ -23,9 +23,10 @@ namespace Tool {
         }
 
 
-        public void Uploads(IFormCollection param) {
+        public string Uploads(IFormCollection param) {
             string fileName = "";
             string fileEXTSN = "";
+            string docId = getRandomString();
             DateTime timeNow = DateTime.Now;
 
 
@@ -50,6 +51,7 @@ namespace Tool {
                 files.Add("file_name", fileNameSplit);
                 files.Add("file_extsn", fileEXTSN);
                 files.Add("upload_time", FileTimeNow);
+                files.Add("doc_id", docId);
 
                 //INSERT 쿼리
                 using var transaction = _context.Database.BeginTransaction();
@@ -57,7 +59,8 @@ namespace Tool {
                 string query = "INSERT INTO OP_FILE VALUES(@file_id:VARCHAR,"
                                                    + "@file_name:VARCHAR,"
                                                    + "@file_extsn:VARCHAR,"
-                                                   + "@upload_time:VARCHAR"
+                                                   + "@upload_time:VARCHAR,"
+                                                   + "@doc_id:VARCHAR"
                                                    + ")";
                 _commonDao.Insert(query, files);
 
@@ -65,7 +68,8 @@ namespace Tool {
 
                 //폴더에 파일쓰기
                 if (file.Length > 0) {
-                    string filePath = Path.Combine(@"C:\filestream\uploads", fileHash);
+                    string folder = System.IO.Directory.GetCurrentDirectory() + @"\wwwroot\upload";
+                    string filePath = Path.Combine(folder, fileHash);
 
                     using (Stream fileStream = new FileStream(filePath, FileMode.Create)) {
                         file.CopyTo(fileStream);
@@ -74,7 +78,7 @@ namespace Tool {
                     }
                 }
             }
-
+            return docId;
             //Response.WriteAsync("<script language=\"javascript\">alert('" + fileName + " is uploaded!');</script>");
             //Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
 
@@ -119,6 +123,11 @@ namespace Tool {
             System.IO.Directory.CreateDirectory(targetPath);
             System.IO.File.Copy(sourceFile, destFile, true);
 
+        }
+
+        public string getRandomString() {
+            DateTime dt = DateTime.Now;
+            return dt.ToString("MMddhhmmss");
         }
     }
 }

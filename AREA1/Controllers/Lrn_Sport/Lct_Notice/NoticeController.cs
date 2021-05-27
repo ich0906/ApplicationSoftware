@@ -230,7 +230,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             param.Add("Title", notice.Title);
             param.Add("OthbcAt", notice.OthbcAt);
             param.Add("Content", notice.Content);
-            param.Add("AtchFileId", notice.SelectSubj);
+            param.Add("AtchFileId", notice.AtchFileId);
             param.Add("user_id", userInfo.user_id);
 
             string query = "";
@@ -287,6 +287,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                         + ", B.NAME "
                         + ", A.BBS_ID "
                         + ", A.RDCNT "
+                        + ", A.DOC_ID "
                         + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
                         + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
                         + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
@@ -323,7 +324,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             param.Add("OthbcAt", notice.OthbcAt);
             param.Add("Content", notice.Content);
             param.Add("bbs_id", notice.Bbs_id);
-            param.Add("AtchFileId", notice.SelectSubj);
+            param.Add("AtchFileId", notice.AtchFileId);
             param.Add("user_id", userInfo.user_id);
             string query = "";
 

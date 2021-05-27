@@ -284,6 +284,17 @@
                 this.$refs.attach.upload();
             },
             uploadComplete: function (attachId) {
+                this.atchFileId = attachId;
+
+
+                oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+
+
+                this.content = $('#content').val();
+                this.present_form = $('#present_form').val();
+                this.file_cpcty_lmt = $('#file_cpcty_lmt').val();
+                this.content = this.content.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+
                 if (this.title.trim() == "") {
                     alert('제목을 입력하세요');
                     this.$refs.title.focus();
@@ -314,16 +325,6 @@
                 }
 
 
-                this.atchFileId = attachId;
-
-
-                oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
-
-
-                this.content = $('#content').val();
-                this.present_form = $('#present_form').val();
-                this.file_cpcty_lmt = $('#file_cpcty_lmt').val();
-                this.content = this.content.replace(/(?:\r\n|\r|\n)/g, '<br/>');
 
                 axios.post('@ViewBag.Insert',
                     {
@@ -344,7 +345,7 @@
                     .then(function (response) {
                         @if (ViewData["command"].Equals("UPDATE")) {
                             @:alert("수정되었습니다.");
-                            @:goDetail('@ViewBag.result["TASK_SEQ"]');
+                            @:goDetail(@ViewBag.result["TASK_SEQ"]);
                         } else {
                             @:alert("등록되었습니다.");
                             @:linkUrl('@ViewBag.SelectPageList', this.$data);

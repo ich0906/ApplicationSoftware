@@ -11,6 +11,7 @@
             </div>
         </div>
         <div></div>
+        <div class="board_viewfile"><span>파일 : </span><a href="#">P2-WebUIApp.pdf</a><span class="format">[ 551.62 KB ]</span></div>
         <div class="board_view_content">
             <div class="board_viewDetail">
                 <div>
@@ -22,8 +23,7 @@
         {
             <div class="board_view_comment">
 
-                @for (int i = 0; i < ViewBag.commentList.Count; i++)
-                {
+                @for (int i = 0; i < ViewBag.commentList.Count; i++) {
                     <ul class="board_viewcomment">
                         <li class="name first">@ViewBag.commentList[i]["NAME"]</li>
                         <li class="text first">
