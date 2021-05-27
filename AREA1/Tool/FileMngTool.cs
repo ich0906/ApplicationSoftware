@@ -86,13 +86,13 @@ namespace Tool {
             //Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
 
         }
-        public void Downloads(IFormCollection param) {
+        public string Downloads(IFormCollection param) {
             var fileData = new Dictionary<string, string>();
             //HTML input값과 동일한 해쉬값을 가진 튜플에서 파일네임과 확장자 가져오기
             using var transaction = _context.Database.BeginTransaction();
 
-            string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM OP_FILE WHERE FILE_ID = @file_id:VARCHAR";
-
+            //string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM OP_FILE WHERE FILE_ID = @file_id:VARCHAR";
+            string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM OP_FILE WHERE FILE_ID = '"+param["file_id"]+"'";
             fileData = _commonDao.SelectOne(query, param);
 
             transaction.Commit();
@@ -126,6 +126,7 @@ namespace Tool {
             System.IO.Directory.CreateDirectory(targetPath);
             System.IO.File.Copy(sourceFile, destFile, true);
 
+            return fileName;
         }
 
         public void removeFile(string docId) {
