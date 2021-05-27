@@ -17,12 +17,14 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
         private readonly CodeMngTool _codeMngTool;
+        private readonly FileMngTool _fileMngTool;
 
         public NoticeController(ILogger<NoticeController> logger, AppSoftDbContext context) {
             _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);
             _codeMngTool = new CodeMngTool(context);
+            _fileMngTool = new FileMngTool(context);
         }
 
         /*
@@ -155,6 +157,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                        + ", B.NAME "
                        + ", A.BBS_ID "
                        + ", A.RDCNT "
+                       + ", DOC_ID "
                        + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
                        + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
                        + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
@@ -176,6 +179,19 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
             ViewBag.UpdateForm = "/Notice/UpdateFormNotice";
             ViewBag.Delete = "/Notice/DeleteNotice";
+
+            int fcount = 0;
+            //첨부파일 읽어오기
+            if (result["DOC_ID"] != "") {
+                sql = "SELECT * FROM OP_FILE A JOIN OP_BBS B ON A.DOC_ID=B.DOC_ID"
+               + " WHERE A.DOC_ID=" + result["DOC_ID"];
+
+                var fileList = _commonDao.SelectList(sql);
+                fcount = fileList.Count;
+                ViewBag.fileList = fileList;
+            }
+
+            ViewBag.fileCount = fcount;
 
             return View("/Views/LctSport/BoardViewStdPage.cshtml");
         }
@@ -309,7 +325,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
             ViewBag.Select = "/Notice/SelectNotice";
             ViewBag.InsertForm = "/Notice/InsertFormNotice";
-            ViewBag.Insert = "/Notice/UpdateNotice";
+            ViewBag.Insert = "/Notice/UpdateNotice";  
 
             return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
         }
@@ -333,6 +349,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                     ", UPDATE_DT = TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
                     ", CONTENTS = @Content:VARCHAR" +
                     ", UPDUSR = @user_id:VARCHAR" +
+                    ", DOC_ID = @AtchFileId:VARCHAR"+
                     ", OTHBC_AT = @OthbcAt:VARCHAR WHERE BBS_ID = @bbs_id:NUMBER";
 
             //cud 처리할 때는 트랜잭션 시작해주어야함
@@ -353,6 +370,15 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             }
 
             string query = "";
+
+            query = "SELECT FILE_ID, A.DOC_ID FROM OP_FILE A "
+                +"JOIN OP_BBS B "
+                +"ON A.DOC_ID=B.DOC_ID "
+                +"AND BBS_ID='"+Request.Form["bbs_id"]+"'";
+            var removeFiles = _commonDao.SelectList(query);
+            for(int i = 0; i < removeFiles.Count; ++i) {
+                _fileMngTool.removeFile(removeFiles[i]["DOC_ID"]);
+            }
 
             query = "DELETE FROM OP_BBS WHERE BBS_ID = @bbs_id:NUMBER";
 
