@@ -11,7 +11,9 @@
             </div>
         </div>
         <div></div>
-        <div class="board_viewfile"><span>파일 : </span><a href="#">P2-WebUIApp.pdf</a><span class="format">[ 551.62 KB ]</span></div>
+        @for (int i = 0; i < ViewBag.fileCount; ++i) {
+            <div class="board_viewfile"><span>파일 : </span><a href="#">@ViewBag.fileList[i]["FILE_NAME"].@ViewBag.fileList[i]["FILE_EXTSN"]</a></div>
+        }
         <div class="board_view_content">
             <div class="board_viewDetail">
                 <div>
