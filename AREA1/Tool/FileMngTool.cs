@@ -26,9 +26,12 @@ namespace Tool {
         public string Uploads(IFormCollection param) {
             string fileName = "";
             string fileEXTSN = "";
-            string docId = getRandomString();
+            string docId;
+            if (param["attachId"].Equals("")) docId = getRandomString();
+            else docId = param["attachId"];
             DateTime timeNow = DateTime.Now;
 
+            removeFile(docId);
 
             foreach (IFormFile file in param.Files) {
                 fileName = file.FileName;
@@ -114,8 +117,8 @@ namespace Tool {
             //Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
 
             //파일 다운로드(카피)
-            string sourcePath = @"c:\filestream\uploads";
-            string targetPath = @"c:\filestream\downloads";
+            string sourcePath = System.IO.Directory.GetCurrentDirectory() + @"\wwwroot\upload";
+            string targetPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
             string sourceFile = System.IO.Path.Combine(sourcePath, fileID);
             string destFile = System.IO.Path.Combine(targetPath, fileName);
@@ -123,6 +126,28 @@ namespace Tool {
             System.IO.Directory.CreateDirectory(targetPath);
             System.IO.File.Copy(sourceFile, destFile, true);
 
+        }
+
+        public void removeFile(string docId) {
+            string query = "SELECT FILE_ID FROM OP_FILE "
+                + "WHERE DOC_ID='" + docId + "'";
+
+            string uploadFolder = System.IO.Directory.GetCurrentDirectory() + @"\wwwroot\upload";
+            string fName;
+            var willDeleteList = _commonDao.SelectList(query);
+            for (int i = 0; i < willDeleteList.Count; ++i) {
+                fName = Path.Combine(uploadFolder, willDeleteList[i]["FILE_ID"]);
+                File.Delete(fName);
+            }
+
+            query = "DELETE FROM OP_FILE"
+                + " WHERE DOC_ID='" + docId + "'";
+
+            using var transaction2 = _context.Database.BeginTransaction();
+
+            _commonDao.Delete(query);
+
+            transaction2.Commit();
         }
 
         public string getRandomString() {
