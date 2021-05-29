@@ -111,7 +111,15 @@
                             </div> <div class="schedule">
                                 <table class="scheduletb">
                                     <colgroup><col> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"></colgroup>
-                                    <thead><tr><th></th> <th><!---->월</th> <th><!---->화</th> <th><p class="today1">수</p><!----></th> <th><!---->목</th> <th><!---->금</th> <th><!---->토</th></tr></thead>
+                                    <thead><tr><th></th> 
+                                        @if(ViewBag.DayOfWeek==0){ <th><p class="today1">월</p></th> }else {<th>월</th> }
+                                        @if(ViewBag.DayOfWeek==1){ <th><p class="today1">화</p></th> }else {<th>화</th> }
+                                        @if(ViewBag.DayOfWeek==2){ <th><p class="today1">수</p></th> }else {<th>수</th> }
+                                        @if(ViewBag.DayOfWeek==3){ <th><p class="today1">목</p></th> }else {<th>목</th> }
+                                        @if(ViewBag.DayOfWeek==4){ <th><p class="today1">금</p></th> }else {<th>금</th> }
+                                        @if(ViewBag.DayOfWeek==5){ <th><p class="today1">토</p></th> }else {<th>토</th> }
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         @{string[] days = { "", "월", "화", "수", "목", "금", "토" };}
                                         @{string clsStr; }
@@ -297,7 +305,7 @@
                                                     <div class="left" style="cursor: pointer;">
                                                         @ViewBag.ResultList[i]["TITLE"] (@ViewBag.ResultList[i]["ACDMC_NO"])
                                                         <br> <span>
-                                                            @if (ViewBag.ResultList[i]["DAY1"] != string.Empty) {
+                                                           @ViewBag.ResultList[i]["NAME"] /  @if (ViewBag.ResultList[i]["DAY1"] != string.Empty) {
                                                     <span>@ViewBag.ResultList[i]["DAY1"] @ViewBag.ResultList[i]["PERIOD1"]교시</span>}
                                                             @if (ViewBag.ResultList[i]["DAY1"] != string.Empty && ViewBag.ResultList[i]["DAY2"] != string.Empty) {
                                                     <span>,</span>}
