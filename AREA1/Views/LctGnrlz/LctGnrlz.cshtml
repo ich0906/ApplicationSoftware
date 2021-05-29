@@ -1,5 +1,28 @@
 ﻿@Html.Partial("~/Views/Shared/LctSportHeader.cshtml")
 
+<form id="__form2__" method="post" style="display: none;">
+    <input type="hidden" name="selectedGrcode" />
+    <input id="yearhakgi" type="hidden" name="selectedYearhakgi" />
+    <input id="_selectedSubj" type="hidden" name="selectedSubj" />
+    <input id="_BBS_ID" type="hidden" name="BBS_ID" />
+    <input type="hidden" name="page" value="@ViewBag.param["page"]" />
+</form>
+
+<script>
+    function page_move(url, acdmc_no, yearhakgi, bbs_id) {
+        var form = document.getElementById("__form2__");
+        var yh = document.getElementById("yearhakgi");
+        var subj = document.getElementById("_selectedSubj");
+        var bbs = document.getElementById("_BBS_ID");
+        form.action = url;
+        form.method = "post";
+        yh.setAttribute("value", yearhakgi);
+        subj.setAttribute("value", acdmc_no);
+        bbs.setAttribute("value", bbs_id);
+        form.submit();
+    }
+</script>
+
 <div id="appModule">
     <div class="row">
         <div class="col-md-6">
@@ -11,8 +34,10 @@
                     <dl class="notice_list_top">
                         @for (int i = 0; i < 4; ++i) {
                             if (i < ViewBag.noticeCount) {
-            <dt><p><a href="#" onclick="javascript: page_move('/Notice/SelectNotice', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI', '@ViewBag.noticeList[i]["BBS_ID"]')">@ViewBag.noticeList[i]["TITLE"]</a></p> <span class="date">@ViewBag.noticeList[i]["REGIST_DT"]</span></dt> } else {
-            <dt><p><a href="#"></a></p> <span class="date"></span></dt>}
+                                <dt><p><a href="#" onclick="javascript: page_move('/Notice/SelectNotice', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI', '@ViewBag.noticeList[i]["BBS_ID"]')">@ViewBag.noticeList[i]["TITLE"]</a></p> <span class="date">@ViewBag.noticeList[i]["REGIST_DT"]</span></dt>
+ } else {
+                                <dt><p><a href="#"></a></p> <span class="date"></span></dt>
+}
                         }
                     </dl>
                 </div>

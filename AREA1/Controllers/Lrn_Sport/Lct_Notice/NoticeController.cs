@@ -189,6 +189,19 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
             ViewBag.UpdateForm = "/Notice/UpdateFormNotice";
             ViewBag.Delete = "/Notice/DeleteNotice";
 
+            int fcount = 0;
+            //첨부파일 읽어오기
+            if (result["DOC_ID"] != "") {
+                sql = "SELECT FILE_NAME,FILE_EXTSN,FILE_ID FROM OP_FILE A JOIN OP_BBS B ON A.DOC_ID=B.DOC_ID"
+               + " WHERE A.DOC_ID=" + result["DOC_ID"];
+
+                var fileList = _commonDao.SelectList(sql);
+                fcount = fileList.Count;
+                ViewBag.fileList = fileList;
+            }
+
+            ViewBag.fileCount = fcount;
+
             return View("/Views/LctSport/BoardViewStdPage.cshtml");
         }
 
