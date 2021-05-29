@@ -65,7 +65,8 @@
                 }
                 @if (ViewData["pageNm"].Equals("강의 묻고답하기") && ViewBag.ResultList[i]["OTHBC"].Equals("비공개") && !ViewData["name"].Equals(ViewBag.ResultList[i]["REGISTER"])) { <td class="lft" style="cursor: pointer;" onclick="test()">@ViewBag.ResultList[i]["TITLE"]</td>}
                 else { <td class="lft" style="cursor: pointer;" onclick="goDetail(@ViewBag.ResultList[i]["BBS_ID"])">@ViewBag.ResultList[i]["TITLE"]</td>}
-                <td class="disnone"><!----></td>
+                @if (ViewBag.fileExistList[i]["DOC_ID"]!="") {<td><img src="~/images/lctSport/ic_file_01.jpg" /></td>} 
+                else { <td></td>}
                 <td class="disnone">@ViewBag.ResultList[i]["REGISTER"]</td>
                 <td class="disnone">@ViewBag.ResultList[i]["REGIST_DT"].ToString().Split(' ')[0]</td>
                 <td class="disnone">@ViewBag.ResultList[i]["RDCNT"]</td>
