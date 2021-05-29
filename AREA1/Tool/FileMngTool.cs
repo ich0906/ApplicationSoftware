@@ -44,8 +44,16 @@ namespace Tool {
                 tmpHash = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
 
                 string fileHash = BitConverter.ToString(tmpHash);//해쉬
-                fileEXTSN = result[1];//확장자
-                string fileNameSplit = result[0];//확장자뗀이름
+                string fileNameSplit = "";
+
+                for(int i =0; i<result.Length- 1; i++) {
+                    fileNameSplit += result[i];
+                    if (i < result.Length - 2) {
+                        fileNameSplit += ".";//확장자뗀이름
+                    }
+                }
+                fileEXTSN = result[result.Length-1];//확장자
+
                 string FileTimeNow = timeNow.ToString("yyyy-MM-dd HH:mm:ss");//업로드시각
 
                 //속성마다 값 넣어주기
@@ -63,7 +71,8 @@ namespace Tool {
                                                    + "@file_name:VARCHAR,"
                                                    + "@file_extsn:VARCHAR,"
                                                    + "@upload_time:VARCHAR,"
-                                                   + "@doc_id:VARCHAR"
+                                                   + "@doc_id:VARCHAR,"
+                                                   + "''"
                                                    + ")";
                 _commonDao.Insert(query, files);
 

@@ -1045,7 +1045,7 @@ ul.paging li.active a:focus {
 .board_view .board_view_header .board_viewInfo {padding-left:5px}
 .board_view .board_view_header .board_viewInfo span {padding:0 0px 0px 10px;color:#666;}
 
-.board_view .board_viewfile { background:#fff url(../images/common/ic_file_01.jpg) no-repeat 18px 15px; line-height:23px;border-bottom:1px dashed #ddd; padding:10px 20px 10px 40px;margin:0;}
+.board_view .board_viewfile { background:#fff url(/images/lctSport/ic_file_01.jpg) no-repeat 18px 15px; line-height:23px;border-bottom:1px dashed #ddd; padding:10px 20px 10px 40px;margin:0;}
 .board_view .board_viewfile span {padding:0 10px 0 0px;color:#222;}
 .board_view .board_viewfile span.format {padding:0 10px 0 10px;color:#0269ca;}
 
