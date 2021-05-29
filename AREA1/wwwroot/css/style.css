@@ -1,5 +1,8 @@
 @charset 'UTF-8';
 
+
+
+
 body {
     font-size: 87.5%;
     line-height: 1.769em;
@@ -17,6 +20,9 @@ body {
     -moz-box-orient: vertical;
     -webkit-box-orient: vertical;
 }
+
+
+
 
 a > span {
     cursor: pointer;
@@ -37,6 +43,7 @@ a {
         outline: 0;
     }
 
+
 ul, ol, dl, li {
     list-style: none;
     margin: 0;
@@ -50,7 +57,10 @@ input[type="checkbox"] {
     height: auto;
     line-height: auto;
 }
+
+
 /*float*/
+
 .aL {
     text-align: left !important;
 }
@@ -62,6 +72,7 @@ input[type="checkbox"] {
 .aR {
     text-align: right !important;
 }
+
 
 .fl {
     float: left !important;
@@ -134,6 +145,7 @@ input[type="checkbox"] {
     margin: 1.2rem 0
 }
 
+
 .mt1 {
     margin-top: 1px
 }
@@ -178,6 +190,8 @@ input[type="checkbox"] {
     margin-left: 5px
 }
 
+
+
 .pr5 {
     padding-right: 5px
 }
@@ -193,6 +207,7 @@ input[type="checkbox"] {
 .pr20 {
     padding-right: 20px
 }
+
 
 .btnCon {
     text-align: right;
@@ -212,7 +227,9 @@ input[type="checkbox"] {
     .btnCon.left + .btnCon {
         float: right;
     }
+
 /*í°íŠ¸*/
+
 .ftred {
     color: #c8003d
 }
@@ -232,6 +249,7 @@ input[type="checkbox"] {
 .B {
     font-weight: 400;
 }
+
 
 table.tablegw {
     width: 100%;
@@ -330,6 +348,8 @@ span.check {
     padding-right: 20px;
 }
 
+
+
 table.timetable {
     width: 100%;
     border-collapse: collapse;
@@ -365,6 +385,7 @@ table.timetable {
         table.timetable td.in {
             background: #f7f4e7;
         }
+
 
 table.protable {
     width: 100%;
@@ -412,9 +433,14 @@ table.protable {
         text-align: center;
     }
 
+
+
+
 .title {
     font-size: 0.7143rem;
 }
+
+
 
 .wh50p {
     width: 50% !important;
@@ -472,7 +498,10 @@ ul.tab-list-col5 li {
     width: 20%;
     text-align: center;
 }
+
+
 /*ë²„íŠ¼*/
+
 .btn2 {
     display: inline-block;
     font-weight: 400;
@@ -490,6 +519,11 @@ ul.tab-list-col5 li {
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     cursor: pointer;
 }
+
+
+
+
+
 
 .btn-radius {
     border-spacing: 3px;
@@ -613,6 +647,8 @@ ul.tab-list-col5 li {
     padding: .3rem 2rem
 }
 
+
+
 .btn-darkgreen {
     background-color: #277b97;
     color: #fff;
@@ -648,6 +684,7 @@ ul.tab-list-col5 li {
     color: #fff;
 }
 
+
 .btn-lightgreen {
     background-color: #93bca1;
     color: #fff;
@@ -668,6 +705,9 @@ ul.tab-list-col5 li {
     color: #fff;
 }
 /*heard*/
+
+
+
 .topmenutxt h4 {
     font-weight: 400;
     font-size: 1.071rem;
@@ -676,6 +716,7 @@ ul.tab-list-col5 li {
     background-color: #b0747a;
     color: #fff
 }
+
 
 .topmenutxt a {
     color: #000;
@@ -735,6 +776,9 @@ ul.tab-list-col5 li {
             color: #904d6f;
         }
 
+
+
+
 .bg-top {
     background-color: #3a051f !important;
 }
@@ -782,7 +826,11 @@ ul.tab-list-col5 li {
     .navtxt i {
         margin: 0 3px
     }
+
+
+
 /* mainpage */
+
 .contenttitle {
     font-weight: 500;
     font-size: 1.429rem;
@@ -848,6 +896,7 @@ ul.tab-list-col5 li {
         padding-left: 18px;
     }
 
+
 .contsmallsubtxt {
     line-height: 25px;
     padding: 0.5rem 0
@@ -858,7 +907,11 @@ ul.tab-list-col5 li {
         position: absolute;
         right: 20px;
     }
+
 /*ê³µì§€ì‚¬í•­ */
+
+
+
 .bodtitle {
     border-bottom: 1px solid #d7d6d7;
     margin-bottom: 1rem;
@@ -907,6 +960,8 @@ ul.tab-list-col5 li {
         /*border:1px solid #ff0000;*/
     }
 
+
+
 .ft01 {
     color: #30a0b1
 }
@@ -930,7 +985,12 @@ ul.tab-list-col5 li {
 .ft06 {
     color: #c2a400
 }
+
+
+
+
 /* ê°¤ë¦°ë” */
+
 .calendarbox .caltitle {
     background: #b10058;
     color: #fff;
@@ -1000,6 +1060,8 @@ ul.tab-list-col5 li {
         font-weight: 500;
         padding: 0 1em 0 0
     }
+
+
 
 table.calendartb {
     width: 100%;
@@ -1096,6 +1158,8 @@ table.calendartb {
         .linkbanner li img {
             width: 100%
         }
+
+
 /* ìˆ˜ê°•ê³¼ëª© */
 .subjectlist {
 }
@@ -1140,6 +1204,7 @@ table.calendartb {
                 padding: 0 6px
             }
 
+
 .learntime {
     position: absolute;
     right: 20px;
@@ -1165,6 +1230,8 @@ table.calendartb {
     right: 10px;
     top: 7px;
 }
+
+
 
 .bagraph {
     width: calc(100% - 120px);
@@ -1210,6 +1277,7 @@ table.calendartb {
             min-width: 90%;
         }
 
+
 .subjectnotice {
     margin-top: 0.5em
 }
@@ -1237,6 +1305,7 @@ table.calendartb {
         .subjectnotice dl dt a {
             color: #222;
         }
+
 
 .pie-chart {
     margin: 0;
@@ -1316,6 +1385,7 @@ table.calendartb {
     background-color: #f0f0f0;
 }
 
+
 footer {
     padding: 2rem 0;
     background-color: #dedede;
@@ -1324,6 +1394,7 @@ footer {
 .con_footer .copyright p {
     margin-bottom: .1rem;
 }
+
 
 .con_footer h1.logo {
     position: absolute;
@@ -1343,7 +1414,11 @@ footer .btnup a {
     font-size: 2rem;
     color: #b5b4b5
 }
+
+
+
 /* sub page*/
+
 .subjectnameba {
     background-color: #b10058;
 }
@@ -1380,11 +1455,17 @@ footer .btnup a {
         padding-right: 10px;
     }
 
+
 .title-text2 {
     font-weight: 500;
     font-size: 1.286rem;
     color: #3d3d3d;
 }
+
+
+
+
+
 
 .memberft01 {
     color: #2e8bd9;
@@ -1415,6 +1496,9 @@ footer .btnup a {
     font-weight: 500;
     font-size: 0.7143rem
 }
+
+
+
 /*ê³¼ëª©í˜„í™©*/
 .subjectpresentbox {
 }
@@ -1454,6 +1538,8 @@ footer .btnup a {
 .ftred {
     color: #b60c00
 }
+
+
 
 .playbtn {
     color: #780902;
@@ -1505,6 +1591,8 @@ footer .btnup a {
     border-radius: 2em;
     border: 1px solid #ddd;
 }
+
+
 
 .ac-container {
 }
@@ -1562,6 +1650,8 @@ footer .btnup a {
             height: 260px;
         }
 
+
+
 .graybox {
     position: relative;
     display: inline-block;
@@ -1575,10 +1665,15 @@ footer .btnup a {
     float: left !important;
 }
 
+
+
+
 .profilimg {
     width: 100%;
     padding: 0 0.4rem
 }
+
+
 /* layerPop */
 .layerTip {
     position: fixed;
@@ -1595,6 +1690,9 @@ footer .btnup a {
     margin-top: 70px;
     line-height: 2em;
 }
+
+
+
 /* window popup */
 .popWindow {
     width: 100%;
@@ -1622,6 +1720,9 @@ footer .btnup a {
         text-indent: 100%;
         white-space: nowrap;
     }
+
+
+
 
     .popWindow .settingHeader {
         padding: 13px 20px 14px;
@@ -1667,6 +1768,8 @@ footer .btnup a {
             margin: 0;
         }
 
+
+
     .popWindow .talkHeader {
         position: fixed;
         left: 0;
@@ -1699,6 +1802,7 @@ footer .btnup a {
                 background: url(../images/popup/btn_refresh.png) no-repeat 2px 11px;
             }
 
+
 .refresh {
     font-size: 1.5rem;
     font-weight: 700;
@@ -1717,6 +1821,7 @@ footer .btnup a {
     .refresh:not(:disabled):not(.disabled) {
         cursor: pointer;
     }
+
 
 .popWindow .talkpopbody {
     margin-top: 48px;
@@ -1738,6 +1843,7 @@ footer .btnup a {
 #layer3 {
     display: none;
 }
+
 
 .talkpopbody .txtinput textarea {
     width: 100%;
@@ -1783,6 +1889,8 @@ footer .btnup a {
         font-weight: 400;
     }
 
+
+
 .popWindow .popbody {
     width: 100%;
     padding-right: 15px;
@@ -1795,7 +1903,9 @@ footer .btnup a {
 .popWindow p {
     margin-bottom: 0.5rem
 }
+
 /*모바일*/
+
 .talkbody .talkHeader {
     position: relative;
     width: 100%;
@@ -1823,6 +1933,9 @@ footer .btnup a {
             height: 26px;
             background: url(../images/popup/btn_refresh.png) no-repeat 2px 11px;
         }
+
+
+
 
 .talkreply {
     border-bottom: 1px solid #e7e7e7 !important;
@@ -1870,6 +1983,7 @@ footer .btnup a {
     margin-top: 5px;
 }
 
+
 .talkreplyview {
     padding: .3rem 1rem 0.3rem 1.7rem;
     margin-top: 5px;
@@ -1896,6 +2010,7 @@ footer .btnup a {
         padding-bottom: 0px
     }
 
+
 .morebtn {
     border: 1px solid #e7e7e7;
     width: 100%;
@@ -1904,6 +2019,8 @@ footer .btnup a {
     padding: .4rem;
     font-size: 0.7857rem;
 }
+
+
 
 .onoffswitch {
     position: relative;
@@ -1994,7 +2111,9 @@ footer .btnup a {
         background: none;
         padding: 0px;
     }
+
 /*ê²Œì‹œíŒ*/
+
 .con_search {
     border: 2px solid #d5d5d5;
     padding: 0.5rem 0.5rem 0 0.5rem;
@@ -2023,6 +2142,8 @@ footer .btnup a {
                 padding: 0 0 0 10px;
                 width: 400px
             }
+
+
 /* board list */
 table.AType {
     width: 100%;
@@ -2105,6 +2226,8 @@ table.AType {
             min-height: 300px
         }
 
+
+
 table.BType {
     width: 100%;
     border-collapse: collapse;
@@ -2173,6 +2296,9 @@ table.BType {
             background-position: center;
         }
 
+
+
+
 .bbs_ico {
     display: inline-block;
     background: url('../images/common/bbs_icon.png') no-repeat;
@@ -2195,6 +2321,9 @@ table.BType {
         margin-right: 5px;
         background-position: 0px -18px
     }
+
+
+
 /* paging */
 ul.paging {
     display: block;
@@ -2213,6 +2342,7 @@ ul.paging {
         letter-spacing: -1px;
         vertical-align: middle;
     }
+
 
         ul.paging li a {
             display: inline-block;
@@ -2256,6 +2386,7 @@ ul.paging {
                 border: 1px solid #2e2e2e;
                 z-index: 1;
             }
+
 
         ul.paging li.go-prev {
             margin-right: 13px;
@@ -2334,12 +2465,17 @@ ul.paging {
             right: 15px;
         }
 
+
         ul.paging li.active a,
         ul.paging li.active a:hover,
         ul.paging li.active a:focus {
             color: #000;
             font-weight: 400;
         }
+
+
+
+
 /* board view */
 .board_view .board_view_header {
     background: #f9f9f9;
@@ -2366,14 +2502,6 @@ ul.paging {
             padding: 0 0px 0px 10px;
             color: #666;
         }
-
-.board_view .board_viewfile {
-    background: #fff url(../images/common/ic_file_01.jpg) no-repeat 18px 15px;
-    line-height: 23px;
-    border-bottom: 1px dashed #ddd;
-    padding: 10px 20px 10px 40px;
-    margin: 0;
-}
 
 .board_view .board_viewfile {
     background: #fff url(/images/lctSport/ic_file_01.jpg) no-repeat 18px 15px;
@@ -2473,6 +2601,7 @@ ul.paging {
             padding-left: 5px
         }
 
+
 .next_prev_box {
     border-top: 1px solid #aaa;
     border-bottom: 1px solid #aaa;
@@ -2493,6 +2622,10 @@ ul.paging {
         display: inline-block;
         width: 80%;
     }
+
+
+
+
 /*board write*/
 .board_write_form {
     display: table;
@@ -2561,7 +2694,11 @@ ul.paging {
     display: inline-block;
     border-radius: 0rem;
 }
+
+
+
 /* í… */
+
 .con_tab {
     position: relative;
     margin-bottom: 1rem
@@ -2618,6 +2755,8 @@ ul.paging {
                     border-bottom: 2px solid #ffffff;
                 }
 
+
+
     .con_tab .con_tab2 {
         height: 42px;
         border-bottom: 2px solid #f29d0c;
@@ -2669,6 +2808,12 @@ ul.paging {
                     border-bottom: 2px solid #ffffff;
                 }
 
+
+
+
+
+
+
 .form-group2 {
     position: absolute;
     top: -5px;
@@ -2706,6 +2851,7 @@ ul.paging {
     display: none;
 }
 
+
 .wid10pro {
     width: 10%
 }
@@ -2737,6 +2883,10 @@ ul.paging {
 .wid30pro {
     width: 30%
 }
+
+
+
+
 
 .lecturelist.topba {
     border-top: 1px solid #445988;
@@ -2772,6 +2922,12 @@ ul.paging {
 .w40 {
     width: 40%;
 }
+
+
+
+
+
+
 /*ëª¨ë°”ì¼í•™ìƒ êµìˆ˜ ë©”ì¸*/
 .maintitle span.right {
     line-height: 25px;
@@ -2822,6 +2978,9 @@ ul.paging {
     text-overflow: ellipsis;
 }
 
+
+
+
 .subjectschedule li {
     border-bottom: 1px solid #dce3eb;
     padding: .4rem 0 .6rem 0;
@@ -2847,6 +3006,7 @@ ul.paging {
         text-overflow: ellipsis;
     }
 
+
 .talkhistory li {
     border-bottom: 1px solid #dce3eb;
     padding: .4rem 0 .6rem 0;
@@ -2863,11 +3023,13 @@ ul.paging {
         font-weight: 300 !important;
     }
 
+
 .fjahong {
     font-weight: 500 !important;
     font-size: 1.143rem !important;
     color: #a20a47 !important;
 }
+
 
 .mcalnotice ul li {
     background: url("../images/common/icon-cal2.png") no-repeat 0 15px;
@@ -2881,6 +3043,7 @@ ul.paging {
     font-weight: 500;
     padding: 0 .7em 0 .7em
 }
+
 
 .scheduletitle {
     text-align: center;
@@ -3126,7 +3289,11 @@ table.scheduletb {
             height: 192px !important;
         }
 
+
+
+
 @media (max-width: 767.98px) {
+
     table.scheduletb td {
         height: 88px;
     }
@@ -3189,6 +3356,7 @@ table.scheduletb {
             height: 264px !important;
         }
 
+
     .linkbanner li {
         float: left;
         width: 50%;
@@ -3220,6 +3388,7 @@ table.scheduletb {
         width: 100%;
     }
 
+
     .wid60px {
         width: 60px !important;
     }
@@ -3240,6 +3409,8 @@ table.scheduletb {
         width: 80px !important;
     }
 
+
+
     .pt-5,
     .py-5 {
         padding: 1rem 0 !important;
@@ -3250,9 +3421,11 @@ table.scheduletb {
         margin-bottom: 1rem !important;
     }
 
+
     .calendarbox {
         margin-top: 1rem !important;
     }
+
 
     .navbar {
         height: 60px
@@ -3310,6 +3483,7 @@ table.scheduletb {
         display: inline-block;
     }
 
+
     .bg-menu .col-sm-3 {
         -webkit-box-flex: 0;
         -ms-flex: 0 0 100%;
@@ -3359,6 +3533,7 @@ table.scheduletb {
         margin: 0 auto;
         text-align: center;
     }
+
 
     .subjectnameba .subtime {
         padding: 0rem 0 0 0;
@@ -3412,6 +3587,7 @@ table.scheduletb {
             margin-bottom: 3px
         }
 
+
     .next_prev_box dl dt {
         display: none;
     }
@@ -3420,6 +3596,7 @@ table.scheduletb {
         display: inline-block;
         width: 100%;
     }
+
 
     .selectsemester .btn2 {
         width: 100%
@@ -3436,6 +3613,9 @@ table.scheduletb {
             line-height: 25px;
             padding-left: 20px
         }
+
+
+
 
     .board_write_form,
     .board_write_form dl {
@@ -3469,7 +3649,13 @@ table.scheduletb {
     .form-control {
         width: 100%;
     }
+
+
+
+
+
     /* í… */
+
     .con_tab .con_tab1 {
         height: auto;
         overflow: hidden;
@@ -3522,6 +3708,7 @@ table.scheduletb {
                 border-width: 2px 2px 2px 2px;
                 border-bottom: 2px solid #f29d0c;
             }
+
 
     .con_tab .con_tab2 {
         height: auto;
@@ -3579,11 +3766,20 @@ table.scheduletb {
                     border-bottom: 2px solid #f29d0c;
                 }
 
+
     .form-group2 {
         position: relative;
         width: 100%
     }
+
+
+
+
+
     /*side menu*/
+
+
+
     /* PEN STYLES ========== */
     .side_menu {
         display: inline-block;
@@ -3595,6 +3791,7 @@ table.scheduletb {
         -webkit-transition: all 300ms ease-in-out;
         transition: all 300ms ease-in-out;
     }
+
     /* MENU CONTAINER ----- */
     .side_menu {
         background: #2b2b2b;
@@ -3609,6 +3806,7 @@ table.scheduletb {
         .side_menu .container {
             padding: 0 1em;
         }
+
     /* HAMBURGER STYLES ----- */
     .burger_box {
         display: block;
@@ -3721,6 +3919,8 @@ table.scheduletb {
         position: relative;
     }
 
+
+
         .jquery-accordion-menu ul {
             margin: 0;
             padding: 0;
@@ -3752,9 +3952,14 @@ table.scheduletb {
                     transition: color .2s linear,background .2s linear
                 }
 
+
+
         .jquery-accordion-menu > ul > li > a {
             border-bottom: solid 1px #2b2b2b
         }
+
+
+
 
         .jquery-accordion-menu ul ul.submenu, .jquery-accordion-menu ul ul.submenu li ul.submenu {
             width: 100%;
@@ -3782,6 +3987,8 @@ table.scheduletb {
                     transition: border .2s linear
                 }
 
+
+
             .jquery-accordion-menu ul ul.submenu > li > a {
                 padding-left: 15px
             }
@@ -3790,6 +3997,10 @@ table.scheduletb {
                 padding-left: 35px;
                 background: #383838
             }
+
+
+
+
 
     .brown.jquery-accordion-menu .jquery-accordion-menu-footer, .brown.jquery-accordion-menu .jquery-accordion-menu-header, .brown.jquery-accordion-menu ul li a {
         background: #675d57
@@ -3811,6 +4022,8 @@ table.scheduletb {
         background: #464646
     }
 
+
+
     #sitemap li span {
         float: right;
         position: absolute;
@@ -3830,10 +4043,19 @@ table.scheduletb {
             #sitemap li span.expanded {
                 background: url(../images/common/expanded.png) no-repeat 0 0;
             }
+
     /*side menu*/
+
+
+
+
 }
 
+
 @media (max-width: 1200px) {
+
+
+
     .lectureboardleft {
         width: 100%;
         float: left;

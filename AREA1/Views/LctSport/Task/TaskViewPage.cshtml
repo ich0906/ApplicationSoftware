@@ -32,13 +32,12 @@
                 </td>
             </tr>
             @if (ViewData["fs_at"].Equals("N")) {
-                <tr>
-                    <th>상태</th>
-                    <td class="lft">
-                        미제출
-                    </td>
-                </tr>
-            }
+<tr>
+    <th>상태</th>
+    <td class="lft">
+        미제출
+    </td>
+</tr>            }
             <tr>
                 <th>내용/주의사항</th>
                 <td colspan="5" class="lft">@Html.Raw(@ViewBag.result["CONTENT"])</td>
@@ -52,7 +51,8 @@
             <tr>
                 <th>첨부파일</th>
                 <td colspan="5" class="lft">
-                    <div></div>
+                    @for (int i = 0; i < ViewBag.fileCount; ++i) {
+        <div class="board_viewfile"><a href="#" onclick="javascript: sendFileId('/File/DownloadDocument', '@ViewBag.fileList[i]["FILE_ID"]')"> @ViewBag.fileList[i]["FILE_NAME"].@ViewBag.fileList[i]["FILE_EXTSN"]</a></div>}
                 </td>
             </tr>
             <tr>
@@ -62,71 +62,66 @@
         </tbody>
     </table>
     @if (ViewData["fs_at"].Equals("N") && (ViewBag.Result["B1"].Equals("Y") || ViewBag.Result["B2"].Equals("Y")) && !ViewBag.ResultPrsentr["PRSENTR_AT"].Equals("Y")) {
-        <div class="contsubtitle icon">과제제출</div>
-        <table class="AType">
-            <colgroup>
-                <col style="width: 20%;">
-                <col>
-            </colgroup>
-            <tbody>
-                <tr>
-                    <th>파일</th>
-                    <td>
-                        <div><input id="prsentr_file" type="file" multiple="" accept="*/*" style="width: 100%;" ></div>
-                    </td>
-                </tr>
-                <tr>
-                    <th>제목</th>
-                    <td><input id="prsentr_title" type="text" size="50" value="@ViewBag.ResultPrsentr["TITLE"]"></td>
-                </tr>
-                <tr>
-                    <th>내용</th>
-                    <td><textarea cols="10" rows="3" id="textarea">@ViewBag.ResultPrsentr["CONTENT"]</textarea></td>
-                </tr>
-            </tbody>
-        </table>
-    } else if (ViewData["fs_at"].Equals("N") && ViewBag.ResultPrsentr["PRSENTR_AT"].Equals("Y")) {
-        <div class="contsubtitle icon">과제제출</div>
-        <table class="tablegw">
-            <colgroup>
-                <col style="width: 20%;">
-                <col>
-            </colgroup>
-            <tbody>
-                <tr>
-                    <th> 파일</th>
-                    <td class="lft">
-                        @* <div>
-            <div class="board_viewfile">
-                <span>파일 : </span><a href="#">2021203012 김정원 12주차 과제.pdf</a><span class="format">[ 189.63 KB ]</span> <span style="display: none;"><a href="#">[삭제]</a></span>
-            </div>
-        </div>*@
-                    </td>
-                </tr>
-                <tr>
-                    <th>제목</th>
-                    <td class="lft">@ViewBag.ResultPrsentr["TITLE"]</td>
-                </tr>
-                <tr>
-                    <th>내용</th>
-                    <td class="lft">@Html.Raw(@ViewBag.ResultPrsentr["CONTENT"].Replace("\n", "</br>"))</td>
-                </tr>
-            </tbody>
-        </table>
-    }
+<div class="contsubtitle icon">과제제출</div>
+                <table class="AType">
+                    <colgroup>
+                        <col style="width: 20%;">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th>파일</th>
+                            <td>
+                                <form id="fform" enctype="multipart/form-data" action="/File/UserUploadFile" method="POST">
+                                    <input type="hidden" name="attachId" value="@ViewBag.ResultPrsentr["DOC_ID"]" />
+                                    <div><input id="prsentr_file" name="prsentr_file" type="file" multiple="" accept="*/*" style="width: 100%;"></div>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>제목</th>
+                            <td><input id="prsentr_title" type="text" size="50" value="@ViewBag.ResultPrsentr["TITLE"]"></td>
+                        </tr>
+                        <tr>
+                            <th>내용</th>
+                            <td><textarea cols="10" rows="3" id="textarea">@ViewBag.ResultPrsentr["CONTENT"]</textarea></td>
+                        </tr>
+                    </tbody>
+                </table> } else if (ViewData["fs_at"].Equals("N") && ViewBag.ResultPrsentr["PRSENTR_AT"].Equals("Y")) {
+                <div class="contsubtitle icon">과제제출</div>
+                                <table class="tablegw">
+                                    <colgroup>
+                                        <col style="width: 20%;">
+                                        <col>
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th> 파일</th>
+                                            <td class="lft">
+                                                @for (int i = 0; i < ViewBag.fileCount2; ++i) {
+                                <div class="board_viewfile"><a href="#" onclick="javascript: sendFileId('/File/DownloadDocument', '@ViewBag.fileList2[i]["FILE_ID"]')"> @ViewBag.fileList2[i]["FILE_NAME"].@ViewBag.fileList2[i]["FILE_EXTSN"]</a></div>}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>제목</th>
+                                            <td class="lft">@ViewBag.ResultPrsentr["TITLE"]</td>
+                                        </tr>
+                                        <tr>
+                                            <th>내용</th>
+                                            <td class="lft">@Html.Raw(@ViewBag.ResultPrsentr["CONTENT"].Replace("\n", "</br>"))</td>
+                                        </tr>
+                                    </tbody>
+                                </table>}
     <div class="btnCon">
         @if (ViewData["fs_at"].Equals("N")) {
             if (!ViewBag.ResultPrsentr["PRSENTR_AT"].Equals("Y")) {
-                <button type="button" id="btn_assign" class="btn2 btn-gray">제출</button>
-                <button type="button" id="btn_clean" class="btn2 btn-gray">다시</button>
-            } else if(ViewBag.Result["B1"].Equals("Y") || ViewBag.Result["B2"].Equals("Y")) {
-            <button type="button" id="btn_modify" class="btn2 btn-gray">수정</button>
-            <button type="button" id="btn_delete" class="btn2 btn-gray">삭제</button>
-            }
-        } else {
-            <button type="button" id="btn_modify" class="btn2 btn-gray">수정</button>
-            <button type="button" id="btn_delete" class="btn2 btn-gray">삭제</button>
-        }
+<button type="button" id="btn_assign" class="btn2 btn-gray">제출</button>
+                    <button type="button" id="btn_clean" class="btn2 btn-gray">다시</button> } else if (ViewBag.Result["B1"].Equals("Y") || ViewBag.Result["B2"].Equals("Y")) {
+                    <button type="button" id="btn_modify" class="btn2 btn-gray">수정</button>
+                                        <button type="button" id="btn_delete" class="btn2 btn-gray">삭제</button> }
+                                                    } else {
+                                        <button type="button" id="btn_modify" class="btn2 btn-gray">수정</button>
+                                                        <button type="button" id="btn_delete" class="btn2 btn-gray">삭제</button>}
         <button type="button" class="btn2 btn-gray">목록</button>
     </div>
 </div>
@@ -148,31 +143,40 @@
                 if (!ViewBag.ResultPrsentr["PRSENTR_AT"].Equals("Y")) {
                 <text>
 
-                input = "<input type='hidden' name='prsentr_file' />";
-                $("#__form__").append(input);
-                $("[name=prsentr_file]").val($("#prsentr_file").val());
-
-                input = "<input type='hidden' name='prsentr_title' />";
-                $("#__form__").append(input);
-                $("[name=prsentr_title]").val($("#prsentr_title").val()); 
-
-                input = "<input type='hidden' name='prsentr_content' />";
-                $("#__form__").append(input);
-                $("[name=prsentr_content]").val($("#textarea").val()); 
-
-                $("#__form__").attr("action", "@ViewBag.Prsentr");
-
-                $("#__form__").ajaxForm({
+                $("#fform").ajaxForm({
                     success: function (data) {
-                        if (data == 'ok') {
-                            alert("제출하였습니다.");
-                            $('#__form__').ajaxFormUnbind();
-                            goDetail(@ViewBag.result["TASK_SEQ"]);
-                        } else {
-                            alert("에러가 발생헀습니다.");
-                        }
+                        input = "<input type='hidden' name='doc_id' />";
+                        $("#__form__").append(input);
+                        $("[name=doc_id]").val(data);
+
+                        input = "<input type='hidden' name='prsentr_title' />";
+                        $("#__form__").append(input);
+                        $("[name=prsentr_title]").val($("#prsentr_title").val());
+
+                        input = "<input type='hidden' name='prsentr_content' />";
+                        $("#__form__").append(input);
+                        $("[name=prsentr_content]").val($("#textarea").val());
+
+                        $("#__form__").attr("action", "@ViewBag.Prsentr");
+
+                        $("#__form__").ajaxForm({
+                            success: function (data) {
+                                if (data == 'ok') {
+                                    alert("제출하였습니다.");
+                                   $('#__form__').ajaxFormUnbind();
+                                   goDetail(@ViewBag.result["TASK_SEQ"]);
+                                } else {
+                                   alert("에러가 발생헀습니다.");
+                                }
+                            }
+                        });
+
+                        $("#__form__").submit();
                     }
                 });
+
+                $("#fform").submit();
+
 
                 </text>
                 } else {
@@ -185,8 +189,33 @@
                     </text>
                 }
             }
-            $("#__form__").submit();
-            });
+        });
+
+        $("#prsentr_file").on("change", function (e) {
+
+            var count = 1;
+            var files = e.currentTarget.files; // puts all files into an array
+
+            // call them as such; files[0].size will get you the file size of the 0th file
+            for (var i = 0; i < files.length; i++) {
+                var x = files[i];
+                var filesize = ((files[x].size / 1024) / 1024).toFixed(4); // MB
+
+                var fileExtension = ['@ViewBag.result["PRESENT_FORM"]'];
+
+                if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                    alert("제출양식이 아닙니다");
+                    $("#prsentr_file").val('');
+                    break;
+                }
+
+                if (!(files[x].name != "item" && typeof files[x].name != "undefined" && filesize <= @ViewBag.result["FILE_CPCTY_LMT"])) {
+                    alert("파일용량제한을 초과하였습니다.");
+                    $("#prsentr_file").val('');
+                    break;
+                }
+            }
+        });
 
         // 삭제 버튼
         $(".btnCon").find("button").eq(1).click(function () {
@@ -197,7 +226,7 @@
 
                 $("[name=task_id]").val(@ViewBag.result["TASK_SEQ"]);
 
-                        if (confirm("삭제하시겠습니까?")) {
+                if (confirm("삭제하시겠습니까?")) {
                     $("#__form__").attr("action", "@ViewBag.Delete");
                     $("#aform").attr("method", "POST");
 
