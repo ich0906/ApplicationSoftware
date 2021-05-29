@@ -1,55 +1,55 @@
 ﻿@Html.Partial("~/Views/Shared/LctSportHeader.cshtml")
-  
 
-            <!-- content -->
-            <div id="appModule" class="card card-body mb-4 content">
-                <div><p class="contenttitle">@ViewData["pageNm"]</p></div>
-                <div class="board_write_form">
-                    <dl>
-                        <dt>
-                            제목
-                        </dt>
-                        <dd><input type="text" id="title" v-model="title" class="es" style="width: 100%;"></dd>
-                    </dl>
-                    <dl>
-                        <dt>
-                            공개여부
-                        </dt>
-                        <dd>
-                            <input type="radio" id="one" value="Y" v-model="othbcAt">
-                            <label for="one">공개</label>
-                            <input type="radio" id="two" value="N" v-model="othbcAt">
-                            <label for="two">비공개</label>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt>
-                            내용
-                        </dt>
-                        <dd>
-                            <textarea id="content" class="es" style="display: none;"></textarea>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt>
-                            파일 업로드
-                        </dt>
-                        <dd>
-                            <file-upload ref="attach" multiple="true" :storage-id="storageId" :attach-id="atchFileId" params="{ 'masterNo' : '5' }" @@upload-complete="uploadComplete"></file-upload>
-                        </dd>
-                    </dl>
-                </div>
-                <div class='btnCon'>
-                    @if (ViewData["command"].Equals("UPDATE")) {
-                        @:<button type="button" class="btn2 btn-darkpurple" @@click="saveData()">수정</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    } else {
-                        @:<button type="button" class="btn2 btn-darkpurple" @@click="saveData()">등록</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    }
-                    <button type="button" class="btn2 btn-gray" @@click="goList()">목록</button>
-                </div>
-            </div>
-            <!-- content -->
-            <script>
+
+<!-- content -->
+<div id="appModule" class="card card-body mb-4 content">
+    <div><p class="contenttitle">@ViewData["pageNm"]</p></div>
+    <div class="board_write_form">
+        <dl>
+            <dt>
+                제목
+            </dt>
+            <dd><input type="text" id="title" v-model="title" class="es" style="width: 100%;"></dd>
+        </dl>
+        <dl>
+            <dt>
+                공개여부
+            </dt>
+            <dd>
+                <input type="radio" id="one" value="Y" v-model="othbcAt">
+                <label for="one">공개</label>
+                <input type="radio" id="two" value="N" v-model="othbcAt">
+                <label for="two">비공개</label>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                내용
+            </dt>
+            <dd>
+                <textarea id="content" class="es" style="display: none;"></textarea>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                파일 업로드
+            </dt>
+            <dd>
+                <file-upload ref="attach" multiple="true" :storage-id="storageId" :attach-id="atchFileId" params="{ 'masterNo' : '5' }" @@upload-complete="uploadComplete"></file-upload>
+            </dd>
+        </dl>
+    </div>
+    <div class='btnCon'>
+        @if (ViewData["command"].Equals("UPDATE")) {
+@:<button type="button" class="btn2 btn-darkpurple" @@click="saveData()">수정</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+} else {
+@:<button type="button" class="btn2 btn-darkpurple" @@click="saveData()">등록</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}
+        <button type="button" class="btn2 btn-gray" @@click="goList()">목록</button>
+    </div>
+</div>
+<!-- content -->
+<script>
 
                 let appModule = new Vue({
                     el: '#appModule',
@@ -65,13 +65,14 @@
                         @if (ViewData["command"].Equals("UPDATE")) {
                             @: title: '@ViewBag.result["TITLE"]',
                             @: content: '@Html.Raw(@ViewBag.result["CONTENTS"])',
+                            @: atchFileId: '@ViewBag.result["DOC_ID"]',
                         } else {
                             @: title: null,
                             @: content: null,
+                            @: atchFileId: null,
                         }
                         othbcAt: 'Y',
                         preOthbcAt: 'Y',
-                        atchFileId: null,
                         storageId: '1000',
                         cmd: 'insert',
                         sortOrdr: null,
@@ -157,9 +158,9 @@
                     }
                 });
 
-            </script>
+</script>
 
-            <script type="text/javascript">
+<script type="text/javascript">
                 //SmartEditor :항상 Textarea보다 아래에 이 스크립트가 있어야 합니다.
                 var oEditors = [];
                 var oContents = new Array(1);
@@ -195,11 +196,11 @@
                     $("#__form__").attr("action", "@ViewBag.Select");
                     $("#__form__").submit();
                 }
-            </script>
+</script>
 
-            <script type="text/javascript" src="~/lib/smarteditor/HuskyEZCreator.js" charset="utf-8"></script>
-            <script type="text/javascript" src="~/lib/smarteditor/smarteditor_basic.js" charset="utf-8"></script>
+<script type="text/javascript" src="~/lib/smarteditor/HuskyEZCreator.js" charset="utf-8"></script>
+<script type="text/javascript" src="~/lib/smarteditor/smarteditor_basic.js" charset="utf-8"></script>
         </div>
     </div>
 
-    @Html.Partial("~/Views/Shared/LctSportFooter.cshtml")
+@Html.Partial("~/Views/Shared/LctSportFooter.cshtml")

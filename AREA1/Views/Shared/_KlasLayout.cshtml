@@ -353,7 +353,8 @@
 
     <script src="/js/common-vue.js"></script>
 
-    <script>Vue.use(VueLoading);
+    <script>
+    Vue.use(VueLoading);
         Vue.component('loading', VueLoading);
 
         Vue.use(Toasted);
@@ -362,7 +363,8 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/jquery.fileDownload.js"></script>
     <script src="/js/main.js"></script>
-    <script>moment.locale('ko', {
+    <script>
+    moment.locale('ko', {
             weekdays: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
             weekdaysShort: ['일', '월', '화', '수', '목', '금', '토']
         });</script><!-- Bootstrap core CSS -->
@@ -419,33 +421,13 @@
                                     <li>
                                         <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/cps/atnlc/TimetableStdPage.do&#39;);">수업시간표</a>
                                     </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/ads/admst/KwAttendStdPage.do&#39;);">출석관리(KW출첵)</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/cps/atnlc/LectrePlanStdPage.do&#39;);">강의계획서 조회</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/cps/atnlc/LctreReqstNewProgPage.do&#39;);">수강신청 프로그램</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/cps/atnlc/GiveupStdPage.do&#39;);">수강포기 신청</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/cps/atnlc/ExchgHakjumStdPage.do&#39;);">교류 학점 신청</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/cps/atnlc/CdpAtendStdPage.do&#39;);">CDP 출석내역</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/cps/atnlc/CdpAtendQustnrStdPage.do&#39;);">CDP 출석여부 설문조사</a>
-                                    </li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;&#39;);">학습결과</a>
                                 <ul class="depth03ul">
                                     <li>
+                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/cps/inqire/AtnlcScreStdPage.do&#39;);">수강/성적 조회</a>
                                         <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/cps/inqire/LctreEvlResultStdPage.do&#39;);">수업평가 결과 확인</a>
                                     </li>
                                     <li>
@@ -455,28 +437,6 @@
                                         <a href="/StandInqire/StandInqire">석차조회</a>
                                     </li>
                                     <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/cps/inqire/ToeicStdPage.do&#39;);">어학성적 조회</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/cps/inqire/JanghakStdPage.do&#39;);">장학 조회</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;&#39;);">학적관리</a>
-                                <ul class="depth03ul">
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/hak/hakjuk/DetailMajorSelectStdPage.do&#39;);">세부전공 선택</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/hak/hakjuk/CompnoMajorStdPage.do&#39;);">복수/부/심화전공 신청/조회</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/hak/hakjuk/CntcSbjectStdPage.do&#39;);">연계전공 신청/조회</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/hak/hakjuk/TmpabssklStdPage.do&#39;);">휴복학 신청</a>
-                                    </li>
                                 </ul>
                             </li>
                         </ul>
@@ -498,37 +458,13 @@
                                         <a href="/Notice/SelectPageListNotice">강의 공지사항</a>
                                     </li>
                                     <li>
-                                        <a href="/QNA/SelectPageListNotice">강의 묻고답하기</a>
+                                        <a href="/QNA/SelectPageListQNA">강의 묻고답하기</a>
                                     </li>
                                     <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/sport/6972896bfe72408eb72926780e85d041/BoardListStdPage.do&#39;);">강의 자료실</a>
+                                        <a href="/Recsroom/SelectPageListRecsroom">강의 자료실</a>
                                     </li>
                                     <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/sport/70778131bf7a421aba99dded74b3fb6b/BoardListStdPage.do&#39;);">수강생 자료실</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/evltn/TaskStdPage.do&#39;);">과제제출</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/evltn/OnlineTestStdPage.do&#39;);">온라인시험 응시</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/evltn/AnytmQuizStdPage.do&#39;);">수시퀴즈 응시</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/evltn/PrjctStdPage.do&#39;);">팀프로젝트</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/evltn/DscsnStdPage.do&#39;);">토론참여</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/sport/QustnrStdPage.do&#39;);">설문참여</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/evltn/LrnSttusStdPage.do&#39;);">학습현황 조회</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/cps/inqire/LctreEvlStdPage.do&#39;);">수업평가</a>
+                                        <a href="/Task/SelectPageListTask">과제제출</a>
                                     </li>
                                 </ul>
                             </li>
@@ -537,147 +473,6 @@
                                 <ul class="depth03ul">
                                     <li>
                                         <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/evltn/OnlineCntntsStdPage.do&#39;);">온라인 강의컨텐츠 보기</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/evltn/LrnSttusRtprgsStdPage.do&#39;);">온라인 컨텐츠 진도현황 조회</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/lctre/EClassStdPage.do&#39;);">E-class 강의 복습</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/lis/sport/DicStdPage.do&#39;);">용어사전</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-3 py-4">
-                        <h4 class="titlecolor01">
-                            <a href="javascript:void(0)" onclick="linkUrl(&#39;&#39;);"><font color="white">공학교육</font></a>
-                        </h4>
-
-                        <ul class="list-unstyled depth02ul">
-
-                            <li>
-                                <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;&#39;);">학생(수강)상담</a>
-                                <ul class="depth03ul">
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/egn/cnslt/SuhakPlanStdPage.do&#39;);">수학계획서 작성</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/egn/cnslt/CnsltDetailStdPage.do&#39;);">상담내역 조회</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/egn/cnslt/TrnsPntRCnsltStdPage.do&#39;);">전입생 학점인정 상담</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;&#39;);">학습성과 성취도 평가</a>
-                                <ul class="depth03ul">
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/egn/sesdg/EssayReprtStdPage.do&#39;);">에세이 보고서</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/egn/sesdg/EgnSurveyStdPage.do&#39;);">설문조사</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/egn/chck/PrtFolioStdPage.do&#39;);">설계포트폴리오 조회</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;&#39;);">이수현황점검</a>
-                                <ul class="depth03ul">
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkWinOpen(&#39;/std/egn/chck/popwin/BeforeSbjectGradeViewStdPage.do&#39;);">공학프로그램 이수현황 점검</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/egn/chck/LrnRsltStdPage.do&#39;);">공학프로그램 학습성과 점검</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/egn/chck/DgriChangeStdPage.do&#39;);">학위과정(프로그램)변경</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/egn/chck/BeforeSbjectStdPage.do&#39;);">선수교과목이수현황 조회</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-3 py-4">
-                        <h4 class="titlecolor01">
-                            <a href="javascript:void(0)" onclick="linkUrl(&#39;&#39;);"><font color="white">학사 서비스</font></a>
-                        </h4>
-
-                        <ul class="list-unstyled depth02ul">
-
-                            <li>
-                                <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;&#39;);">등록관리</a>
-                                <ul class="depth03ul">
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/hak/erollmnt/TutionNtPage.do&#39;);">등록금 고지서출력</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/hak/erollmnt/PreSeterPage.do&#39;);">등록금/교육비 증명서 </a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/hak/erollmnt/TutionEduPage.do&#39;);">이전학기 등록내역 조회</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/hak/erollmnt/SenalClNtPage.do&#39;);">계절수업고지서 출력</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/hak/erollmnt/PartPayNhtPage.do&#39;);">분할납부 고지서 출력</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;&#39;);">상담관리</a>
-                                <ul class="depth03ul">
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/hak/cnslt/KwAbilUpStdPage.do&#39;);">광운역량이력서 입력</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/hak/cnslt/CnsltTimeStdPage.do&#39;);">소속학과 교수 상담시간 조회</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/hak/cnslt/CnsltStsfdgRsrchStdPage.do&#39;);">상담만족도 조사</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;&#39;);">행정 서비스</a>
-                                <ul class="depth03ul">
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/ads/admst/RsvTrnsfrnStdPage.do&#39;);">예비군 전입신고</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkWinOpen(&#39;http://kupis.kw.ac.kr&#39;);">중앙 도서관</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/sys/optrn/58459c5b27b6409aaf24359ae24f5213/BoardListStdPage.do&#39;);">대학평의회 자료실</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/sys/optrn/c9925e2c1341487ebc7595ba8b64376e/BoardListStdPage.do&#39;);">조교게시판</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/ads/admst/AstntRptStdPage.do&#39;);">조교등록과목조회 및 채점조교 활동보고서</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/ads/admst/SklstfAptdExamStdPage.do&#39;);">교직적성인성검사</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/ads/admst/MySchdulPage.do&#39;);">일정관리</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/sys/optrn/e4c863dfd8c7410d92bc4abc9542bccd/BoardListStdPage.do&#39;);">장소사용</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkWinOpen(&#39;https://www.kw.ac.kr/ko/life/notice.jsp?BoardMode=view&amp;DUID=21819&#39;);">Office 365</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://klas.kw.ac.kr/std/cmn/frame/Frame.do#" onclick="linkUrl(&#39;/std/sys/optrn/MyNumberQrStdPage.do&#39;);">학번QR코드</a>
                                     </li>
                                 </ul>
                             </li>
@@ -988,7 +783,8 @@
             </div>
         </div>
     </header>
-    <script type="text/javascript">var deviceAgent = navigator.userAgent.toLowerCase();
+    <script type="text/javascript">
+    var deviceAgent = navigator.userAgent.toLowerCase();
         var ios = deviceAgent.match(/(iphone|ipod|ipad)/);
         var android = deviceAgent.match(/(android)/);
 

@@ -4,12 +4,12 @@
     <input type="hidden" name="selectedGrcode" />
     <input id="yearhakgi" type="hidden" name="selectedYearhakgi" />
     <input id="_selectedSubj" type="hidden" name="selectedSubj" />
-    <input id="_BBS_ID" type="hidden" name="BBS_ID"/>
+    <input id="_BBS_ID" type="hidden" name="BBS_ID" />
     <input type="hidden" name="page" value="@ViewBag.param["page"]" />
 </form>
 
 <script>
-    function page_move(url, acdmc_no, yearhakgi,bbs_id) {
+    function page_move(url, acdmc_no, yearhakgi, bbs_id) {
         var form = document.getElementById("__form2__");
         var yh = document.getElementById("yearhakgi");
         var subj = document.getElementById("_selectedSubj");
@@ -35,9 +35,9 @@
                         @for (int i = 0; i < 4; ++i) {
                             if (i < ViewBag.noticeCount) {
                                 <dt><p><a href="#" onclick="javascript: page_move('/Notice/SelectNotice', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI', '@ViewBag.noticeList[i]["BBS_ID"]')">@ViewBag.noticeList[i]["TITLE"]</a></p> <span class="date">@ViewBag.noticeList[i]["REGIST_DT"]</span></dt>
-                            } else {
+ } else {
                                 <dt><p><a href="#"></a></p> <span class="date"></span></dt>
-                            }
+}
                         }
                     </dl>
                 </div>
@@ -51,7 +51,7 @@
                         <div class="col-6">
                             <ul class="subjectpresent">
                                 <li><a href="#none">강의 <span class="oval"><span class="ftred">23</span>/24</span></a></li>
-                                <li><a href="#none">공지사항 <span class="oval"><span class="ftred">0</span>/0</span></a></li>
+                                <li><a href="#none">공지사항 <span class="oval">@ViewBag.noticeCount</span></a></li>
                             </ul>
                         </div>
                         <div class="col-6">

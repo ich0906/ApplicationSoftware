@@ -5,6 +5,7 @@ using AREA1.Tool;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,27 +39,24 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             ViewData["name"] = userInfo.name;                                       // 이름
             ViewData["user_id"] = userInfo.user_id;                                 // 유저 ID(학번)
             ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";         // 교수 여부
-            ViewData["pageNm"] = "강의 공지사항";
+            ViewData["pageNm"] = "과제 제출";
 
             string sql = "";
 
             // 공지사항 개수 체크
-            sql = "SELECT COUNT(*) AS BBS_CNT "
-                      + "FROM OP_BBS A "
+            sql = "SELECT COUNT(*) AS TASK_CNT "
+                      + "FROM OP_TASK A "
                       + "JOIN OP_USER B "
                       + "ON A.REGISTER = B.USER_ID "
                       /*+ "JOIN OP_FILE C "
                       + "ON A.DOC_ID = C.DOC_ID AND C.FILE_NUM = 1 "*/
-                      + "WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "Task") + "' "
-                      + "AND ACDMC_NO = @selectedSubj:VARCHAR";
+                      + "WHERE ACDMC_NO = @selectedSubj:VARCHAR";
 
 
             int bbsCnt = 0;
             // Form이 존재하지 않으면 오류가 나기 때문에 분기해주어야한다.
             if (Request.HasFormContentType && !Request.Form["selectedSubj"].ToString().Equals("")) {
-                param.Add("page", Request.Form["page"]);
-
-                bbsCnt = Convert.ToInt32(_commonDao.SelectOne(sql, Request.Form)["BBS_CNT"]);
+                bbsCnt = Convert.ToInt32(_commonDao.SelectOne(sql, Request.Form)["TASK_CNT"]);
 
                 ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
                 ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
@@ -66,14 +64,16 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                 // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
             } else {
                 // 디폴트 과목을 선택함
-                string sql2 = "SELECT B.ACDMC_NO AS selectedSubj, YEAR || ',' || SEMESTER AS YEAR_HAKGI"
-                    + $" FROM OP_TEACHES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' AND semester='1' AND YEAR = '2021' AND ROWNUM = 1 ORDER BY COURSE_ID";
+                string sql2 = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))
+                    ? "SELECT * FROM (SELECT ROWNUM, AA.* FROM (SELECT B.ACDMC_NO AS selectedSubj, YEAR || ',' || SEMESTER AS YEAR_HAKGI"
+                    + $" FROM OP_TEACHES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' ORDER BY YEAR DESC, SEMESTER DESC, COURSE_ID) AA) AAA WHERE ROWNUM = 1"
+                    : "SELECT * FROM (SELECT ROWNUM, AA.* FROM (SELECT B.ACDMC_NO AS selectedSubj, YEAR || ',' || SEMESTER AS YEAR_HAKGI"
+                    + $" FROM OP_TAKES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' ORDER BY YEAR DESC, SEMESTER DESC, COURSE_ID) AA) AAA WHERE ROWNUM = 1";
 
                 param = _commonDao.SelectOne(sql2);
                 param.Add("selectedSubj", param["SELECTEDSUBJ"]);
-                param.Add("page", "1");
 
-                bbsCnt = Convert.ToInt32(_commonDao.SelectOne(sql, param)["BBS_CNT"]);
+                bbsCnt = Convert.ToInt32(_commonDao.SelectOne(sql, param)["TASK_CNT"]);
 
                 ViewBag.YEAR_HAKGI = param["YEAR_HAKGI"];
                 ViewBag.ACDMC_NO = param["selectedSubj"];
@@ -82,21 +82,22 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
 
             // 만약 조회된 공지사항이 있으면 값을 가져온다.
             if (bbsCnt > 0) {
-                sql = "SELECT *                                                                         "
-                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID                                  "
+                sql = "SELECT *                                                                                               "
+                    + "FROM(SELECT ROWNUM AS RNUM, AA.*                                                                       "
                     + "      FROM(SELECT A.TITLE,                                                                             "
                     + "                   B.NAME AS REGISTER,                                                                 "
-                    + "                   A.REGIST_DT,                                                                        "
-                    + "                   A.RDCNT,                                                                            "
-                    + "                   A.BBS_ID                                                                            "
-                    + "            FROM OP_BBS A                                                                              "
+                    + "                   A.TASK_SEQ,                                                                         "
+                    + "                   TO_CHAR(A.BEGIN_TMLMT, 'YYYY-MM-DD hh24:mi:ss') AS BEGIN_TMLMT,                     "
+                    + "                   TO_CHAR(A.END_TMLMT, 'YYYY-MM-DD hh24:mi:ss')  AS END_TMLMT,                        "
+                    + "                   TO_CHAR(A.BEGIN_ADIT_TMLMT, 'YYYY-MM-DD hh24:mi:ss')  AS BEGIN_ADIT_TMLMT,          "
+                    + "                   TO_CHAR(A.END_ADIT_TMLMT, 'YYYY-MM-DD hh24:mi:ss')   AS END_ADIT_TMLMT,             "
+                    + "                   CASE WHEN A.BEGIN_TMLMT <= SYSDATE THEN CASE WHEN A.END_TMLMT >= SYSDATE THEN  'Y' ELSE 'N' END ELSE 'N' END AS B1,    "
+                    + "                   CASE WHEN A.BEGIN_ADIT_TMLMT <= SYSDATE THEN CASE WHEN A.END_ADIT_TMLMT >= SYSDATE THEN  'Y' ELSE 'N' END ELSE 'N' END AS B2    "
+                    + "            FROM OP_TASK A                                                                             "
                     + "                     JOIN OP_USER B                                                                    "
                     + "                          ON A.REGISTER = B.USER_ID                                                    "
-                    + "            WHERE BBS_CODE = '1000'                                                                    "
-                    + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                     "
-                    + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                  "
-                    + (param.ContainsKey("page") ? "AND RNUM > " + (Convert.ToInt32(param["page"]) - 1) + " * 10 " : "AND RNUM > 0 ")
-                    + (param.ContainsKey("page") ? "AND RNUM <= " + param["page"] + "0" : "AND RNUM <= 10");
+                    + "            WHERE ACDMC_NO = @selectedSubj:VARCHAR                                                     "
+                    + "            ORDER BY TASK_SEQ DESC) AA) AAA WHERE 1 = 1                                                ";
 
                 // Form이 존재하지 않으면 오류가 나기 때문에 분기해주어야한다.
                 if (Request.HasFormContentType) {
@@ -109,6 +110,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                 }
 
             }
+            param.Add("page", "1");
 
             ViewBag.ResultCnt = bbsCnt;
             ViewBag.param = param;
@@ -125,47 +127,43 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
 
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
-            ViewData["pageNm"] = "강의 공지사항";
+            ViewData["pageNm"] = "과제 제출";
             ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";
             ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
 
 
-            // 조회수 증가 쿼리
-            string sql = "UPDATE OP_BBS SET RDCNT = (SELECT RDCNT+1 AS RDCNT FROM OP_BBS WHERE BBS_ID = @BBS_ID:VARCHAR) WHERE BBS_ID = @BBS_ID:VARCHAR";
-
-            //cud 처리할 때는 트랜잭션 시작해주어야함
-            using var transaction = _context.Database.BeginTransaction();
-
-            _commonDao.Update(sql, Request.Form);
-
-            transaction.Commit();
-
             param.Add("page", Request.Form["page"]);
 
-            sql = "SELECT * FROM ("
-                       + "SELECT A.ACDMC_NO AS SelectSubj"
+            string sql = "SELECT A.ACDMC_NO AS SelectSubj"
                        + ", A.TITLE"
-                       + ", A.OTHBC_AT"
-                       + ", A.CONTENTS"
-                       + ", A.REGIST_DT "
+                       + ", A.CONTENT"
+                       + ", A.PRESENT_FORM"
+                       + ", A.FILE_CPCTY_LMT"
+                       + ", TO_CHAR(A.BEGIN_TMLMT, 'YYYY-MM-DD hh24:mi:ss') AS BEGIN_TMLMT "
+                       + ", TO_CHAR(A.END_TMLMT, 'YYYY-MM-DD hh24:mi:ss')  AS END_TMLMT "
+                       + ", TO_CHAR(A.BEGIN_ADIT_TMLMT, 'YYYY-MM-DD hh24:mi:ss')  AS BEGIN_ADIT_TMLMT "
+                       + ", TO_CHAR(A.END_ADIT_TMLMT, 'YYYY-MM-DD hh24:mi:ss')   AS END_ADIT_TMLMT "
+                       + ", CASE WHEN A.BEGIN_TMLMT <= SYSDATE THEN CASE WHEN A.END_TMLMT >= SYSDATE THEN  'Y' ELSE 'N' END ELSE 'N' END AS B1 "
+                       + ", CASE WHEN A.BEGIN_ADIT_TMLMT <= SYSDATE THEN CASE WHEN A.END_ADIT_TMLMT >= SYSDATE THEN  'Y' ELSE 'N' END ELSE 'N' END AS B2 "
                        + ", B.NAME "
-                       + ", A.BBS_ID "
-                       + ", A.RDCNT "
-                       + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
-                       + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
-                       + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
-                       + ", LAG(TITLE) OVER(ORDER BY BBS_ID) AS PREV_TITLE "
-                       + "FROM OP_BBS A "
+                       + ", A.TASK_SEQ "
+                       + "FROM OP_TASK A "
                        + "JOIN OP_USER B "
                        + "ON A.REGISTER = B.USER_ID "
-                       + "WHERE 1=1 "
                        + "AND ACDMC_NO = @selectedSubj:VARCHAR "
-                       + "AND BBS_CODE = '" + _codeMngTool.getCode("BBS", "Task") + "' "
-                       + "ORDER BY BBS_ID DESC)"
-                       + "WHERE BBS_ID = @BBS_ID:VARCHAR";
+                       + "WHERE TASK_SEQ = @task_id:VARCHAR";
 
             var result = _commonDao.SelectOne(sql, Request.Form);
+
+            if(ViewData["fs_at"].Equals("N")) {
+                sql = $"SELECT TASK_SEQ, REGISTER, TITLE, CONTENT, PRSENTR_AT, REGIST_DT FROM OP_TASK_PRSENTR WHERE REGISTER = '{userInfo.user_id}' AND TASK_SEQ = @task_id:VARCHAR";
+                var resultPrsentr = _commonDao.SelectOne(sql, Request.Form);
+                if(Request.Form.ContainsKey("prsentr_at") && Request.Form["prsentr_at"] == "N") {
+                    resultPrsentr["PRSENTR_AT"] = "N";
+                }
+                ViewBag.ResultPrsentr = resultPrsentr;
+            }
 
             ViewBag.result = result;
             ViewBag.param = param;
@@ -173,8 +171,9 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             ViewBag.SelectPageList = "/Task/SelectPageListTask";
             ViewBag.UpdateForm = "/Task/UpdateFormTask";
             ViewBag.Delete = "/Task/DeleteTask";
+            ViewBag.Prsentr = "/Task/PrsentrTask";
 
-            return View("/Views/LctSport/BoardViewStdPage.cshtml");
+            return View("/Views/LctSport/Task/TaskViewPage.cshtml");
         }
 
         /*
@@ -187,7 +186,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
             ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";         // 교수 여부
-            ViewData["pageNm"] = "강의 공지사항";
+            ViewData["pageNm"] = "과제 제출";
             ViewData["command"] = "INSERT";
 
             Dictionary<string, string> param = new Dictionary<string, string>();
@@ -226,24 +225,31 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             // Task 데이터 파싱
             param.Add("SelectSubj", Task.SelectSubj);
             param.Add("Title", Task.Title);
-            param.Add("OthbcAt", Task.OthbcAt);
             param.Add("Content", Task.Content);
-            param.Add("AtchFileId", Task.SelectSubj);
+            param.Add("Sdate", Task.Sdate);
+            param.Add("Edate", Task.Edate);
+            param.Add("Adit_sdate", Task.Adit_sdate);
+            param.Add("Adit_edate", Task.Adit_edate);
+            param.Add("AtchFileId", Task.AtchFileId);
+            param.Add("PresentForm", Task.PresentForm);
+            param.Add("FileCpctyLlmt", Task.FileCpctyLlmt);
             param.Add("user_id", userInfo.user_id);
-
             string query = "";
 
-            query = "INSERT INTO OP_BBS " +
+            query = "INSERT INTO OP_TASK " +
                     "VALUES(Task_SEQ.NEXTVAL" +
                     ", @SelectSubj:VARCHAR" +
-                    ", '1000'" +
                     ", @Title:VARCHAR" +
-                    ", TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
-                    ", 0" +
+                    ", TO_DATE(@Sdate:VARCHAR, 'YYYYMMDDHH24MI')" +
+                    ", TO_DATE(@Edate:VARCHAR, 'YYYYMMDDHH24MI')" +
+                    ", TO_DATE(@Adit_sdate:VARCHAR, 'YYYYMMDDHH24MI')" +
+                    ", TO_DATE(@Adit_edate:VARCHAR, 'YYYYMMDDHH24MI')" +
+                    ", '1'" +
                     ", @Content:VARCHAR" +
-                    ", @user_id:VARCHAR" +
+                    ", @PresentForm:VARCHAR" +
                     ", ''" +
-                    ", @OthbcAt:VARCHAR)";
+                    ", @FileCpctyLlmt:VARCHAR" +
+                    ", @user_id:VARCHAR)";
 
             //cud 처리할 때는 트랜잭션 시작해주어야함
             using var transaction = _context.Database.BeginTransaction();
@@ -258,7 +264,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
-            ViewData["pageNm"] = "강의 공지사항";
+            ViewData["pageNm"] = "과제 제출";
             ViewData["command"] = "UPDATE";
 
             Dictionary<string, string> param = new Dictionary<string, string>();
@@ -273,27 +279,30 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
 
             param.Add("page", Request.Form["page"]);
 
-            string sql = "SELECT * FROM ("
-                        + "SELECT A.ACDMC_NO AS SelectSubj"
-                        + ", A.TITLE"
-                        + ", A.OTHBC_AT"
-                        + ", A.CONTENTS"
-                        + ", A.REGIST_DT "
-                        + ", B.NAME "
-                        + ", A.BBS_ID "
-                        + ", A.RDCNT "
-                        + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
-                        + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
-                        + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
-                        + ", LAG(TITLE) OVER(ORDER BY BBS_ID) AS PREV_TITLE "
-                        + "FROM OP_BBS A "
-                        + "JOIN OP_USER B "
-                        + "ON A.REGISTER = B.USER_ID "
-                        + "WHERE 1=1 "
-                        + "AND ACDMC_NO = @selectedSubj:VARCHAR "
-                        + "AND BBS_CODE = '" + _codeMngTool.getCode("BBS", "Task") + "' "
-                        + "ORDER BY BBS_ID DESC)"
-                        + "WHERE BBS_ID = @BBS_ID:VARCHAR";
+            string sql = "SELECT A.ACDMC_NO AS SelectSubj"
+                      + ", A.TITLE"
+                      + ", A.CONTENT"
+                      + ", A.PRESENT_FORM"
+                      + ", A.FILE_CPCTY_LMT"
+                      + ", TO_CHAR(A.BEGIN_TMLMT, 'MONTH DD, YYYY hh24:mi:ss', 'NLS_DATE_LANGUAGE=ENGLISH') AS SDATE "
+                      + ", TO_CHAR(A.BEGIN_TMLMT, 'hh24') AS STIMEHOUR "
+                      + ", TO_CHAR(A.BEGIN_TMLMT, 'mi') AS STIMEMIN "
+                      + ", TO_CHAR(A.END_TMLMT, 'MONTH DD, YYYY hh24:mi:ss', 'NLS_DATE_LANGUAGE=ENGLISH') AS EDATE "
+                      + ", TO_CHAR(A.END_TMLMT, 'hh24') AS ETIMEHOUR "
+                      + ", TO_CHAR(A.END_TMLMT, 'mi') AS ETIMEMIN "
+                      + ", TO_CHAR(A.BEGIN_ADIT_TMLMT, 'MONTH DD, YYYY hh24:mi:ss', 'NLS_DATE_LANGUAGE=ENGLISH')  AS ADIT_SDATE "
+                      + ", TO_CHAR(A.BEGIN_ADIT_TMLMT, 'hh24')  AS ADIT_STIMEHOURE "
+                      + ", TO_CHAR(A.BEGIN_ADIT_TMLMT, 'mi')  AS ADIT_STIMEMIN "
+                      + ", TO_CHAR(A.END_ADIT_TMLMT, 'MONTH DD, YYYY hh24:mi:ss', 'NLS_DATE_LANGUAGE=ENGLISH')   AS ADIT_EDATE "
+                      + ", TO_CHAR(A.END_ADIT_TMLMT, 'hh24')   AS ADIT_ETIMEHOUR "
+                      + ", TO_CHAR(A.END_ADIT_TMLMT, 'mi')   AS ADIT_ETIMEMIN "
+                      + ", B.NAME "
+                      + ", A.TASK_SEQ "
+                      + "FROM OP_TASK A "
+                      + "JOIN OP_USER B "
+                      + "ON A.REGISTER = B.USER_ID "
+                      + "AND ACDMC_NO = @selectedSubj:VARCHAR "
+                      + "WHERE TASK_SEQ = @task_id:VARCHAR";
 
             var result = _commonDao.SelectOne(sql, Request.Form);
 
@@ -305,7 +314,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             ViewBag.InsertForm = "/Task/InsertFormTask";
             ViewBag.Insert = "/Task/UpdateTask";
 
-            return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
+            return View("/Views/LctSport/Task/TaskInsertStdPage.cshtml");
         }
 
         public string UpdateTask([FromBody] Task Task) {
@@ -315,19 +324,28 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             // Task 데이터 파싱
             param.Add("SelectSubj", Task.SelectSubj);
             param.Add("Title", Task.Title);
-            param.Add("OthbcAt", Task.OthbcAt);
             param.Add("Content", Task.Content);
-            param.Add("bbs_id", Task.Bbs_id);
-            param.Add("AtchFileId", Task.SelectSubj);
+            param.Add("Sdate", Task.Sdate);
+            param.Add("Edate", Task.Edate);
+            param.Add("Adit_sdate", Task.Adit_sdate);
+            param.Add("Adit_edate", Task.Adit_edate);
+            param.Add("AtchFileId", Task.AtchFileId);
+            param.Add("PresentForm", Task.PresentForm);
+            param.Add("FileCpctyLlmt", Task.FileCpctyLlmt);
+            param.Add("TaskId", Task.TaskId);
             param.Add("user_id", userInfo.user_id);
             string query = "";
 
-            query = "UPDATE OP_BBS SET " +
+            query = "UPDATE OP_TASK SET " +
                     "TITLE = @Title:VARCHAR" +
-                    ", UPDATE_DT = TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
-                    ", CONTENTS = @Content:VARCHAR" +
-                    ", UPDUSR = @user_id:VARCHAR" +
-                    ", OTHBC_AT = @OthbcAt:VARCHAR WHERE BBS_ID = @bbs_id:NUMBER";
+                    ", BEGIN_TMLMT = TO_DATE(@Sdate:VARCHAR, 'YYYYMMDDHH24MI')" +
+                    ", END_TMLMT = TO_DATE(@Edate:VARCHAR, 'YYYYMMDDHH24MI')" +
+                    ", BEGIN_ADIT_TMLMT = TO_DATE(@Adit_sdate:VARCHAR, 'YYYYMMDDHH24MI')" +
+                    ", END_ADIT_TMLMT = TO_DATE(@Adit_edate:VARCHAR, 'YYYYMMDDHH24MI')" +
+                    ", CONTENT = @Content:VARCHAR" +
+                    ", PRESENT_FORM = @PresentForm:VARCHAR" +
+                    ", FILE_CPCTY_LMT = @FileCpctyLlmt:VARCHAR" +
+                    " WHERE TASK_SEQ = @TaskId:NUMBER";
 
             //cud 처리할 때는 트랜잭션 시작해주어야함
             using var transaction = _context.Database.BeginTransaction();
@@ -341,14 +359,18 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
         public string DeleteTask() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
 
-            if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
-                Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
-                Response.WriteAsync("<script language=\"javascript\">window.location=\"/Task/SelectPageListTask\"</script>");
-            }
 
             string query = "";
 
-            query = "DELETE FROM OP_BBS WHERE BBS_ID = @bbs_id:NUMBER";
+            if(userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
+                if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
+                    Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
+                    Response.WriteAsync("<script language=\"javascript\">window.location=\"/Task/SelectPageListTask\"</script>");
+                }
+                query = "DELETE FROM OP_TASK WHERE TASK_SEQ = @task_id:NUMBER";
+            } else {
+                query = $"DELETE FROM OP_TASK_PRSENTR WHERE REGISTER = '{userInfo.user_id}' AND TASK_SEQ = @task_id:NUMBER";
+            }
 
             //cud 처리할 때는 트랜잭션 시작해주어야함
             using var transaction = _context.Database.BeginTransaction();
@@ -364,14 +386,69 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             return resultCode;
         }
 
-        // 공지사항 전용 모델 public으로 선언해야 매개변수로 사용가능함
+        public string PrsentrTask() {
+            string resultCode = "ok";
+
+            UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
+
+            string query = "";
+
+            query = $"SELECT COUNT(*) AS CNT FROM OP_TAKES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' AND ACDMC_NO = '" + Request.Form["selectedSubj"] + "'";
+
+            // 해당 강의를 수강하는 학생이 아니라면 
+            if(!_commonDao.SelectOne(query)["CNT"].Equals("1")) {
+                resultCode = "false";
+            }
+
+            query = "INSERT INTO OP_TASK_PRSENTR VALUES(" +
+                    "@task_id:VARCHAR " +
+                    $", '{userInfo.user_id}' " +
+                    ", '' " +
+                    ", @prsentr_title:VARCHAR " +
+                    ", @prsentr_content:VARCHAR " +
+                    ", 'Y'" +
+                    ", SYSDATE)";
+
+            //cud 처리할 때는 트랜잭션 시작해주어야함
+            using var transaction = _context.Database.BeginTransaction();
+
+            try {
+                if (_commonDao.Insert(query, Request.Form) == 0) {
+                    resultCode = "false";
+                }
+            // 한번 제출한 과제는 insert 시 에러가 나기 때문에 catch 문으로 받고 업데이트문으로 바꾸어준다.
+            } catch(OracleException e) {
+                query = "UPDATE OP_TASK_PRSENTR SET " +
+                   "DOC_ID = '' " +
+                   ", TITLE = @prsentr_title:VARCHAR " +
+                   ", CONTENT = @prsentr_content:VARCHAR " +
+                   " WHERE TASK_SEQ = @task_id:VARCHAR";
+
+                if (_commonDao.Insert(query, Request.Form) == 0) {
+                    resultCode = "false";
+                }
+            }
+
+            transaction.Commit();
+
+            return resultCode;
+        }
+
+
+
+        // 과제 전용 모델 public으로 선언해야 매개변수로 사용가능함
         public class Task {
-            public string SelectSubj { get; set; }          // 학정번호
-            public string Title { get; set; }               // 제목
-            public string OthbcAt { get; set; }             // 공개여부(중요여부)
-            public string Content { get; set; }             // 내용
-            public string AtchFileId { get; set; }          // 첨부파일 ID
-            public string Bbs_id { get; set; }              // 게시판 ID
+            public string SelectSubj { get; set; }              // 학정번호
+            public string Title { get; set; }                   // 제목
+            public string Content { get; set; }                 // 내용
+            public string Sdate { get; set; }                   // 내용
+            public string Edate { get; set; }                   // 내용
+            public string Adit_sdate { get; set; }              // 내용
+            public string Adit_edate { get; set; }              // 내용
+            public string AtchFileId { get; set; }              // 첨부파일 ID
+            public string PresentForm { get; set; }              // 첨부파일 ID
+            public string FileCpctyLlmt { get; set; }              // 첨부파일 ID
+            public string TaskId { get; set; }              // 첨부파일 ID
         }
 
 

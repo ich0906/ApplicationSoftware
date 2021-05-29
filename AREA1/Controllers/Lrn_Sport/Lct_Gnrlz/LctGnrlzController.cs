@@ -48,7 +48,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
             sql = "SELECT COUNT(*) AS TAKES_CNT "
                  + "FROM OP_TAKES "
                  + "WHERE ID=" + userInfo.user_id;
-            
+
 
             int takesCnt = 0;
             // Form이 존재하지 않으면 오류가 나기 때문에 분기해주어야한다.
@@ -61,15 +61,15 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
                        "JOIN OP_TEACHES C ON A.SEC_ID=C.SEC_ID and A.COURSE_ID=C.COURSE_ID and A.SEMESTER=C.SEMESTER and A.YEAR=C.YEAR " +
                        "JOIN OP_USER D on C.ID=D.USER_ID " +
                        "JOIN OP_TIME_SLOT E on A.TIME_SLOT_ID=E.TIME_SLOT_ID " +
-                       "WHERE ID=" + userInfo.user_id+" AND ACDMC_NO='"+acdmc_no+"'";
+                       "WHERE ID=" + userInfo.user_id + " AND ACDMC_NO='" + acdmc_no + "'";
                 } else {
                     sql = "SELECT BUILDING,ROOM_NUMBER,ACDMC_NO,TITLE,NAME,DAY1,DAY2,PERIOD1,PERIOD2,A.YEAR,A.SEMESTER,C.ID " +
                         "FROM OP_SECTION A JOIN OP_COURSE B ON A.COURSE_ID=B.COURSE_ID " +
                         "JOIN OP_TAKES C ON A.SEC_ID=C.SEC_ID and A.COURSE_ID=C.COURSE_ID and A.SEMESTER=C.SEMESTER and A.YEAR=C.YEAR " +
                         "JOIN OP_USER D on C.ID=D.USER_ID " +
                         "JOIN OP_TIME_SLOT E on A.TIME_SLOT_ID=E.TIME_SLOT_ID " +
-                        "WHERE ID=" + userInfo.user_id+" AND ACDMC_NO='"+acdmc_no+"'";
-                }    
+                        "WHERE ID=" + userInfo.user_id + " AND ACDMC_NO='" + acdmc_no + "'";
+                }
 
                 param = _commonDao.SelectOne(sql);
                 param.Add("page", "1");
@@ -79,7 +79,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
                 ViewBag.YEAR_HAKGI = param["YEAR"] + "," + param["SEMESTER"];
                 ViewBag.ACDMC_NO = param["ACDMC_NO"];
                 // Form이 없거나 과목을 선택하지 않고 페이지에 넘어오는 경우
-            }else{
+            } else {
                 // 디폴트 과목을 선택함
                 if (userInfo.author.Equals("1000")) {
                     int teachesCnt = 0;
@@ -93,8 +93,8 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
                         "FROM OP_SECTION A JOIN OP_COURSE B ON A.COURSE_ID=B.COURSE_ID " +
                         "JOIN OP_TEACHES C ON A.SEC_ID=C.SEC_ID and A.COURSE_ID=C.COURSE_ID and A.SEMESTER=C.SEMESTER and A.YEAR=C.YEAR " +
                         "JOIN OP_USER D on C.ID=D.USER_ID " +
-                        "JOIN OP_TIME_SLOT E on A.TIME_SLOT_ID=E.TIME_SLOT_ID "+
-                        "WHERE ID="+userInfo.user_id;
+                        "JOIN OP_TIME_SLOT E on A.TIME_SLOT_ID=E.TIME_SLOT_ID " +
+                        "WHERE ID=" + userInfo.user_id;
                 } else {
                     takesCnt = Convert.ToInt32(_commonDao.SelectOne(sql, param)["TAKES_CNT"]);
                     if (takesCnt == 0) {
@@ -105,8 +105,8 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
                         "FROM OP_SECTION A JOIN OP_COURSE B ON A.COURSE_ID=B.COURSE_ID " +
                         "JOIN OP_TAKES C ON A.SEC_ID = C.SEC_ID and A.COURSE_ID = C.COURSE_ID and A.SEMESTER = C.SEMESTER and A.YEAR = C.YEAR " +
                         "JOIN OP_USER D on C.ID=D.USER_ID " +
-                        "JOIN OP_TIME_SLOT E on A.TIME_SLOT_ID=E.TIME_SLOT_ID "+
-                        "WHERE ID="+userInfo.user_id;
+                        "JOIN OP_TIME_SLOT E on A.TIME_SLOT_ID=E.TIME_SLOT_ID " +
+                        "WHERE ID=" + userInfo.user_id;
                 }
 
                 param = _commonDao.SelectOne(sql);
@@ -120,14 +120,24 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
 
             //공지사항 4개 채워 넣는 부분
             if (acdmc_no.Equals("")) { //Form 도착 없이 이동한 경우
-                
+                sql = "SELECT COUNT(*) AS NOTICE_CNT " +
+                   "FROM OP_BBS " +
+                   "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "'";
+                int noticeCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["NOTICE_CNT"]);
+                if (noticeCnt > 0) {
+                    sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
+                    "FROM OP_BBS " +
+                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND OTHBC_AT='Y'" + " ORDER BY REGIST_DT DESC";
+
+                    var noticeList = _commonDao.SelectList(sql);
+                    ViewBag.noticeList = noticeList;
+                }
+                ViewBag.noticeCount = noticeCnt;
             } else {
                 sql = "SELECT COUNT(*) AS NOTICE_CNT " +
-                    "FROM OP_BBS " +
-                    "WHERE ACDMC_NO='" + acdmc_no+"'";
+                  "FROM OP_BBS " +
+                  "WHERE ACDMC_NO='" + acdmc_no + "'";
                 int noticeCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["NOTICE_CNT"]);
-
-                //공지사항이 존재하면
                 if (noticeCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +

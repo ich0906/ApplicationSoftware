@@ -17,12 +17,14 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
         private readonly CodeMngTool _codeMngTool;
+        private readonly FileMngTool _fileMngTool;
 
         public StandInqireController(ILogger<StandInqireController> logger, AppSoftDbContext context) {
             _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);
             _codeMngTool = new CodeMngTool(context);
+            _fileMngTool = new FileMngTool(context);
         }
 
         /*
@@ -49,7 +51,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                       + "ON A.REGISTER = B.USER_ID "
                       /*+ "JOIN OP_FILE C "
                       + "ON A.DOC_ID = C.DOC_ID AND C.FILE_NUM = 1 "*/
-                      + "WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' "
+                      + "WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' " 
                       + "AND ACDMC_NO = @selectedSubj:VARCHAR";
 
 
@@ -63,10 +65,10 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                 ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
                 ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
 
-                // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
+            // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
             } else {
                 // 디폴트 과목을 선택함
-                string sql2 = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))
+                string sql2 = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) 
                     ? "SELECT * FROM (SELECT ROWNUM, AA.* FROM (SELECT B.ACDMC_NO AS selectedSubj, YEAR || ',' || SEMESTER AS YEAR_HAKGI"
                     + $" FROM OP_TEACHES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' ORDER BY YEAR DESC, SEMESTER DESC, COURSE_ID) AA) AAA WHERE ROWNUM = 1"
                     : "SELECT * FROM (SELECT ROWNUM, AA.* FROM (SELECT B.ACDMC_NO AS selectedSubj, YEAR || ',' || SEMESTER AS YEAR_HAKGI"
@@ -105,7 +107,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                 if (Request.HasFormContentType) {
                     var resultList = _commonDao.SelectList(sql, Request.Form);
                     ViewBag.ResultList = resultList;
-                    // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
+                // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
                 } else {
                     var resultList = _commonDao.SelectList(sql, param);
                     ViewBag.ResultList = resultList;
@@ -129,7 +131,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
             ViewData["pageNm"] = "강의 공지사항";
-            ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";
+            ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";      
             ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
 
@@ -155,10 +157,11 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                        + ", B.NAME "
                        + ", A.BBS_ID "
                        + ", A.RDCNT "
+                       + ", DOC_ID "
                        + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
                        + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
                        + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
-                       + ", LAG(TITLE) OVER(ORDER BY BBS_ID) AS PREV_TITLE "
+                       + ", LAG(TITLE) OVER(ORDER BY BBS_ID) AS PREV_TITLE " 
                        + "FROM OP_BBS A "
                        + "JOIN OP_USER B "
                        + "ON A.REGISTER = B.USER_ID "
@@ -176,6 +179,19 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
             ViewBag.UpdateForm = "/Notice/UpdateFormNotice";
             ViewBag.Delete = "/Notice/DeleteNotice";
+
+            int fcount = 0;
+            //첨부파일 읽어오기
+            if (result["DOC_ID"] != "") {
+                sql = "SELECT FILE_NAME,FILE_EXTSN,FILE_ID FROM OP_FILE A JOIN OP_BBS B ON A.DOC_ID=B.DOC_ID"
+               + " WHERE A.DOC_ID=" + result["DOC_ID"];
+
+                var fileList = _commonDao.SelectList(sql);
+                fcount = fileList.Count;
+                ViewBag.fileList = fileList;
+            }
+
+            ViewBag.fileCount = fcount;
 
             return View("/Views/LctSport/BoardViewStdPage.cshtml");
         }
@@ -209,7 +225,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewBag.Select = "/Notice/SelectNotice";
             ViewBag.InsertForm = "/Notice/InsertFormNotice";
             ViewBag.Insert = "/Notice/InsertNotice";
-
+            
 
             return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
         }
@@ -221,7 +237,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
          * 기능 : 공지사항 작성 로직
          * */
         [HttpPost]
-        public string InsertNotice([FromBody] Notice notice) {
+        public string InsertNotice([FromBody]Notice notice) {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             Dictionary<string, string> param = new Dictionary<string, string>();
 
@@ -230,7 +246,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             param.Add("Title", notice.Title);
             param.Add("OthbcAt", notice.OthbcAt);
             param.Add("Content", notice.Content);
-            param.Add("AtchFileId", notice.SelectSubj);
+            param.Add("AtchFileId", notice.AtchFileId);
             param.Add("user_id", userInfo.user_id);
 
             string query = "";
@@ -245,7 +261,10 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                     ", @Content:VARCHAR" +
                     ", @user_id:VARCHAR" +
                     ", ''" +
-                    ", @OthbcAt:VARCHAR)";
+                    ", @OthbcAt:VARCHAR" +
+                    ", NULL" +
+                    ", NULL" +
+                    ", NULL)";
 
             //cud 처리할 때는 트랜잭션 시작해주어야함
             using var transaction = _context.Database.BeginTransaction();
@@ -284,6 +303,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                         + ", B.NAME "
                         + ", A.BBS_ID "
                         + ", A.RDCNT "
+                        + ", A.DOC_ID "
                         + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
                         + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
                         + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
@@ -305,7 +325,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
             ViewBag.Select = "/Notice/SelectNotice";
             ViewBag.InsertForm = "/Notice/InsertFormNotice";
-            ViewBag.Insert = "/Notice/UpdateNotice";
+            ViewBag.Insert = "/Notice/UpdateNotice";  
 
             return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
         }
@@ -320,7 +340,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             param.Add("OthbcAt", notice.OthbcAt);
             param.Add("Content", notice.Content);
             param.Add("bbs_id", notice.Bbs_id);
-            param.Add("AtchFileId", notice.SelectSubj);
+            param.Add("AtchFileId", notice.AtchFileId);
             param.Add("user_id", userInfo.user_id);
             string query = "";
 
@@ -329,6 +349,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                     ", UPDATE_DT = TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
                     ", CONTENTS = @Content:VARCHAR" +
                     ", UPDUSR = @user_id:VARCHAR" +
+                    ", DOC_ID = @AtchFileId:VARCHAR"+
                     ", OTHBC_AT = @OthbcAt:VARCHAR WHERE BBS_ID = @bbs_id:NUMBER";
 
             //cud 처리할 때는 트랜잭션 시작해주어야함
@@ -349,6 +370,15 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             }
 
             string query = "";
+
+            query = "SELECT FILE_ID, A.DOC_ID FROM OP_FILE A "
+                +"JOIN OP_BBS B "
+                +"ON A.DOC_ID=B.DOC_ID "
+                +"AND BBS_ID='"+Request.Form["bbs_id"]+"'";
+            var removeFiles = _commonDao.SelectList(query);
+            for(int i = 0; i < removeFiles.Count; ++i) {
+                _fileMngTool.removeFile(removeFiles[i]["DOC_ID"]);
+            }
 
             query = "DELETE FROM OP_BBS WHERE BBS_ID = @bbs_id:NUMBER";
 

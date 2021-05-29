@@ -12,29 +12,28 @@ using System.Text;
 using System;
 using System.Security.Cryptography;
 
-namespace Tool
-{
-    public class FileMngTool
-    {
+namespace Tool {
+    public class FileMngTool {
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
 
-        public FileMngTool(AppSoftDbContext context)
-        {
+        public FileMngTool(AppSoftDbContext context) {
             _context = context;
             _commonDao = new CommonDao(context);
         }
 
-     
-        public void Uploads(IFormCollection param)
-        {
+
+        public string Uploads(IFormCollection param) {
             string fileName = "";
             string fileEXTSN = "";
+            string docId;
+            if (param["attachId"].Equals("")) docId = getRandomString();
+            else docId = param["attachId"];
             DateTime timeNow = DateTime.Now;
 
+            removeFile(docId);
 
-            foreach (IFormFile file in param.Files)
-            {
+            foreach (IFormFile file in param.Files) {
                 fileName = file.FileName;
                 string[] result = fileName.Split(new string[] { "." }, System.StringSplitOptions.None);
                 //파일명 해쉬
@@ -55,6 +54,7 @@ namespace Tool
                 files.Add("file_name", fileNameSplit);
                 files.Add("file_extsn", fileEXTSN);
                 files.Add("upload_time", FileTimeNow);
+                files.Add("doc_id", docId);
 
                 //INSERT 쿼리
                 using var transaction = _context.Database.BeginTransaction();
@@ -62,38 +62,37 @@ namespace Tool
                 string query = "INSERT INTO OP_FILE VALUES(@file_id:VARCHAR,"
                                                    + "@file_name:VARCHAR,"
                                                    + "@file_extsn:VARCHAR,"
-                                                   + "@upload_time:VARCHAR"
+                                                   + "@upload_time:VARCHAR,"
+                                                   + "@doc_id:VARCHAR"
                                                    + ")";
                 _commonDao.Insert(query, files);
 
                 transaction.Commit();
 
                 //폴더에 파일쓰기
-                if (file.Length > 0)
-                {
-                    string filePath = Path.Combine(@"C:\filestream\uploads", fileHash);
+                if (file.Length > 0) {
+                    string folder = System.IO.Directory.GetCurrentDirectory() + @"\wwwroot\upload";
+                    string filePath = Path.Combine(folder, fileHash);
 
-                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
-                    {
+                    using (Stream fileStream = new FileStream(filePath, FileMode.Create)) {
                         file.CopyTo(fileStream);
 
                         fileStream.Flush();
                     }
                 }
             }
-
+            return docId;
             //Response.WriteAsync("<script language=\"javascript\">alert('" + fileName + " is uploaded!');</script>");
             //Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
 
         }
-        public void Downloads(IFormCollection param)
-        {
+        public string Downloads(IFormCollection param) {
             var fileData = new Dictionary<string, string>();
             //HTML input값과 동일한 해쉬값을 가진 튜플에서 파일네임과 확장자 가져오기
             using var transaction = _context.Database.BeginTransaction();
 
-            string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM OP_FILE WHERE FILE_ID = @file_id:VARCHAR";
-
+            //string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM OP_FILE WHERE FILE_ID = @file_id:VARCHAR";
+            string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM OP_FILE WHERE FILE_ID = '"+param["file_id"]+"'";
             fileData = _commonDao.SelectOne(query, param);
 
             transaction.Commit();
@@ -104,8 +103,7 @@ namespace Tool
             string tmpName = "";
             string tmpEXTSN = "";
 
-            foreach (KeyValuePair<string, string> keyValues in fileData)
-            {
+            foreach (KeyValuePair<string, string> keyValues in fileData) {
                 if (fileData.TryGetValue("FILE_ID", out string id))
                     fileID = id;
                 if (fileData.TryGetValue("FILE_EXTSN", out string extsn))
@@ -119,8 +117,8 @@ namespace Tool
             //Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
 
             //파일 다운로드(카피)
-            string sourcePath = @"c:\filestream\uploads";
-            string targetPath = @"c:\filestream\downloads";
+            string sourcePath = System.IO.Directory.GetCurrentDirectory() + @"\wwwroot\upload";
+            string targetPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
             string sourceFile = System.IO.Path.Combine(sourcePath, fileID);
             string destFile = System.IO.Path.Combine(targetPath, fileName);
@@ -128,6 +126,34 @@ namespace Tool
             System.IO.Directory.CreateDirectory(targetPath);
             System.IO.File.Copy(sourceFile, destFile, true);
 
+            return fileName;
+        }
+
+        public void removeFile(string docId) {
+            string query = "SELECT FILE_ID FROM OP_FILE "
+                + "WHERE DOC_ID='" + docId + "'";
+
+            string uploadFolder = System.IO.Directory.GetCurrentDirectory() + @"\wwwroot\upload";
+            string fName;
+            var willDeleteList = _commonDao.SelectList(query);
+            for (int i = 0; i < willDeleteList.Count; ++i) {
+                fName = Path.Combine(uploadFolder, willDeleteList[i]["FILE_ID"]);
+                File.Delete(fName);
+            }
+
+            query = "DELETE FROM OP_FILE"
+                + " WHERE DOC_ID='" + docId + "'";
+
+            using var transaction2 = _context.Database.BeginTransaction();
+
+            _commonDao.Delete(query);
+
+            transaction2.Commit();
+        }
+
+        public string getRandomString() {
+            DateTime dt = DateTime.Now;
+            return dt.ToString("MMddhhmmss");
         }
     }
 }
