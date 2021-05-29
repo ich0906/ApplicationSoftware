@@ -63,7 +63,8 @@ namespace Tool {
                                                    + "@file_name:VARCHAR,"
                                                    + "@file_extsn:VARCHAR,"
                                                    + "@upload_time:VARCHAR,"
-                                                   + "@doc_id:VARCHAR"
+                                                   + "@doc_id:VARCHAR,"
+                                                   + "''"
                                                    + ")";
                 _commonDao.Insert(query, files);
 
