@@ -1,0 +1,408 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>부트스트랩 차트그리기</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> <!-- 차트 링크 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+</head>
+
+<body>
+    <main role="main">
+        <div class="py-5 bg-light">
+            <div class="container">
+
+                <div id="appModule" class="card card-body mb-4 content">
+                    <div><p class="contenttitle">수강 /성적조회</p></div>
+                    <div class="tablelistbox">
+                        <!--테이블리스트박스-->
+                        <div id="hakbu">
+                            <table class="tablegw">
+                                <colgroup>
+                                    <col style="width: 5%;">
+                                    <col style="width: 25%;">
+                                    <col style="width: 15%;">
+                                    <col style="width: 15%;">
+                                    <col style="width: 17%;">
+                                    <col style="width: 23%;">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>구분</th>
+                                        <th>학과/학부</th>
+                                        <th>학번</th>
+                                        <th>이름</th>
+                                        <th>학적상황</th>
+                                        <th>지도교수</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>학부</td>
+                                        <td>소프트웨어학부 시스템소프트웨어전공</td>
+                                        <td>@ViewBag.user_id</td>
+                                        <td>@ViewBag.name</td>
+                                        <td>3학년 재학</td>
+                                        <td>@ViewBag.advisor<br>dmdthtlftlfdgj@kw.ac.kr</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br>
+
+                            <!----><br> <!---->
+                            <table class="tablegw">
+                                <!--표테이블2-->
+                                <colgroup>
+                                    <col style="width: 5%;">
+                                    <col style="width: 5%;">
+                                    <col style="width: 5%;">
+                                    <col style="width: 5%;">
+                                    <col style="width: 5%;">
+                                    <col style="width: 5%;">
+                                    <col style="width: 5%;">
+                                    <col style="width: 5%;">
+                                    <col style="width: 5%;">
+                                    <col style="width: 5%;">
+                                    <col style="width: 5%;">
+                                    <col style="width: 5%;">
+                                    <col style="width: 10%;">
+                                    <col style="width: 10%;">
+                                    <col style="width: 20%;">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th colspan="4">1)신청학점</th>
+                                        <th colspan="4">2)삭제학점</th>
+                                        <th colspan="4">3)취득학점</th>
+                                        <th colspan="2">평량평균</th>
+                                        <th rowspan="2">6)연도/학과별<br>졸업이수학점</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="4">@ViewBag.tc</td>
+                                        <td colspan="4">0</td>
+                                        <td colspan="4">@ViewBag.tc</td>
+                                        <td>F 포함<br>@ViewBag.ag</br></td>
+                                        <td>F 미포함<br>@ViewBag.agnf</br></td>
+                                        <th>
+                                            <a href="https://klas.kw.ac.kr/assets/custom/doc/sungjuk_info.pdf" target="_blank"> <button type="button" class="btn2 btn-gray">조회</button></a>
+                                        </th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table id="synthesis-score-table" class="tablegw" style="margin: 25px 0">
+                                <!--표테이블3-->
+                                <colgroup>
+                                    <col width="25%">
+                                    <col width="15%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">학기</th>
+                                        <th rowspan="2">취득 학점</th>
+                                        <th colspan="6">평균 평점</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3">F 포함</th>
+                                        <th colspan="3">F 미포함</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr style="">
+                                        <td>2020학년도 1학기</td>
+                                        <td>@ViewBag.allcred00</td>
+                                        <td colspan="3">@ViewBag.grd00</td>
+                                        <td colspan="3">@ViewBag.grd_noF00</td>
+                                    </tr>
+
+                                    <tr style="">
+                                        <td>2020학년도 2학기</td>
+                                        <td>@ViewBag.allcred01</td>
+                                        <td colspan="3">@ViewBag.grd01</td>
+                                        <td colspan="3">@ViewBag.grd_noF01</td>
+                                    </tr>
+
+                                    <tr style="">
+                                        <td>2021학년도 1학기</td>
+                                        <td>@ViewBag.allcred10</td>
+                                        <td colspan="3">@ViewBag.grd10</td>
+                                        <td colspan="3">@ViewBag.grd_noF10</td>
+                                    </tr>
+
+                                    <tr style="font-weight: bold">
+                                        <td>전체 학기</td>
+                                        <td>@ViewBag.tc</td>
+                                        <td colspan="3">@ViewBag.ag</td>
+                                        <td colspan="3">@ViewBag.agnf</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                            <!--차트-->
+
+                            <div class="container">
+                                <canvas id="myChart"></canvas>
+                            </div> <!-- 부트스트랩 -->
+                            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+                            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> <!-- 차트 -->
+                            <script>
+                                var ctx = document.getElementById('myChart').getContext('2d');
+                                var chart = new Chart(ctx,
+                                    { // 챠트 종류를 선택
+                                        type: 'line',
+                                        // 챠트를 그릴 데이타
+                                        data: {
+                                            labels: ['2020학년도 1학기', '2020학년도 2학기', '2021학년도 1학기'],
+                                            datasets: [
+                                                {
+                                                    label: '평균 평점',
+                                                    backgroundColor: 'transparent',
+                                                    borderColor: 'grey',
+                                                    data: [@ViewBag.grd00, @ViewBag.grd01, @ViewBag.grd10]
+                                                }
+                                            ]
+                                        },
+                                        // 옵션
+                                        options: {}
+                                    });
+                            </script>
+                            <!--차트끝-->
+                            <table width="100%" align="left"><tbody><tr height="20"><td><font color="#FF0000">※ () 안의 학점은 재수강 학점임</font></td></tr> <tr height="20"><td><font color="#FF0000">※ 기타 : 교직, 복수전공, 부전공, 일반선택 학점 등</font></td></tr></tbody></table> <br> <table width="100%" align="left" cellspacing="0"><tbody><tr height="20"><td><b>1) 신청학점 : <font color="#FF0000">성적처리가 마감된 과목의 학점에 한해서만 합산</font><font color="#0000FF">(F학점, 삭제학점, 재수강으로 인한 삭제학점 <u>포함</u>)</font></b></td></tr> <tr height="20"><td><b>2) 삭제학점 : <font color="#FF0000">학점삭제제도로 인한 삭제학점 + 재수강으로 인한 삭제 학점</font></b></td></tr> <tr height="20"><td><b>3) 취득학점 : <font color="#FF0000">성적처리가 마감된 과목의 학점에 한해서만 합산</font><font color="#0000FF">(F학점, 삭제학점, 재수강으로 인한 삭제학점 <u>미포함</u>)</font></b></td></tr> <tr height="20"><td><b>4) (학적부 기준) 평량평균 : <font color="#0000FF">신청학점</font></b>에 대한 평량평균</td></tr> <tr height="20"><td><b>5) (성적증명서 기준) 평량평균 : <font color="#0000FF">취득학점</font></b>에 대한 평량평균</td></tr> <tr height="20"><td>6) 연도/학과별 졸업이수학점 : 입학연도 및 각 학과별 졸업이수 학점</td></tr></tbody></table> <br> <table width="100%" align="left"><tbody><tr height="20"><td><b><font color="#FF0000">※ 상기 산출자료는 단순 참고용이므로 정확한 이수 학점 및 평량평균은 성적증명서 발급을 통하여 확인하시기 바랍니다 ※</font></b></td></tr></tbody></table> <table width="100%" align="left"><tbody><tr height="20"><td></td></tr></tbody></table> <table width="100%" align="left">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <b><font color="black" size="5px" style="font-weight: bold;">*성적내역</font></b>&nbsp;<b>
+                                                <b>
+                                                    <a href="javascript:void(0);">
+                                                        - <span>[2021 년도 1 학기  성적표 출력] </span>
+                                                    </a>
+                                                </b>
+                                            </b>
+                                        </td>
+                                    </tr>
+                                    <tr><td><b><font color="#0000FF" style="font-weight: bold;">※ 당해학기 재수강 과목의 기 이수한 과목은 성적마감과 동시에 삭제되며, 기존 이수과목의 성적은 '등급(재수강)'로 표기됨</font></b></td></tr> <!----> <!---->
+                                </tbody>
+                            </table>
+                            <br>
+                            <table class="AType">
+                                <colgroup>
+                                    <col width="16%">
+                                    <col width="23%">
+                                    <col width="15%">
+                                    <col width="5%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                </colgroup>
+                                <thead>
+                                    <!--표테이블4-->
+                                    <tr>
+                                        <th colspan="9">2021학년도 1<span>학기</span></th>
+                                    </tr>
+                                    <tr>
+                                        <th>학정번호</th>
+                                        <th>과목명</th>
+                                        <th>개설학과</th>
+                                        <th>학점</th>
+                                        <th>성적</th>
+                                        <th>인증구분</th>
+                                        <th>재수강여부</th>
+                                        <th>재수강이후 <br>삭제여부</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> @ViewBag.an100</td>
+                                        <td> @ViewBag.title100</td>
+                                        <td> @ViewBag.dept100</td>
+                                        <td> @ViewBag.credit100</td>
+                                        <td> @ViewBag.grade100</td>
+                                        <td> </td>
+                                        <td><font color="red"></font></td>
+                                        <!---->
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td> @ViewBag.an101</td>
+                                        <td> @ViewBag.title101</td>
+                                        <td> @ViewBag.dept101</td>
+                                        <td> @ViewBag.credit101</td>
+                                        <td> @ViewBag.grade101</td>
+                                        <td> </td>
+                                        <td><font color="red"></font></td> <!---->
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td> @ViewBag.an102</td>
+                                        <td> @ViewBag.title102</td>
+                                        <td> @ViewBag.dept102</td>
+                                        <td> @ViewBag.credit102</td>
+                                        <td> @ViewBag.grade102</td>
+                                        <td> </td>
+                                        <td><font color="red"></font></td>
+                                        <!---->
+                                        <td>
+                                        </td>
+                                    </tr>
+
+                                    </tr>
+                                    <tr>
+                                        <td> @ViewBag.an103</td>
+                                        <td> @ViewBag.title103</td>
+                                        <td> @ViewBag.dept103</td>
+                                        <td> @ViewBag.credit103</td>
+                                        <td> @ViewBag.grade103</td>
+                                        <td>
+                                        </td>
+                                        <td><font color="red"></font></td>
+                                        <!---->
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td> @ViewBag.an104</td>
+                                        <td> @ViewBag.title104</td>
+                                        <td> @ViewBag.dept104</td>
+                                        <td> @ViewBag.credit104</td>
+                                        <td> @ViewBag.grade104</td>
+                                        <td> </td>
+                                        <td><font color="red"></font></td>
+                                        <!---->
+                                        <td>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table><table class="AType">
+                                <colgroup>
+                                    <col width="16%">
+                                    <col width="23%">
+                                    <col width="15%">
+                                    <col width="5%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                </colgroup>
+                                <thead>
+                                <thead>
+                                    <!--표테이블4-->
+                                    <tr>
+                                        <th colspan="9">2020학년도 2<span>학기</span></th>
+                                    </tr>
+                                    <tr>
+                                        <th>학정번호</th>
+                                        <th>과목명</th>
+                                        <th>개설학과</th>
+                                        <th>학점</th>
+                                        <th>성적</th>
+                                        <th>인증구분</th>
+                                        <th>재수강여부</th>
+                                        <th>재수강이후 <br>삭제여부</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> @ViewBag.an010</td>
+                                        <td> @ViewBag.title010</td>
+                                        <td> @ViewBag.dept010</td>
+                                        <td> @ViewBag.credit010</td>
+                                        <td> @ViewBag.grade010</td>
+                                        <td> </td>
+                                        <td><font color="red"></font></td>
+                                        <!---->
+                                        <td>
+                                        </td>
+                                    </tr>
+
+
+                                </tbody>
+                            </table><table class="AType">
+                                <colgroup>
+                                    <col width="16%">
+                                    <col width="23%">
+                                    <col width="15%">
+                                    <col width="5%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                </colgroup>
+                                <thead>
+                                <thead>
+                                    <!--표테이블4-->
+                                    <tr>
+                                        <th colspan="9">2020학년도 1<span>학기</span></th>
+                                    </tr>
+                                    <tr>
+                                        <th>학정번호</th>
+                                        <th>과목명</th>
+                                        <th>개설학과</th>
+                                        <th>학점</th>
+                                        <th>성적</th>
+                                        <th>인증구분</th>
+                                        <th>재수강여부</th>
+                                        <th>재수강이후 <br>삭제여부</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> @ViewBag.an000</td>
+                                        <td> @ViewBag.title000</td>
+                                        <td> @ViewBag.dept000</td>
+                                        <td> @ViewBag.credit000</td>
+                                        <td> @ViewBag.grade000</td>
+                                        <td> </td>
+                                        <td><font color="red"></font></td>
+                                        <!---->
+                                        <td>
+                                        </td>
+                                    </tr>
+
+
+                                </tbody>
+                            </table><table class="AType">
+                                <colgroup>
+                                    <col width="11%">
+                                    <col width="23%">
+                                    <col width="15%">
+                                    <col width="5%">
+                                    <col width="5%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                </colgroup>
+                                <thead>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </main>
+
+
+
+</body>
+</html>

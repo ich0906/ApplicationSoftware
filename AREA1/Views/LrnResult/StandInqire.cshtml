@@ -1,0 +1,142 @@
+﻿<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" crossorigin="anonymous"></script>
+<!DOCTYPE html>
+<!-- saved from url=(0052)https://klas.kw.ac.kr/std/cps/inqire/StandStdPage.do -->
+<html lang="en">
+
+
+<body>
+
+    <main role="main">
+        <
+        <div class="py-5 bg-light">
+            <div class="container">
+
+                <div id="appModule" class="card card-body mb-4 content">
+                    <div><p class="contenttitle">석차 조회</p></div>
+                    <table class="tablegw">
+                        <colgroup><col style="width: 35%;"> <col style="width: 25%;"> <col style="width: 15%;"> <col style="width: 25%;"></colgroup>
+                        <thead><tr><th>학과/학부</th> <th>학번</th> <th>이름</th> <th>학적상황</th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td>시스템소프트웨어/소프트웨어학부</td>
+                                <td>@ViewBag.user_id</td>
+                                <td>@ViewBag.name</td>
+                                <td>3학년 재학</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <br><br><br><br>
+
+                    <div id="test" style="margin-top: 10px">
+                        <form id="aform">
+                            <button type="button" id="listButton" class="btn2 btn-learn">이전 석차 내역 불러오기</button>
+                        </form>
+
+                        <table id="test4" class="AType">
+                            <colgroup><col width="12.5%"> <col width="12.5%"> <col width="12.5%"> <col width="12.5%"> <col width="12.5%"> <col width="12.5%"> <col width="12.5%"> <col width="12.5%"></colgroup>
+                            <table id="test3" class="AType">
+                                <thread id="test5">
+                                    <colgroup id="hz">
+                                        <col width="12.5%">
+                                        <col width="12.5%">
+                                        <col width="12.5%">
+                                        <col width="12.5%">
+                                        <col width="12.5%">
+                                        <col width="12.5%">
+                                        <col width="12.5%">
+                                        <col width="12.5%">
+                                    </colgroup>
+                                    <tr id="test6">
+                                        <th>년도</th>
+                                        <th>학기</th>
+                                        <th>신청학점</th>
+                                        <th>총점</th>
+                                        <th>평점</th>
+                                        <th>백분율</th>
+                                        <th>학과석차</th>
+                                        <th>학사경고</th>
+                                    </tr>
+                                </thread>
+                                <tbody id="test2">
+                                    <tr id="test7">
+                                        <td>2021</td>
+                                        <td>1</td>
+                                        <td>@ViewBag.allcred10</td>
+                                        <td>@ViewBag.allgrd10</td>
+                                        <td>@ViewBag.grd10</td>
+                                        <td>@ViewBag.per10</td>
+                                        <td>@ViewBag.rank10/@ViewBag.countstudents10</td>
+                                        <td>@ViewBag.probation01</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+
+            $("#listButton").click(function () {
+                $("#aform").attr("action", "/StandInqire/PreRankList");
+                $("#aform").attr("method", "POST");
+                $("#listButton").hide();
+
+                $("#aform").ajaxForm({
+                    success: function (data) {
+                        var table = '<thread id="test5">' +
+                            '    <colgroup id="hz">          ' +
+                            '        <col width="12.5%">     ' +
+                            '        <col width="12.5%">     ' +
+                            '        <col width="12.5%">     ' +
+                            '        <col width="12.5%">     ' +
+                            '        <col width="12.5%">     ' +
+                            '        <col width="12.5%">     ' +
+                            '        <col width="12.5%">     ' +
+                            '        <col width="12.5%">     ' +
+                            '    </colgroup>                 ' +
+                            '    <tbody>                     ' +
+                            '        <tr>                    ' +
+                            '            <th>년도</th>       ' +
+                            '            <th>학기</th>       ' +
+                            '            <th>신청학점</th>    ' +
+                            '            <th>총점</th>       ' +
+                            '            <th>평점</th>       ' +
+                            '            <th>백분율</th>      ' +
+                            '            <th>학과석차</th>    ' +
+                            '            <th>학사경고</th>    ' +
+                            '        </tr>                   ' +
+                            ' </thread>' +
+                            '    </tbody>                    ' +
+                            '    <tbody id="rank_by_yearhakgi">                     ' +
+                            '    </tbody>                    ';
+
+                        $("#rank_by_yearhakgi").html('');
+                        $("#test3").html(table);
+                        for (let i = 0; i < data.length; ++i) {
+                            $("#rank_by_yearhakgi").append("<tr><td>"
+                                + data[i].value['YEAR'] + "</td><td>" +
+                                data[i].value['SEMESTER'] + "</td><td>" +
+                                data[i].value['CREDIT'] + "</td><td>" +
+                                data[i].value['TOTALSCORE'] + "</td><td>" +
+                                data[i].value['GRADE'] + "</td><td>" +
+                                data[i].value['PERCENT'] + "</td><td>" +
+                                data[i].value['ROWNUM'] + " / " + data[i].value['TS'] + "</td><td>" +
+                                data[i].value['PROBATION'] + "</td></tr>");
+                        }
+                    }
+                });
+
+                $('#aform').submit();
+            });
+        </script>
+</body>
+
+</html>

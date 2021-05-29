@@ -12,14 +12,14 @@ using Tool;
 
 namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
     [LoginActionFilter]
-    public class NoticeController : Controller {
-        private readonly ILogger<NoticeController> _logger;
+    public class StandInqireController : Controller {
+        private readonly ILogger<StandInqireController> _logger;
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
         private readonly CodeMngTool _codeMngTool;
         private readonly FileMngTool _fileMngTool;
 
-        public NoticeController(ILogger<NoticeController> logger, AppSoftDbContext context) {
+        public StandInqireController(ILogger<StandInqireController> logger, AppSoftDbContext context) {
             _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);

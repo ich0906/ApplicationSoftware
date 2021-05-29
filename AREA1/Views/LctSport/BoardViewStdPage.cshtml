@@ -11,7 +11,8 @@
             </div>
         </div>
         <div></div>
-        @for (int i = 0; i < ViewBag.fileCount; ++i) {
+        @for (int i = 0; i < ViewBag.fileCount; ++i)
+        {
             <div class="board_viewfile"><span>파일 : </span><a href="#" onclick="javascript: sendFileId('/File/DownloadDocument', '@ViewBag.fileList[i]["FILE_ID"]')"> @ViewBag.fileList[i]["FILE_NAME"].@ViewBag.fileList[i]["FILE_EXTSN"]</a></div>
         }
         <div class="board_view_content">
@@ -21,10 +22,12 @@
                 </div>
             </div>
         </div>
-        @if (ViewData["pageNm"].Equals("강의 묻고답하기") || ViewData["pageNm"].Equals("강의 자료실")) {
+        @if (ViewData["pageNm"].Equals("강의 묻고답하기") || ViewData["pageNm"].Equals("강의 자료실"))
+        {
             <div class="board_view_comment">
 
-                @for (int i = 0; i < ViewBag.commentList.Count; i++) {
+                @for (int i = 0; i < ViewBag.commentList.Count; i++)
+                {
                     <ul class="board_viewcomment">
                         <li class="name first">@ViewBag.commentList[i]["NAME"]</li>
                         <li class="text first">
@@ -39,7 +42,8 @@
         }
     </div>
     <div class="btnCon">
-        @if (ViewData["fs_at"].Equals("Y")) {
+        @if (ViewData["fs_at"].Equals("Y"))
+        {
             <button type="button" class="btn2 btn-gray">수정</button>
             <button type="button" class="btn2 btn-gray">삭제</button>
         }
@@ -48,17 +52,23 @@
     <div class="next_prev_box">
         <dl>
             <dt><em>이전 글</em></dt>
-            @if (!ViewBag.result["PREV_ID"].Equals("")) {
+            @if (!ViewBag.result["PREV_ID"].Equals(""))
+            {
                 <dd style="cursor: pointer;" onclick="goDetail('@(ViewBag.result["PREV_ID"])');"> @ViewBag.result["PREV_TITLE"]</dd>
-            } else {
+            }
+            else
+            {
                 <dd> 이전글이 없습니다.</dd>
             }
         </dl>
         <dl>
             <dt><em>다음 글</em></dt>
-            @if (!ViewBag.result["NEXT_ID"].Equals("")) {
+            @if (!ViewBag.result["NEXT_ID"].Equals(""))
+            {
                 <dd style="cursor: pointer;" onclick="goDetail('@(ViewBag.result["NEXT_ID"])');"> @ViewBag.result["NEXT_TITLE"]</dd>
-            } else {
+            }
+            else
+            {
                 <dd> 다음글이 없습니다.</dd>
             }
         </dl>
