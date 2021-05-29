@@ -12,10 +12,6 @@
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\LRN_RESULT\STAND_INQIRE\" />
-  </ItemGroup>
-
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>
