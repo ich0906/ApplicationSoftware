@@ -1,20 +1,5 @@
 ﻿@Html.Partial("~/Views/Shared/LctSportHeader.cshtml")
 
-<form id="__form3__" method="post" style="display: none;">
-    <input id="filename" type="hidden" name="file_id" />
-</form>
-
-<script>
-    function sendFileId(url, fileId) {
-        var form = document.getElementById("__form3__");
-        var fName = document.getElementById("filename");
-        form.action = url;
-        form.method = "post";
-        fName.setAttribute("value", fileId);
-        form.submit();
-    }
-</script>
-
 <!-- content -->
 <div id="appModule" class="card card-body mb-4 content">
     <div><p class="contenttitle">@ViewData["pageNm"]</p></div>
