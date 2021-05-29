@@ -1,167 +1,438 @@
-﻿using AREA1.Data;
-using AREA1.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Tool;
-using System.IO;
-using System.Web;
-using System.Text;
-using System;
-using System.Security.Cryptography;
+﻿@Html.Partial("~/Views/Shared/LctSportHeader.cshtml")
 
-namespace Tool {
-    public class FileMngTool {
-        private readonly AppSoftDbContext _context;
-        private readonly CommonDao _commonDao;
+<script src="/js/polyfill.min.js?features=Array.prototype.find,Intl"></script>
 
-        public FileMngTool(AppSoftDbContext context) {
-            _context = context;
-            _commonDao = new CommonDao(context);
-        }
+<link rel="stylesheet" href="/css/v-calendar.min.css">
+<script src="/js/v-calendar.min.js"></script>
 
+<!-- content -->
+<div id="appModule" class="card card-body mb-4 content">
+    <div><p class="contenttitle">@ViewData["pageNm"]</p></div>
+    <div class="board_write_form">
+        <dl>
+            <dt>
+                제목
+            </dt>
+            <dd><input type="text" id="title" v-model="title" class="es" style="width: 100%;"></dd>
+        </dl>
+        <dl>
+            <dt>
+                제출기한
+            </dt>
+            <dd>
+                <!--  데스크톱 화면 시작 -->
+                <div class='tablelistbox' style="float:left; margin-right:16px;">
+                    <v-date-picker :min-date="new Date()" v-model="sdate" style="float:left;"></v-date-picker>
+                    &nbsp;
+                    <select v-model="stimeHour" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="stimeMin" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;~
+                </div>
 
-        public string Uploads(IFormCollection param) {
-            string fileName = "";
-            string fileEXTSN = "";
-            string docId;
-            if (param["attachId"].Equals("")) docId = getRandomString();
-            else docId = param["attachId"];
-            DateTime timeNow = DateTime.Now;
+                <!-- 모바일 화면 시작 -->
+                <div class='mtablelistbox'>
+                    <v-date-picker :min-date="new Date()" v-model="sdate" style="float:left;width: 90px;"></v-date-picker>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <select v-model="stimeHour" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="stimeMin" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                </div>
+                <!--  데스크톱 화면 시작 -->
+                <div class='tablelistbox' style="float:left; margin-right:16px;">
+                    <v-date-picker :min-date="new Date()" v-model="edate" style="float:left;"></v-date-picker>
+                    &nbsp;
+                    <select v-model="etimeHour" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="etimeMin" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                </div>
 
-            removeFile(docId);
+                <!-- 모바일 화면 시작 -->
+                <div class='mtablelistbox'>
+                    <v-date-picker :min-date="new Date()" v-model="edate" style="float:left;width: 90px;"></v-date-picker>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <select v-model="etimeHour" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="etimeMin" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                추가제출기한
+            </dt>
+            <dd>
+                <!--  데스크톱 화면 시작 -->
+                <div class='tablelistbox' style="float:left; margin-right:16px;">
+                    <v-date-picker :min-date="new Date()" v-model="adit_sdate" style="float:left;"></v-date-picker>
+                    &nbsp;
+                    <select v-model="adit_stimeHour" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="adit_stimeMin" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;~
+                </div>
 
-            foreach (IFormFile file in param.Files) {
-                fileName = file.FileName;
-                string[] result = fileName.Split(new string[] { "." }, System.StringSplitOptions.None);
-                //파일명 해쉬
-                string sSourceData = fileName + DateTime.Now;
-                byte[] tmpSource;
-                byte[] tmpHash;
-                tmpSource = UnicodeEncoding.Unicode.GetBytes(sSourceData);
-                tmpHash = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
+                <!-- 모바일 화면 시작 -->
+                <div class='mtablelistbox'>
+                    <v-date-picker :min-date="new Date()" v-model="adit_sdate" style="float:left;width: 90px;"></v-date-picker>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <select v-model="adit_stimeHour" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="adit_stimeMin" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0' + n ">
+                            {{ n > 9 ? n : '0' + n }}
+                        </option>
+                    </select>
+                </div>
+                <!--  데스크톱 화면 시작 -->
+                <div class='tablelistbox' style="float:left; margin-right:16px;">
+                    <v-date-picker :min-date="new Date()" v-model="adit_edate" style="float:left;"></v-date-picker>
+                    &nbsp;
+                    <select v-model="adit_etimeHour" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="adit_etimeMin" class="form-control form-control-sm" style="width: 80px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                </div>
 
-                string fileHash = BitConverter.ToString(tmpHash);//해쉬
-                string fileNameSplit = "";
-
-                for(int i =0; i<result.Length- 1; i++) {
-                                               fileNameSplit +=result[i];
-                                               if (i < result.Length - 2) {
-                        fileNameSplit += ".";//확장자뗀이름
-                    }
-                }
-                fileEXTSN = result[result.Length-1];//확장자
-
-                string FileTimeNow = timeNow.ToString("yyyy-MM-dd HH:mm:ss");//업로드시각
-
-                //속성마다 값 넣어주기
-                Dictionary<string, string> files = new Dictionary<string, string>();
-                files.Add("file_id", fileHash);
-                files.Add("file_name", fileNameSplit);
-                files.Add("file_extsn", fileEXTSN);
-                files.Add("upload_time", FileTimeNow);
-                files.Add("doc_id", docId);
-
-                //INSERT 쿼리
-                using var transaction = _context.Database.BeginTransaction();
-
-                string query = "INSERT INTO OP_FILE VALUES(@file_id:VARCHAR,"
-                                                   + "@file_name:VARCHAR,"
-                                                   + "@file_extsn:VARCHAR,"
-                                                   + "@upload_time:VARCHAR,"
-                                                   + "@doc_id:VARCHAR"
-                                                   + ")";
-                _commonDao.Insert(query, files);
-
-                transaction.Commit();
-
-                //폴더에 파일쓰기
-                if (file.Length > 0) {
-                    string folder = System.IO.Directory.GetCurrentDirectory() + @"\wwwroot\upload";
-                    string filePath = Path.Combine(folder, fileHash);
-
-                    using (Stream fileStream = new FileStream(filePath, FileMode.Create)) {
-                        file.CopyTo(fileStream);
-
-                        fileStream.Flush();
-                    }
-                }
-            }
-            return docId;
-            //Response.WriteAsync("<script language=\"javascript\">alert('" + fileName + " is uploaded!');</script>");
-            //Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
-
-        }
-        public string Downloads(IFormCollection param) {
-            var fileData = new Dictionary<string, string>();
-            //HTML input값과 동일한 해쉬값을 가진 튜플에서 파일네임과 확장자 가져오기
-            using var transaction = _context.Database.BeginTransaction();
-
-            //string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM OP_FILE WHERE FILE_ID = @file_id:VARCHAR";
-            string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM OP_FILE WHERE FILE_ID = '"+param["file_id"]+"'";
-            fileData = _commonDao.SelectOne(query, param);
-
-            transaction.Commit();
-
-            //확장자 붙여서 원래 이름 만들어주기
-            string fileID = "";
-            string fileName = "";
-            string tmpName = "";
-            string tmpEXTSN = "";
-
-            foreach (KeyValuePair<string, string> keyValues in fileData) {
-                if (fileData.TryGetValue("FILE_ID", out string id))
-                    fileID = id;
-                if (fileData.TryGetValue("FILE_EXTSN", out string extsn))
-                    tmpEXTSN = extsn;
-                if (fileData.TryGetValue("FILE_NAME", out string name))
-                    tmpName = name;
-            }
-            fileName = tmpName + "." + tmpEXTSN;
-
-            //Response.WriteAsync("<script language=\"javascript\">alert('" + fileName + " is downloaded!');</script>");
-            //Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
-
-            //파일 다운로드(카피)
-            string sourcePath = System.IO.Directory.GetCurrentDirectory() + @"\wwwroot\upload";
-            string targetPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-
-            string sourceFile = System.IO.Path.Combine(sourcePath, fileID);
-            string destFile = System.IO.Path.Combine(targetPath, fileName);
-
-            System.IO.Directory.CreateDirectory(targetPath);
-            System.IO.File.Copy(sourceFile, destFile, true);
-
-            return fileName;
-        }
-
-        public void removeFile(string docId) {
-            string query = "SELECT FILE_ID FROM OP_FILE "
-                + "WHERE DOC_ID='" + docId + "'";
-
-            string uploadFolder = System.IO.Directory.GetCurrentDirectory() + @"\wwwroot\upload";
-            string fName;
-            var willDeleteList = _commonDao.SelectList(query);
-            for (int i = 0; i < willDeleteList.Count; ++i) {
-                fName = Path.Combine(uploadFolder, willDeleteList[i]["FILE_ID"]);
-                File.Delete(fName);
-            }
-
-            query = "DELETE FROM OP_FILE"
-                + " WHERE DOC_ID='" + docId + "'";
-
-            using var transaction2 = _context.Database.BeginTransaction();
-
-            _commonDao.Delete(query);
-
-            transaction2.Commit();
-        }
-
-        public string getRandomString() {
-            DateTime dt = DateTime.Now;
-            return dt.ToString("MMddhhmmss");
-        }
-    }
+                <!-- 모바일 화면 시작 -->
+                <div class='mtablelistbox'>
+                    <v-date-picker :min-date="new Date()" v-model="adit_edate" style="float:left;width: 90px;"></v-date-picker>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <select v-model="adit_etimeHour" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 23" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                    &#58;
+                    <select v-model="adit_etimeMin" class="form-control form-control-sm" style="width: 75px">
+                        <option value="00">00</option>
+                        <option v-for="n in 59" v-bind:value="n > 9 ? n : '0'+n ">
+                            {{n > 9 ? n : '0'+n }}
+                        </option>
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                내용/주의사항
+            </dt>
+            <dd>
+                <textarea id="content" class="es" style="display: none;"></textarea>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                제출양식
+            </dt>
+            <dd><input type="text" id="present_form" v-model="present_form" class="es" style="width: 100%;"></dd>
+        </dl>
+        <dl>
+            <dt>
+                파일용량제한
+            </dt>
+            <dd><input type="text" id="file_cpcty_lmt" v-model="file_cpcty_lmt" class="es" style="width: 97%;"> MB</dd>
+        </dl>
+        <dl>
+            <dt>
+                파일 업로드
+            </dt>
+            <dd>
+                <file-upload ref="attach" multiple="true" :storage-id="storageId" :attach-id="atchFileId" params="{ 'masterNo' : '5' }" @@upload-complete="uploadComplete"></file-upload>
+            </dd>
+        </dl>
+    </div>
+    <div class='btnCon'>
+        @if (ViewData["command"].Equals("UPDATE")) {
+@:<button type="button" class="btn2 btn-darkpurple" @@click="saveData()">수정</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+} else {
+@:<button type="button" class="btn2 btn-darkpurple" @@click="saveData()">등록</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 }
+        <button type="button" class="btn2 btn-gray" @@click="goList()">목록</button>
+    </div>
+</div>
+<!-- content -->
+<script>
+
+    let appModule = new Vue({
+        el: '#appModule',
+        data: {
+            selectYearhakgi: null,
+            selectSubj: null,
+            @if (ViewData["command"].Equals("UPDATE")) {
+                @: title: '@ViewBag.result["TITLE"]',
+                @: content: '@Html.Raw(@ViewBag.result["CONTENT"])',
+                @: present_form: '@ViewBag.result["PRESENT_FORM"]',
+                @: file_cpcty_lmt: '@ViewBag.result["FILE_CPCTY_LMT"]',
+                @:task_id: '@ViewBag.result["TASK_SEQ"]',
+                @:sdate: new Date('@ViewBag.result["SDATE"]'),
+                @:stimeHour: '@ViewBag.result["STIMEHOUR"]',
+                @:stimeMin: '@ViewBag.result["STIMEMIN"]',
+                @:edate: new Date('@ViewBag.result["EDATE"]'),
+                @:etimeHour: '@ViewBag.result["ETIMEHOUR"]',
+                @:etimeMin: '@ViewBag.result["ETIMEMIN"]',
+                @:adit_sdate: new Date('@ViewBag.result["ADIT_SDATE"]'),
+                @:adit_stimeHour: '@ViewBag.result["ADIT_STIMEHOURE"]',
+                @:adit_stimeMin: '@ViewBag.result["ADIT_STIMEMIN"]',
+                @:adit_edate: new Date('@ViewBag.result["ADIT_EDATE"]'),
+                @:adit_etimeHour: '@ViewBag.result["ADIT_ETIMEHOUR"]',
+                @:adit_etimeMin: '@ViewBag.result["ADIT_ETIMEMIN"]',
+                @: atchFileId: '@ViewBag.result["DOC_ID"]',
+            } else {
+                @: title: null,
+                @: content: null,
+                @: present_form: '',
+                @: file_cpcty_lmt: '',
+                @:sdate: '',
+                @:stimeHour: '00',
+                @:stimeMin: '00',
+                @:edate: '',
+                @:etimeHour: '00',
+                @:etimeMin: '00',
+                @:adit_sdate: '',
+                @:adit_stimeHour: '00',
+                @:adit_stimeMin: '00',
+                @:adit_edate: '',
+                @:adit_etimeHour: '00',
+                @:adit_etimeMin: '00',
+                @: atchFileId: null,
+            }
+            storageId: '1000'
+        },
+        mounted: function () {
+            @if (ViewData["command"].Equals("INSERT")) {
+                @:this.sdate = moment().format('YYYY-MM-DD');
+                @:this.adit_sdate = moment().format('YYYY-MM-DD');
+                @:this.edate = moment().format('YYYY-MM-DD');
+                @:this.adit_edate = moment().format('YYYY-MM-DD');
+            }
+            let self = this;
+            appEvents.$on('eventSubjChange', function (param) {
+
+            self.selectYearhakgi = param.selectYearhakgi;
+            self.selectSubj = param.selectSubj;
+
+            });
+        },
+        methods: {
+            saveData: function () {
+                this.$refs.attach.upload();
+            },
+            uploadComplete: function (attachId) {
+                this.atchFileId = attachId;
+
+
+                oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+
+
+                this.content = $('#content').val();
+                this.present_form = $('#present_form').val();
+                this.file_cpcty_lmt = $('#file_cpcty_lmt').val();
+                this.content = this.content.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+
+                if (this.title.trim() == "") {
+                    alert('제목을 입력하세요');
+                    this.$refs.title.focus();
+                    return;
+                }
+
+                if (this.content.trim() == "") {
+                    alert('내용을 입력하세요');
+                    this.$refs.content.focus();
+                    return;
+                }
+                if (this.getBytes(this.title) > 100) {
+                    alert('제목은 한글 기준 50자를 초과하지 못합니다.');
+                    this.$refs.title.focus();
+                    return;
+                }
+
+                if (this.getBytes(this.content) > 600) {
+                    alert('내용은 한글 기준 300자를 초과하지 못합니다.');
+                    this.$refs.content.focus();
+                    return;
+                }
+
+                if (isNaN(this.file_cpcty_lmt)) {
+                    alert('숫자로 입력해 주세요.');
+                    $("#file_cpcty_lmt").focus();
+                    return;
+                }
+
+
+
+                axios.post('@ViewBag.Insert',
+                    {
+                        'selectSubj': this.$data.selectSubj,
+                        'title': this.$data.title,
+                        'content': this.$data.content,
+                        'sdate': this.$data.sdate.format("yyyyMMdd") + this.$data.stimeHour + this.$data.stimeMin,
+                        'edate': this.$data.edate.format("yyyyMMdd") + this.$data.etimeHour + this.$data.etimeMin,
+                        'adit_sdate': this.$data.adit_sdate.format("yyyyMMdd") + this.$data.adit_stimeHour + this.$data.adit_stimeMin,
+                        'adit_edate': this.$data.adit_edate.format("yyyyMMdd") + this.$data.adit_etimeHour + this.$data.adit_etimeMin,
+                        'atchFileId': this.$data.atchFileId,
+                        'presentForm': this.$data.present_form,
+                        'fileCpctyLlmt': this.$data.file_cpcty_lmt,
+                        @if (ViewData["command"].Equals("UPDATE")) {
+                            @:'taskId': this.$data.task_id
+                        }
+                    })
+                    .then(function (response) {
+                        @if (ViewData["command"].Equals("UPDATE")) {
+                            @:alert("수정되었습니다.");
+                            @:goDetail(@ViewBag.result["TASK_SEQ"]);
+                        } else {
+                            @:alert("등록되었습니다.");
+                            @:linkUrl('@ViewBag.SelectPageList', this.$data);
+                        }
+                    });
+            },
+            getBytes: function (str) {
+                var length = 0;
+                for (var i = 0; i < str.length; i++) {
+                    length += (str.charCodeAt(i) > 128) ? 2 : 1;
+                }
+                return length;
+            }
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    //SmartEditor :항상 Textarea보다 아래에 이 스크립트가 있어야 합니다.
+    var oEditors = [];
+    var oContents = new Array(1);
+    oContents[0] = "content";
+
+    $(function () {
+        @if (ViewData["command"].Equals("UPDATE")) {
+            @:$("#title").val('@ViewBag.result["TITLE"]');
+            @:$("#content").html('@Html.Raw(@ViewBag.result["CONTENT"])');
+        }
+
+        $(".btnCon").find("button").eq(1).click(function () {
+            $("#__form__").attr("action", "@ViewBag.SelectPageList");
+            $("#__form__").submit();
+        });
+
+        $("[name=selectSubj]").change(function () {
+            $("#__form__").attr("action", "@ViewBag.SelectPageList");
+            $("#__form__").submit();
+        });
+
+        $("[name=selectYearhakgi]").change(function () {
+            $("[name=selectSubj]").trigger('change');
+        });
+    });
+
+    function goDetail(task_seq) {
+        var input = "<input type='hidden' name='task_id' />";
+        $("#__form__").append(input);
+
+        $("[name=task_id]").val(task_seq);
+
+        $("#__form__").attr("action", "@ViewBag.Select");
+        $("#__form__").submit();
+    }
+
+    Date.prototype.format = function (f) {
+        if (!this.valueOf()) return " ";
+
+        var weekName = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+        var d = this;
+
+        return f.replace(/(yyyy|yy|MM|dd|E|hh|mm|ss|a\/p)/gi, function ($1) {
+            switch ($1) {
+                case "yyyy": return d.getFullYear();
+                case "yy": return (d.getFullYear() % 1000).zf(2);
+                case "MM": return (d.getMonth() + 1).zf(2);
+                case "dd": return d.getDate().zf(2);
+                case "E": return weekName[d.getDay()];
+                case "HH": return d.getHours().zf(2);
+                case "hh": return ((h = d.getHours() % 12) ? h : 12).zf(2);
+                case "mm": return d.getMinutes().zf(2);
+                case "ss": return d.getSeconds().zf(2);
+                case "a/p": return d.getHours() < 12 ? "오전" : "오후";
+                default: return $1;
+            }
+        });
+    };
+
+    String.prototype.string = function (len) { var s = '', i = 0; while (i++ < len) { s += this; } return s; };
+    String.prototype.zf = function (len) { return "0".string(len - this.length) + this; };
+    Number.prototype.zf = function (len) { return this.toString().zf(len); };
+
+</script>
+
+<script type="text/javascript" src="~/lib/smarteditor/HuskyEZCreator.js" charset="utf-8"></script>
+<script type="text/javascript" src="~/lib/smarteditor/smarteditor_basic.js" charset="utf-8"></script>
+        </div>
+    </div>
+
+@Html.Partial("~/Views/Shared/LctSportFooter.cshtml")
