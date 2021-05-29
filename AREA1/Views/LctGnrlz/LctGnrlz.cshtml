@@ -1,5 +1,4 @@
 ﻿@Html.Partial("~/Views/Shared/LctSportHeader.cshtml")
-
 <form id="__form2__" method="post" style="display: none;">
     <input type="hidden" name="selectedGrcode" />
     <input id="yearhakgi" type="hidden" name="selectedYearhakgi" />
@@ -7,7 +6,6 @@
     <input id="_BBS_ID" type="hidden" name="BBS_ID" />
     <input type="hidden" name="page" value="@ViewBag.param["page"]" />
 </form>
-
 <script>
     function page_move(url, acdmc_no, yearhakgi, bbs_id) {
         var form = document.getElementById("__form2__");
@@ -22,7 +20,6 @@
         form.submit();
     }
 </script>
-
 <div id="appModule">
     <div class="row">
         <div class="col-md-6">
@@ -32,12 +29,17 @@
                 </div>
                 <div class="board_notice">
                     <dl class="notice_list_top">
-                        @for (int i = 0; i < 4; ++i) {
-                            if (i < ViewBag.noticeCount) {
+                        @for (int i = 0; i < 4; ++i)
+                        {
+                            if (i < ViewBag.noticeCount)
+                            {
+                                <dt><p><a href="#" onclick="javascript: page_move('/Notice/SelectNotice', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI', '@ViewBag.noticeList[i]["BBS_ID"]')">@ViewBag.noticeList[i]["TITLE"]</a></p> <span class="date">@ViewBag.noticeList[i]["REGIST_DT"]</span></dt>
                                 <dt><p><a href="#" onclick="javascript: page_move('/Notice/SelectNotice', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI', '@ViewBag.noticeList[i]["BBS_ID"]')">@ViewBag.noticeList[i]["TITLE"]</a></p> <span class="date">@ViewBag.noticeList[i]["REGIST_DT"].Split(' ')[0]</span></dt>
- } else {
+                            }
+                            else
+                            {
                                 <dt><p><a href="#"></a></p> <span class="date"></span></dt>
-}
+                            }
                         }
                     </dl>
                 </div>
@@ -62,7 +64,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div> <div class="row">
@@ -150,16 +151,13 @@
     </div> <form id="viewForm" name="viewForm" method="post"><input id="grcode" name="grcode" type="hidden"><input id="subj" name="subj" type="hidden"><input id="year" name="year" type="hidden"><input id="hakgi" name="hakgi" type="hidden"><input id="bunban" name="bunban" type="hidden"><input id="module" name="module" type="hidden"><input id="lesson" name="lesson" type="hidden"><input id="oid" name="oid" type="hidden"><input id="ptime" name="ptime" type="hidden"><input id="weeklyseq" name="weeklyseq" type="hidden"><input id="weeklysubseq" name="weeklysubseq" type="hidden"><input id="totalTime" name="totalTime" type="hidden"><input id="prog" name="prog" type="hidden"><input id="profYN" name="profYN" type="hidden" value="N"><input id="previewYN" name="previewYN" type="hidden" value="N"></form>
 </div>
             </div>
-
         </div>
-
 <script type="text/javascript">
     $(function () {
         $("[name=selectSubj]").change(function () {
             $("#__form__").attr("action", "/LctGnrlz/LctGnrlz");
             $("#__form__").submit();
         });
-
         $("[name=selectYearhakgi]").change(function () {
             $("[name=selectSubj]").trigger('change');
         });
