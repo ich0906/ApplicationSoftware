@@ -172,7 +172,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             if (ViewData["fs_at"].Equals("N")) {
                 sql = $"SELECT TASK_SEQ, REGISTER, DOC_ID, TITLE, CONTENT, PRSENTR_AT, REGIST_DT FROM OP_TASK_PRSENTR WHERE REGISTER = '{userInfo.user_id}' AND TASK_SEQ = @task_id:VARCHAR";
                 var resultPrsentr = _commonDao.SelectOne(sql, Request.Form);
-                if(Request.Form.ContainsKey("prsentr_at") && Request.Form["prsentr_at"] == "N") {
+                if (Request.Form.ContainsKey("prsentr_at") && Request.Form["prsentr_at"] == "N") {
                     resultPrsentr["PRSENTR_AT"] = "N";
                 }
 
@@ -191,7 +191,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                 ViewBag.ResultPrsentr = resultPrsentr;
             }
 
-            
+
 
             ViewBag.result = result;
             ViewBag.param = param;
@@ -201,7 +201,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             ViewBag.Delete = "/Task/DeleteTask";
             ViewBag.Prsentr = "/Task/PrsentrTask";
 
-           
+
             return View("/Views/LctSport/Task/TaskViewPage.cshtml");
         }
 
@@ -393,7 +393,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
 
             string query = "";
 
-            if(userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
+            if (userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
                 if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
                     Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
                     Response.WriteAsync("<script language=\"javascript\">window.location=\"/Task/SelectPageListTask\"</script>");
@@ -427,7 +427,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             query = $"SELECT COUNT(*) AS CNT FROM OP_TAKES A NATURAL JOIN OP_SECTION B WHERE A.ID = '{userInfo.user_id}' AND ACDMC_NO = '" + Request.Form["selectedSubj"] + "'";
 
             // 해당 강의를 수강하는 학생이 아니라면 
-            if(!_commonDao.SelectOne(query)["CNT"].Equals("1")) {
+            if (!_commonDao.SelectOne(query)["CNT"].Equals("1")) {
                 resultCode = "false";
             }
 
@@ -447,8 +447,8 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                 if (_commonDao.Insert(query, Request.Form) == 0) {
                     resultCode = "false";
                 }
-            // 한번 제출한 과제는 insert 시 에러가 나기 때문에 catch 문으로 받고 업데이트문으로 바꾸어준다.
-            } catch(OracleException e) {
+                // 한번 제출한 과제는 insert 시 에러가 나기 때문에 catch 문으로 받고 업데이트문으로 바꾸어준다.
+            } catch (OracleException e) {
                 query = "UPDATE OP_TASK_PRSENTR SET " +
                    "DOC_ID =  @doc_id:VARCHAR " +
                    ", TITLE = @prsentr_title:VARCHAR " +

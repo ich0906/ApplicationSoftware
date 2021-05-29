@@ -32,13 +32,12 @@
                 </td>
             </tr>
             @if (ViewData["fs_at"].Equals("N")) {
-                <tr>
-                    <th>상태</th>
-                    <td class="lft">
-                        미제출
-                    </td>
-                </tr>
-            }
+<tr>
+    <th>상태</th>
+    <td class="lft">
+        미제출
+    </td>
+</tr>            }
             <tr>
                 <th>내용/주의사항</th>
                 <td colspan="5" class="lft">@Html.Raw(@ViewBag.result["CONTENT"])</td>
@@ -53,8 +52,7 @@
                 <th>첨부파일</th>
                 <td colspan="5" class="lft">
                     @for (int i = 0; i < ViewBag.fileCount; ++i) {
-                        <div class="board_viewfile"><a href="#" onclick="javascript: sendFileId('/File/DownloadDocument', '@ViewBag.fileList[i]["FILE_ID"]')"> @ViewBag.fileList[i]["FILE_NAME"].@ViewBag.fileList[i]["FILE_EXTSN"]</a></div>
-                    }
+        <div class="board_viewfile"><a href="#" onclick="javascript: sendFileId('/File/DownloadDocument', '@ViewBag.fileList[i]["FILE_ID"]')"> @ViewBag.fileList[i]["FILE_NAME"].@ViewBag.fileList[i]["FILE_EXTSN"]</a></div>}
                 </td>
             </tr>
             <tr>
@@ -64,72 +62,66 @@
         </tbody>
     </table>
     @if (ViewData["fs_at"].Equals("N") && (ViewBag.Result["B1"].Equals("Y") || ViewBag.Result["B2"].Equals("Y")) && !ViewBag.ResultPrsentr["PRSENTR_AT"].Equals("Y")) {
-        <div class="contsubtitle icon">과제제출</div>
-        <table class="AType">
-            <colgroup>
-                <col style="width: 20%;">
-                <col>
-            </colgroup>
-            <tbody>
-                <tr>
-                    <th>파일</th>
-                    <td>
-                        <form id="fform" enctype="multipart/form-data" action="/File/UserUploadFile" method="POST">
-                            <input type="hidden" name="attachId" value="@ViewBag.ResultPrsentr["DOC_ID"]"/>
-                            <div><input id="prsentr_file" name="prsentr_file" type="file" multiple="" accept="*/*" style="width: 100%;" ></div>
-                        </form>
-                    </td>
-                </tr>
-                <tr>
-                    <th>제목</th>
-                    <td><input id="prsentr_title" type="text" size="50" value="@ViewBag.ResultPrsentr["TITLE"]"></td>
-                </tr>
-                <tr>
-                    <th>내용</th>
-                    <td><textarea cols="10" rows="3" id="textarea">@ViewBag.ResultPrsentr["CONTENT"]</textarea></td>
-                </tr>
-            </tbody>
-        </table>
-    } else if (ViewData["fs_at"].Equals("N") && ViewBag.ResultPrsentr["PRSENTR_AT"].Equals("Y")) {
-        <div class="contsubtitle icon">과제제출</div>
-        <table class="tablegw">
-            <colgroup>
-                <col style="width: 20%;">
-                <col>
-            </colgroup>
-            <tbody>
-                <tr>
-                    <th> 파일</th>
-                    <td class="lft">
-                        @for (int i = 0; i < ViewBag.fileCount2; ++i) {
-                            <div class="board_viewfile"><a href="#" onclick="javascript: sendFileId('/File/DownloadDocument', '@ViewBag.fileList2[i]["FILE_ID"]')"> @ViewBag.fileList2[i]["FILE_NAME"].@ViewBag.fileList2[i]["FILE_EXTSN"]</a></div>
-                        }
-                    </td>
-                </tr>
-                <tr>
-                    <th>제목</th>
-                    <td class="lft">@ViewBag.ResultPrsentr["TITLE"]</td>
-                </tr>
-                <tr>
-                    <th>내용</th>
-                    <td class="lft">@Html.Raw(@ViewBag.ResultPrsentr["CONTENT"].Replace("\n", "</br>"))</td>
-                </tr>
-            </tbody>
-        </table>
-    }
+<div class="contsubtitle icon">과제제출</div>
+                <table class="AType">
+                    <colgroup>
+                        <col style="width: 20%;">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th>파일</th>
+                            <td>
+                                <form id="fform" enctype="multipart/form-data" action="/File/UserUploadFile" method="POST">
+                                    <input type="hidden" name="attachId" value="@ViewBag.ResultPrsentr["DOC_ID"]" />
+                                    <div><input id="prsentr_file" name="prsentr_file" type="file" multiple="" accept="*/*" style="width: 100%;"></div>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>제목</th>
+                            <td><input id="prsentr_title" type="text" size="50" value="@ViewBag.ResultPrsentr["TITLE"]"></td>
+                        </tr>
+                        <tr>
+                            <th>내용</th>
+                            <td><textarea cols="10" rows="3" id="textarea">@ViewBag.ResultPrsentr["CONTENT"]</textarea></td>
+                        </tr>
+                    </tbody>
+                </table> } else if (ViewData["fs_at"].Equals("N") && ViewBag.ResultPrsentr["PRSENTR_AT"].Equals("Y")) {
+                <div class="contsubtitle icon">과제제출</div>
+                                <table class="tablegw">
+                                    <colgroup>
+                                        <col style="width: 20%;">
+                                        <col>
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th> 파일</th>
+                                            <td class="lft">
+                                                @for (int i = 0; i < ViewBag.fileCount2; ++i) {
+                                <div class="board_viewfile"><a href="#" onclick="javascript: sendFileId('/File/DownloadDocument', '@ViewBag.fileList2[i]["FILE_ID"]')"> @ViewBag.fileList2[i]["FILE_NAME"].@ViewBag.fileList2[i]["FILE_EXTSN"]</a></div>}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>제목</th>
+                                            <td class="lft">@ViewBag.ResultPrsentr["TITLE"]</td>
+                                        </tr>
+                                        <tr>
+                                            <th>내용</th>
+                                            <td class="lft">@Html.Raw(@ViewBag.ResultPrsentr["CONTENT"].Replace("\n", "</br>"))</td>
+                                        </tr>
+                                    </tbody>
+                                </table>}
     <div class="btnCon">
         @if (ViewData["fs_at"].Equals("N")) {
             if (!ViewBag.ResultPrsentr["PRSENTR_AT"].Equals("Y")) {
-                <button type="button" id="btn_assign" class="btn2 btn-gray">제출</button>
-                <button type="button" id="btn_clean" class="btn2 btn-gray">다시</button>
-            } else if(ViewBag.Result["B1"].Equals("Y") || ViewBag.Result["B2"].Equals("Y")) {
-            <button type="button" id="btn_modify" class="btn2 btn-gray">수정</button>
-            <button type="button" id="btn_delete" class="btn2 btn-gray">삭제</button>
-            }
-        } else {
-            <button type="button" id="btn_modify" class="btn2 btn-gray">수정</button>
-            <button type="button" id="btn_delete" class="btn2 btn-gray">삭제</button>
-        }
+<button type="button" id="btn_assign" class="btn2 btn-gray">제출</button>
+                    <button type="button" id="btn_clean" class="btn2 btn-gray">다시</button> } else if (ViewBag.Result["B1"].Equals("Y") || ViewBag.Result["B2"].Equals("Y")) {
+                    <button type="button" id="btn_modify" class="btn2 btn-gray">수정</button>
+                                        <button type="button" id="btn_delete" class="btn2 btn-gray">삭제</button> }
+                                                    } else {
+                                        <button type="button" id="btn_modify" class="btn2 btn-gray">수정</button>
+                                                        <button type="button" id="btn_delete" class="btn2 btn-gray">삭제</button>}
         <button type="button" class="btn2 btn-gray">목록</button>
     </div>
 </div>

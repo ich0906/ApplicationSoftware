@@ -1,5 +1,21 @@
 ﻿@Html.Partial("~/Views/Shared/LctSportHeader.cshtml")
 
+<form id="__form3__" method="post" style="display: none;">
+    <input id="filename" type="hidden" name="file_id" />
+</form>
+
+<script>
+    function sendFileId(url, fileId) {
+        alert("기존 파일을 삭제하고 새로 첨부파일을 업로드합니다.");
+        var form = document.getElementById("__form3__");
+        var fName = document.getElementById("filename");
+        form.action = url;
+        form.method = "post";
+        fName.setAttribute("value", fileId);
+        form.submit();
+    }
+</script>
+
 <!-- content -->
 <div id="appModule" class="card card-body mb-4 content">
     <div><p class="contenttitle">@ViewData["pageNm"]</p></div>
@@ -11,8 +27,7 @@
             </div>
         </div>
         <div></div>
-        @for (int i = 0; i < ViewBag.fileCount; ++i)
-        {
+        @for (int i = 0; i < ViewBag.fileCount; ++i) {
             <div class="board_viewfile"><span>파일 : </span><a href="#" onclick="javascript: sendFileId('/File/DownloadDocument', '@ViewBag.fileList[i]["FILE_ID"]')"> @ViewBag.fileList[i]["FILE_NAME"].@ViewBag.fileList[i]["FILE_EXTSN"]</a></div>
         }
         <div class="board_view_content">
@@ -22,28 +37,26 @@
                 </div>
             </div>
         </div>
-        @if (ViewData["pageNm"].Equals("강의 묻고답하기") || ViewData["pageNm"].Equals("강의 자료실"))
+        @if (ViewData["pageNm"].Equals("강의 묻고답하기") || ViewData["pageNm"].Equals("강의 자료실")) {
+    <div class="board_view_comment">
+
+        @for (int i = 0; i < ViewBag.commentList.Count; i++)
         {
-            <div class="board_view_comment">
-
-                @for (int i = 0; i < ViewBag.commentList.Count; i++)
-                {
-                    <ul class="board_viewcomment">
-                        <li class="name first">@ViewBag.commentList[i]["NAME"]</li>
-                        <li class="text first">
-                            <div>
-                                @Html.Raw(ViewBag.commentList[i]["CONTENTS"])
-                            </div><label><span style="color: rgb(2, 105, 202);">(@ViewBag.commentList[i]["REGIST_DT"])</span><button type="button" class="btn2 btn-white btnsmall" style="display: none;">삭제</button></label>
-                        </li>
-                    </ul>
-                }
-
-            </div>
+            <ul class="board_viewcomment">
+                <li class="name first">@ViewBag.commentList[i]["NAME"]</li>
+                <li class="text first">
+                    <div>
+                        @Html.Raw(ViewBag.commentList[i]["CONTENTS"])
+                    </div><label><span style="color: rgb(2, 105, 202);">(@ViewBag.commentList[i]["REGIST_DT"])</span><button type="button" class="btn2 btn-white btnsmall" style="display: none;">삭제</button></label>
+                </li>
+            </ul>
+        }
+        <ul class="board_viewcomment_input"><li><textarea name="cm" id="cm"></textarea><label><button type="button" class="btn2 btn-input">입력</button></label></li></ul>
+    </div>
         }
     </div>
     <div class="btnCon">
-        @if (ViewData["fs_at"].Equals("Y"))
-        {
+        @if (ViewData["fs_at"].Equals("Y")) {
             <button type="button" class="btn2 btn-gray">수정</button>
             <button type="button" class="btn2 btn-gray">삭제</button>
         }
@@ -52,23 +65,17 @@
     <div class="next_prev_box">
         <dl>
             <dt><em>이전 글</em></dt>
-            @if (!ViewBag.result["PREV_ID"].Equals(""))
-            {
+            @if (!ViewBag.result["PREV_ID"].Equals("")) {
                 <dd style="cursor: pointer;" onclick="goDetail('@(ViewBag.result["PREV_ID"])');"> @ViewBag.result["PREV_TITLE"]</dd>
-            }
-            else
-            {
+            } else {
                 <dd> 이전글이 없습니다.</dd>
             }
         </dl>
         <dl>
             <dt><em>다음 글</em></dt>
-            @if (!ViewBag.result["NEXT_ID"].Equals(""))
-            {
+            @if (!ViewBag.result["NEXT_ID"].Equals("")) {
                 <dd style="cursor: pointer;" onclick="goDetail('@(ViewBag.result["NEXT_ID"])');"> @ViewBag.result["NEXT_TITLE"]</dd>
-            }
-            else
-            {
+            } else {
                 <dd> 다음글이 없습니다.</dd>
             }
         </dl>
@@ -78,6 +85,16 @@
 
 <script type="text/javascript">
     $(function () {
+        // 입력 버튼
+        $(".board_view_comment").find("button").eq().click(function () {
+            var input = "<input type='hidden' name='bbs_id' />";
+            $("#__form__").append(input);
+
+            $("[name=bbs_id]").val(@ViewBag.result["BBS_ID"]);
+
+            $("#__form__").attr("action", "@ViewBag.Insert");
+            $("#__form__").submit();
+        });
         // 수정 버튼
         $(".btnCon").find("button").eq(0).click(function () {
             var input = "<input type='hidden' name='bbs_id' />";

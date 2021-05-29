@@ -46,13 +46,13 @@ namespace Tool {
                 string fileHash = BitConverter.ToString(tmpHash);//해쉬
                 string fileNameSplit = "";
 
-                for(int i =0; i<result.Length- 1; i++) {
+                for (int i = 0; i < result.Length - 1; i++) {
                     fileNameSplit += result[i];
                     if (i < result.Length - 2) {
                         fileNameSplit += ".";//확장자뗀이름
                     }
                 }
-                fileEXTSN = result[result.Length-1];//확장자
+                fileEXTSN = result[result.Length - 1];//확장자
 
                 string FileTimeNow = timeNow.ToString("yyyy-MM-dd HH:mm:ss");//업로드시각
 
@@ -71,8 +71,7 @@ namespace Tool {
                                                    + "@file_name:VARCHAR,"
                                                    + "@file_extsn:VARCHAR,"
                                                    + "@upload_time:VARCHAR,"
-                                                   + "@doc_id:VARCHAR,"
-                                                   + "''"
+                                                   + "@doc_id:VARCHAR"
                                                    + ")";
                 _commonDao.Insert(query, files);
 
@@ -101,7 +100,7 @@ namespace Tool {
             using var transaction = _context.Database.BeginTransaction();
 
             //string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM OP_FILE WHERE FILE_ID = @file_id:VARCHAR";
-            string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM OP_FILE WHERE FILE_ID = '"+param["file_id"]+"'";
+            string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM OP_FILE WHERE FILE_ID = '" + param["file_id"] + "'";
             fileData = _commonDao.SelectOne(query, param);
 
             transaction.Commit();

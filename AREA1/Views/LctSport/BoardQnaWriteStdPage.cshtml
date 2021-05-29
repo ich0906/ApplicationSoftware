@@ -40,14 +40,11 @@
         </dl>
     </div>
     <div class='btnCon'>
-        @if (ViewData["command"].Equals("UPDATE"))
-        {
-            @:<button type="button" class="btn2 btn-darkpurple" @@click="saveData()">수정</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        }
-        else
-        {
-            @:<button type="button" class="btn2 btn-darkpurple" @@click="saveData()">등록</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        }
+        @if (ViewData["command"].Equals("UPDATE")) {
+@:<button type="button" class="btn2 btn-darkpurple" @@click="saveData()">수정</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+} else {
+@:<button type="button" class="btn2 btn-darkpurple" @@click="saveData()">등록</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}
         <button type="button" class="btn2 btn-gray" @@click="goList()">목록</button>
     </div>
 </div>
