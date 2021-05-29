@@ -400,3 +400,4 @@ C:\Users\djfwk\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AR
 C:\Users\djfwk\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.csprojAssemblyReference.cache
 C:\Users\djfwk\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LrnResult\StandInqire.cshtml.g.cs
 C:\Users\djfwk\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LrnResult\ScreInqire.cshtml.g.cs
+C:\Users\djfwk\source\repos\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LctSport\Task\TaskViewPage.cshtml.g.cs
