@@ -12,6 +12,11 @@
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Lrn_Sport\Lct_QNA\" />
+    <Folder Include="Controllers\Lrn_Sport\Lct_Recsroom\" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>
