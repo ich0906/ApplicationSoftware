@@ -34,7 +34,7 @@
                     <dl class="notice_list_top">
                         @for (int i = 0; i < 4; ++i) {
                             if (i < ViewBag.noticeCount) {
-                                <dt><p><a href="#" onclick="javascript: page_move('/Notice/SelectNotice', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI', '@ViewBag.noticeList[i]["BBS_ID"]')">@ViewBag.noticeList[i]["TITLE"]</a></p> <span class="date">@ViewBag.noticeList[i]["REGIST_DT"]</span></dt>
+                                <dt><p><a href="#" onclick="javascript: page_move('/Notice/SelectNotice', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI', '@ViewBag.noticeList[i]["BBS_ID"]')">@ViewBag.noticeList[i]["TITLE"]</a></p> <span class="date">@ViewBag.noticeList[i]["REGIST_DT"].Split(' ')[0]</span></dt>
  } else {
                                 <dt><p><a href="#"></a></p> <span class="date"></span></dt>
 }
