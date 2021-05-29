@@ -10,30 +10,25 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Tool;
 
-namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz
-{
-    public class LctGnrlzController : Controller
-    {
+namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
+    public class LctGnrlzController : Controller {
         private readonly ILogger<LctGnrlzController> _logger;
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
         private readonly CodeMngTool _codeMngTool;
         static int MAX_INFO_NUM = 4;
 
-        public LctGnrlzController(ILogger<LctGnrlzController> logger, AppSoftDbContext context)
-        {
+        public LctGnrlzController(ILogger<LctGnrlzController> logger, AppSoftDbContext context) {
             _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);
             _codeMngTool = new CodeMngTool(context);
         }
 
-        public IActionResult LctGnrlz()
-        {
+        public IActionResult LctGnrlz() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
 
-            if (userInfo == null)
-            {
+            if (userInfo == null) {
                 return RedirectToAction("/Login", new { alertLogin = 2 });
             }
 
@@ -57,21 +52,17 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz
 
             int takesCnt = 0;
             // Form이 존재하지 않으면 오류가 나기 때문에 분기해주어야한다.
-            if (Request.HasFormContentType && !Request.Form["selectedSubj"].ToString().Equals(""))
-            {
+            if (Request.HasFormContentType && !Request.Form["selectedSubj"].ToString().Equals("")) {
                 acdmc_no = Request.Form["selectedSubj"];
 
-                if (userInfo.author.Equals("1000"))
-                {
+                if (userInfo.author.Equals("1000")) {
                     sql = "SELECT BUILDING,ROOM_NUMBER,ACDMC_NO,TITLE,NAME,DAY1,DAY2,PERIOD1,PERIOD2,A.YEAR,A.SEMESTER,C.ID " +
                        "FROM OP_SECTION A JOIN OP_COURSE B ON A.COURSE_ID=B.COURSE_ID " +
                        "JOIN OP_TEACHES C ON A.SEC_ID=C.SEC_ID and A.COURSE_ID=C.COURSE_ID and A.SEMESTER=C.SEMESTER and A.YEAR=C.YEAR " +
                        "JOIN OP_USER D on C.ID=D.USER_ID " +
                        "JOIN OP_TIME_SLOT E on A.TIME_SLOT_ID=E.TIME_SLOT_ID " +
                        "WHERE ID=" + userInfo.user_id + " AND ACDMC_NO='" + acdmc_no + "'";
-                }
-                else
-                {
+                } else {
                     sql = "SELECT BUILDING,ROOM_NUMBER,ACDMC_NO,TITLE,NAME,DAY1,DAY2,PERIOD1,PERIOD2,A.YEAR,A.SEMESTER,C.ID " +
                         "FROM OP_SECTION A JOIN OP_COURSE B ON A.COURSE_ID=B.COURSE_ID " +
                         "JOIN OP_TAKES C ON A.SEC_ID=C.SEC_ID and A.COURSE_ID=C.COURSE_ID and A.SEMESTER=C.SEMESTER and A.YEAR=C.YEAR " +
@@ -88,17 +79,13 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz
                 ViewBag.YEAR_HAKGI = param["YEAR"] + "," + param["SEMESTER"];
                 ViewBag.ACDMC_NO = param["ACDMC_NO"];
                 // Form이 없거나 과목을 선택하지 않고 페이지에 넘어오는 경우
-            }
-            else
-            {
+            } else {
                 // 디폴트 과목을 선택함
-                if (userInfo.author.Equals("1000"))
-                {
+                if (userInfo.author.Equals("1000")) {
                     int teachesCnt = 0;
                     sql = "SELECT COUNT(*) AS TEACHES_CNT FROM OP_TEACHES WHERE ID=" + userInfo.user_id;
                     teachesCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["TEACHES_CNT"]);
-                    if (teachesCnt == 0)
-                    {
+                    if (teachesCnt == 0) {
                         return Redirect("/Views/Main.cshtml");
                     }
 
@@ -108,12 +95,9 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz
                         "JOIN OP_USER D on C.ID=D.USER_ID " +
                         "JOIN OP_TIME_SLOT E on A.TIME_SLOT_ID=E.TIME_SLOT_ID " +
                         "WHERE ID=" + userInfo.user_id;
-                }
-                else
-                {
+                } else {
                     takesCnt = Convert.ToInt32(_commonDao.SelectOne(sql, param)["TAKES_CNT"]);
-                    if (takesCnt == 0)
-                    {
+                    if (takesCnt == 0) {
                         return Redirect("/Views/Main.cshtml");
                     }
 
@@ -135,14 +119,12 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz
             }
 
             //공지사항 4개 채워 넣는 부분
-            if (acdmc_no.Equals(""))
-            { //Form 도착 없이 이동한 경우
+            if (acdmc_no.Equals("")) { //Form 도착 없이 이동한 경우
                 sql = "SELECT COUNT(*) AS NOTICE_CNT " +
                    "FROM OP_BBS " +
                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "'";
                 int noticeCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["NOTICE_CNT"]);
-                if (noticeCnt > 0)
-                {
+                if (noticeCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +
                     "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND OTHBC_AT='Y'" + " ORDER BY REGIST_DT DESC";
@@ -151,15 +133,12 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz
                     ViewBag.noticeList = noticeList;
                 }
                 ViewBag.noticeCount = noticeCnt;
-            }
-            else
-            {
+            } else {
                 sql = "SELECT COUNT(*) AS NOTICE_CNT " +
                   "FROM OP_BBS " +
                   "WHERE ACDMC_NO='" + acdmc_no + "'";
                 int noticeCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["NOTICE_CNT"]);
-                if (noticeCnt > 0)
-                {
+                if (noticeCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +
                     "WHERE ACDMC_NO='" + acdmc_no + "' AND OTHBC_AT='Y'" + " ORDER BY REGIST_DT DESC";
@@ -173,8 +152,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz
             return View("/Views/LctGnrlz/LctGnrlz.cshtml");
         }
 
-        public IActionResult InsertData()
-        {
+        public IActionResult InsertData() {
             using var transaction = _context.Database.BeginTransaction();
 
 
@@ -192,8 +170,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz
 
             return Redirect("Index");
         }
-        public IActionResult UpdateData()
-        {
+        public IActionResult UpdateData() {
             using var transaction = _context.Database.BeginTransaction();
 
 
@@ -210,8 +187,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz
 
             return Redirect("Index");
         }
-        public IActionResult DeleteData()
-        {
+        public IActionResult DeleteData() {
             using var transaction = _context.Database.BeginTransaction();
 
 
@@ -225,14 +201,12 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz
             return Redirect("Index");
         }
 
-        public IActionResult Privacy()
-        {
+        public IActionResult Privacy() {
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
+        public IActionResult Error() {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

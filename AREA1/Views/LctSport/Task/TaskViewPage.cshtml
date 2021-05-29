@@ -52,9 +52,7 @@
             <tr>
                 <th>첨부파일</th>
                 <td colspan="5" class="lft">
-                    @for (int i = 0; i < ViewBag.fileCount; ++i) {
-                        <div class="board_viewfile"><a href="#" onclick="javascript: sendFileId('/File/DownloadDocument', '@ViewBag.fileList[i]["FILE_ID"]')"> @ViewBag.fileList[i]["FILE_NAME"].@ViewBag.fileList[i]["FILE_EXTSN"]</a></div>
-                    }
+                    <div></div>
                 </td>
             </tr>
             <tr>
@@ -74,10 +72,7 @@
                 <tr>
                     <th>파일</th>
                     <td>
-                        <form id="fform" enctype="multipart/form-data" action="/File/UserUploadFile" method="POST">
-                            <input type="hidden" name="attachId" value="@ViewBag.ResultPrsentr["DOC_ID"]"/>
-                            <div><input id="prsentr_file" name="prsentr_file" type="file" multiple="" accept="*/*" style="width: 100%;" ></div>
-                        </form>
+                        <div><input id="prsentr_file" type="file" multiple="" accept="*/*" style="width: 100%;" ></div>
                     </td>
                 </tr>
                 <tr>
@@ -101,9 +96,11 @@
                 <tr>
                     <th> 파일</th>
                     <td class="lft">
-                        @for (int i = 0; i < ViewBag.fileCount2; ++i) {
-                            <div class="board_viewfile"><a href="#" onclick="javascript: sendFileId('/File/DownloadDocument', '@ViewBag.fileList2[i]["FILE_ID"]')"> @ViewBag.fileList2[i]["FILE_NAME"].@ViewBag.fileList2[i]["FILE_EXTSN"]</a></div>
-                        }
+                        @* <div>
+            <div class="board_viewfile">
+                <span>파일 : </span><a href="#">2021203012 김정원 12주차 과제.pdf</a><span class="format">[ 189.63 KB ]</span> <span style="display: none;"><a href="#">[삭제]</a></span>
+            </div>
+        </div>*@
                     </td>
                 </tr>
                 <tr>
@@ -151,40 +148,31 @@
                 if (!ViewBag.ResultPrsentr["PRSENTR_AT"].Equals("Y")) {
                 <text>
 
-                $("#fform").ajaxForm({
+                input = "<input type='hidden' name='prsentr_file' />";
+                $("#__form__").append(input);
+                $("[name=prsentr_file]").val($("#prsentr_file").val());
+
+                input = "<input type='hidden' name='prsentr_title' />";
+                $("#__form__").append(input);
+                $("[name=prsentr_title]").val($("#prsentr_title").val()); 
+
+                input = "<input type='hidden' name='prsentr_content' />";
+                $("#__form__").append(input);
+                $("[name=prsentr_content]").val($("#textarea").val()); 
+
+                $("#__form__").attr("action", "@ViewBag.Prsentr");
+
+                $("#__form__").ajaxForm({
                     success: function (data) {
-                        input = "<input type='hidden' name='doc_id' />";
-                        $("#__form__").append(input);
-                        $("[name=doc_id]").val(data);
-
-                        input = "<input type='hidden' name='prsentr_title' />";
-                        $("#__form__").append(input);
-                        $("[name=prsentr_title]").val($("#prsentr_title").val());
-
-                        input = "<input type='hidden' name='prsentr_content' />";
-                        $("#__form__").append(input);
-                        $("[name=prsentr_content]").val($("#textarea").val());
-
-                        $("#__form__").attr("action", "@ViewBag.Prsentr");
-
-                        $("#__form__").ajaxForm({
-                            success: function (data) {
-                                if (data == 'ok') {
-                                    alert("제출하였습니다.");
-                                   $('#__form__').ajaxFormUnbind();
-                                   goDetail(@ViewBag.result["TASK_SEQ"]);
-                                } else {
-                                   alert("에러가 발생헀습니다.");
-                                }
-                            }
-                        });
-
-                        $("#__form__").submit();
+                        if (data == 'ok') {
+                            alert("제출하였습니다.");
+                            $('#__form__').ajaxFormUnbind();
+                            goDetail(@ViewBag.result["TASK_SEQ"]);
+                        } else {
+                            alert("에러가 발생헀습니다.");
+                        }
                     }
                 });
-
-                $("#fform").submit();
-
 
                 </text>
                 } else {
@@ -197,33 +185,8 @@
                     </text>
                 }
             }
-        });
-
-        $("#prsentr_file").on("change", function (e) {
-
-            var count = 1;
-            var files = e.currentTarget.files; // puts all files into an array
-
-            // call them as such; files[0].size will get you the file size of the 0th file
-            for (var i = 0; i < files.length; i++) {
-                var x = files[i];
-                var filesize = ((files[x].size / 1024) / 1024).toFixed(4); // MB
-
-                var fileExtension = ['@ViewBag.result["PRESENT_FORM"]'];
-
-                if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
-                    alert("제출양식이 아닙니다");
-                    $("#prsentr_file").val('');
-                    break;
-                }
-
-                if (!(files[x].name != "item" && typeof files[x].name != "undefined" && filesize <= @ViewBag.result["FILE_CPCTY_LMT"])) {
-                    alert("파일용량제한을 초과하였습니다.");
-                    $("#prsentr_file").val('');
-                    break;
-                }
-            }
-        });
+            $("#__form__").submit();
+            });
 
         // 삭제 버튼
         $(".btnCon").find("button").eq(1).click(function () {
@@ -234,7 +197,7 @@
 
                 $("[name=task_id]").val(@ViewBag.result["TASK_SEQ"]);
 
-                if (confirm("삭제하시겠습니까?")) {
+                        if (confirm("삭제하시겠습니까?")) {
                     $("#__form__").attr("action", "@ViewBag.Delete");
                     $("#aform").attr("method", "POST");
 
