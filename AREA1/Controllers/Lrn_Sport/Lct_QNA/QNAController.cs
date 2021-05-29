@@ -10,31 +10,30 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Tool;
 
-namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
+namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
 {
     [LoginActionFilter]
-    public class NoticeController : Controller
+    public class QNAController : Controller
     {
-        private readonly ILogger<NoticeController> _logger;
+        private readonly ILogger<QNAController> _logger;
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
         private readonly CodeMngTool _codeMngTool;
-        private readonly FileMngTool _fileMngTool;
-        public NoticeController(ILogger<NoticeController> logger, AppSoftDbContext context)
+
+        public QNAController(ILogger<QNAController> logger, AppSoftDbContext context)
         {
             _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);
             _codeMngTool = new CodeMngTool(context);
-            _fileMngTool = new FileMngTool(context);
         }
 
         /*
-         * 강의 공지사항 리스트 페이지
-         * 작성자 : 김정원
-         * 기능 : 공지사항 리스트 페이지 호출
+         * 강의 묻고답하기 리스트 페이지
+         * 작성자 : 이재하
+         * 기능 : 강의 묻고답하기 리스트 페이지 호출
          * */
-        public IActionResult SelectPageListNotice()
+        public IActionResult SelectPageListQNA()
         {
             Dictionary<string, string> param = new Dictionary<string, string>();
 
@@ -43,18 +42,18 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
             ViewData["name"] = userInfo.name;                                       // 이름
             ViewData["user_id"] = userInfo.user_id;                                 // 유저 ID(학번)
             ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";         // 교수 여부
-            ViewData["pageNm"] = "강의 공지사항";
+            ViewData["pageNm"] = "강의 묻고답하기";
 
             string sql = "";
 
-            // 공지사항 개수 체크
+            // 게시판글 개수 체크
             sql = "SELECT COUNT(*) AS BBS_CNT "
                       + "FROM OP_BBS A "
                       + "JOIN OP_USER B "
                       + "ON A.REGISTER = B.USER_ID "
                       /*+ "JOIN OP_FILE C "
                       + "ON A.DOC_ID = C.DOC_ID AND C.FILE_NUM = 1 "*/
-                      + "WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' "
+                      + "WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "QNA") + "' "
                       + "AND ACDMC_NO = @selectedSubj:VARCHAR";
 
 
@@ -69,7 +68,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
                 ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
                 ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
 
-                // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
+                // Form이 없거나 과목을 선택하지 않고 QNA 페이지에 넘어오는 경우
             }
             else
             {
@@ -95,16 +94,17 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
             if (bbsCnt > 0)
             {
                 sql = "SELECT *                                                                         "
-                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID                                  "
+                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, DECODE(OTHBC_AT,'Y','공개','N','비공개') AS OTHBC, RDCNT, BBS_ID                                  "
                     + "      FROM(SELECT A.TITLE,                                                                             "
                     + "                   B.NAME AS REGISTER,                                                                 "
                     + "                   A.REGIST_DT,                                                                        "
+                    + "                   A.OTHBC_AT,                                                                        "
                     + "                   A.RDCNT,                                                                            "
                     + "                   A.BBS_ID                                                                            "
                     + "            FROM OP_BBS A                                                                              "
                     + "                     JOIN OP_USER B                                                                    "
                     + "                          ON A.REGISTER = B.USER_ID                                                    "
-                    + "            WHERE BBS_CODE = '1000'                                                                    "
+                    + "            WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "QNA") + "'"
                     + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                     "
                     + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                  "
                     + (param.ContainsKey("page") ? "AND RNUM > " + (Convert.ToInt32(param["page"]) - 1) + " * 10 " : "AND RNUM > 0 ")
@@ -127,21 +127,22 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
 
             ViewBag.ResultCnt = bbsCnt;
             ViewBag.param = param;
-            ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
-            ViewBag.Select = "/Notice/SelectNotice";
-            ViewBag.InsertForm = "/Notice/InsertFormNotice";
+            ViewBag.SelectPageList = "/QNA/SelectPageListQNA";
+            ViewBag.Select = "/QNA/SelectQNA";
+            ViewBag.InsertForm = "/QNA/InsertFormQNA";
+            ViewBag.Insert = "/QNA/InsertQNA";
 
             return View("/Views/LctSport/BoardListStdPage.cshtml");
         }
 
-        public IActionResult SelectNotice()
+        public IActionResult SelectQNA()
         {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             Dictionary<string, string> param = new Dictionary<string, string>();
 
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
-            ViewData["pageNm"] = "강의 공지사항";
+            ViewData["pageNm"] = "강의 묻고답하기";
             ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";
             ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
@@ -168,7 +169,6 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
                        + ", B.NAME "
                        + ", A.BBS_ID "
                        + ", A.RDCNT "
-                       + ", DOC_ID "
                        + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
                        + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
                        + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
@@ -178,32 +178,28 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
                        + "ON A.REGISTER = B.USER_ID "
                        + "WHERE 1=1 "
                        + "AND ACDMC_NO = @selectedSubj:VARCHAR "
-                       + "AND BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' "
+                       + "AND BBS_CODE = '" + _codeMngTool.getCode("BBS", "QNA") + "' "
                        + "ORDER BY BBS_ID DESC)"
                        + "WHERE BBS_ID = @BBS_ID:VARCHAR";
 
             var result = _commonDao.SelectOne(sql, Request.Form);
 
+            sql = "SELECT COUNT(*) AS COMMENT_CNT FROM OP_BBS WHERE REF_ID = @BBS_ID:VARCHAR";
+            var commentCnt = _commonDao.SelectOne(sql, Request.Form);
+            ViewBag.commentCnt = commentCnt;
+
+            sql = "SELECT B.NAME, A.REGIST_DT, A.CONTENTS " +
+                "FROM OP_BBS A JOIN OP_USER B " +
+                "ON A.REGISTER = B.USER_ID WHERE A.REF_ID = @BBS_ID:VARCHAR";
+            var commentList = _commonDao.SelectList(sql, Request.Form);
+            ViewBag.commentList = commentList;
+
             ViewBag.result = result;
             ViewBag.param = param;
-            ViewBag.Select = "/Notice/SelectNotice";
-            ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
-            ViewBag.UpdateForm = "/Notice/UpdateFormNotice";
-            ViewBag.Delete = "/Notice/DeleteNotice";
-
-            int fcount = 0;
-            //첨부파일 읽어오기
-            if (result["DOC_ID"] != "")
-            {
-                sql = "SELECT FILE_NAME,FILE_EXTSN,FILE_ID FROM OP_FILE A JOIN OP_BBS B ON A.DOC_ID=B.DOC_ID"
-               + $" WHERE A.DOC_ID='{result["DOC_ID"]}'";
-
-                var fileList = _commonDao.SelectList(sql);
-                fcount = fileList.Count;
-                ViewBag.fileList = fileList;
-            }
-
-            ViewBag.fileCount = fcount;
+            ViewBag.Select = "/QNA/SelectQNA";
+            ViewBag.SelectPageList = "/QNA/SelectPageListQNA";
+            ViewBag.UpdateForm = "/QNA/UpdateFormQNA";
+            ViewBag.Delete = "/QNA/DeleteQNA";
 
             return View("/Views/LctSport/BoardViewStdPage.cshtml");
         }
@@ -213,55 +209,55 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
          * 작성자 : 김정원
          * 기능 : 공지사항 작성 페이지 호출
          * */
-        public IActionResult InsertFormNotice()
+        public IActionResult InsertFormQNA()
         {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
-            ViewData["pageNm"] = "강의 공지사항";
+            ViewData["pageNm"] = "강의 묻고답하기";
             ViewData["command"] = "INSERT";
+
 
             Dictionary<string, string> param = new Dictionary<string, string>();
 
             ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
 
-            if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")))
-            {
-                Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
-                Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
-            }
+            //if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")))
+            //{
+            //    Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
+            //    Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
+            //}
 
             param.Add("page", Request.Form["page"]);
             ViewBag.param = param;
 
-            ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
-            ViewBag.Select = "/Notice/SelectNotice";
-            ViewBag.InsertForm = "/Notice/InsertFormNotice";
-            ViewBag.Insert = "/Notice/InsertNotice";
-
+            ViewBag.SelectPageList = "/QNA/SelectPageListQNA";
+            ViewBag.Select = "/QNA/SelectQNA";
+            ViewBag.InsertForm = "/QNA/InsertFormQNA";
+            ViewBag.Insert = "/QNA/InsertQNA";
 
             return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
         }
 
 
         /*
-         * 강의 공지사항 작성
-         * 작성자 : 김정원
-         * 기능 : 공지사항 작성 로직
+         * 강의 묻고답하기 작성
+         * 작성자 : 이재하
+         * 기능 : 강의 묻고답하기 작성 로직
          * */
         [HttpPost]
-        public string InsertNotice([FromBody] Notice notice)
+        public string InsertQNA([FromBody] QNA QNA)
         {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             Dictionary<string, string> param = new Dictionary<string, string>();
 
-            // Notice 데이터 파싱
-            param.Add("SelectSubj", notice.SelectSubj);
-            param.Add("Title", notice.Title);
-            param.Add("OthbcAt", notice.OthbcAt);
-            param.Add("Content", notice.Content);
-            param.Add("AtchFileId", notice.AtchFileId);
+            // QNA 데이터 파싱
+            param.Add("SelectSubj", QNA.SelectSubj);
+            param.Add("Title", QNA.Title);
+            param.Add("OthbcAt", QNA.OthbcAt);
+            param.Add("Content", QNA.Content);
+            param.Add("AtchFileId", QNA.SelectSubj);
             param.Add("user_id", userInfo.user_id);
 
             string query = "";
@@ -269,7 +265,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
             query = "INSERT INTO OP_BBS " +
                     "VALUES(NOTICE_SEQ.NEXTVAL" +
                     ", @SelectSubj:VARCHAR" +
-                    ", '1000'" +
+                    ", " + _codeMngTool.getCode("BBS", "QNA") +
                     ", @Title:VARCHAR" +
                     ", TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
                     ", 0" +
@@ -290,12 +286,13 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
 
             return "ok";
         }
-        public IActionResult UpdateFormNotice()
+
+        public IActionResult UpdateFormQNA()
         {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
-            ViewData["pageNm"] = "강의 공지사항";
+            ViewData["pageNm"] = "강의 묻고답하기";
             ViewData["command"] = "UPDATE";
 
             Dictionary<string, string> param = new Dictionary<string, string>();
@@ -330,7 +327,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
                         + "ON A.REGISTER = B.USER_ID "
                         + "WHERE 1=1 "
                         + "AND ACDMC_NO = @selectedSubj:VARCHAR "
-                        + "AND BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' "
+                        + "AND BBS_CODE = '" + _codeMngTool.getCode("BBS", "QNA") + "' "
                         + "ORDER BY BBS_ID DESC)"
                         + "WHERE BBS_ID = @BBS_ID:VARCHAR";
 
@@ -339,26 +336,26 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
             ViewBag.result = result;
             ViewBag.param = param;
 
-            ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
-            ViewBag.Select = "/Notice/SelectNotice";
-            ViewBag.InsertForm = "/Notice/InsertFormNotice";
-            ViewBag.Insert = "/Notice/UpdateNotice";
+            ViewBag.SelectPageList = "/QNA/SelectPageListQNA";
+            ViewBag.Select = "/QNA/SelectQNA";
+            ViewBag.InsertForm = "/QNA/InsertFormQNA";
+            ViewBag.Insert = "/QNA/InsertQNA";
 
             return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
         }
 
-        public string UpdateNotice([FromBody] Notice notice)
+        public string UpdateQNA([FromBody] QNA QNA)
         {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             Dictionary<string, string> param = new Dictionary<string, string>();
 
-            // Notice 데이터 파싱
-            param.Add("SelectSubj", notice.SelectSubj);
-            param.Add("Title", notice.Title);
-            param.Add("OthbcAt", notice.OthbcAt);
-            param.Add("Content", notice.Content);
-            param.Add("bbs_id", notice.Bbs_id);
-            param.Add("AtchFileId", notice.AtchFileId);
+            // QNA 데이터 파싱
+            param.Add("SelectSubj", QNA.SelectSubj);
+            param.Add("Title", QNA.Title);
+            param.Add("OthbcAt", QNA.OthbcAt);
+            param.Add("Content", QNA.Content);
+            param.Add("bbs_id", QNA.Bbs_id);
+            param.Add("AtchFileId", QNA.SelectSubj);
             param.Add("user_id", userInfo.user_id);
             string query = "";
 
@@ -367,7 +364,6 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
                     ", UPDATE_DT = TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
                     ", CONTENTS = @Content:VARCHAR" +
                     ", UPDUSR = @user_id:VARCHAR" +
-                    ", DOC_ID = @AtchFileId:VARCHAR" +
                     ", OTHBC_AT = @OthbcAt:VARCHAR WHERE BBS_ID = @bbs_id:NUMBER";
 
             //cud 처리할 때는 트랜잭션 시작해주어야함
@@ -379,27 +375,17 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
 
             return "ok";
         }
-        public string DeleteNotice()
+        public string DeleteQNA()
         {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
 
             if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")))
             {
                 Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
-                Response.WriteAsync("<script language=\"javascript\">window.location=\"/Notice/SelectPageListNotice\"</script>");
+                Response.WriteAsync("<script language=\"javascript\">window.location=\"/QNA/SelectPageListQNA\"</script>");
             }
 
             string query = "";
-
-            query = "SELECT FILE_ID, A.DOC_ID FROM OP_FILE A "
-                + "JOIN OP_BBS B "
-                + "ON A.DOC_ID=B.DOC_ID "
-                + "AND BBS_ID='" + Request.Form["bbs_id"] + "'";
-            var removeFiles = _commonDao.SelectList(query);
-            for (int i = 0; i < removeFiles.Count; ++i)
-            {
-                _fileMngTool.removeFile(removeFiles[i]["DOC_ID"]);
-            }
 
             query = "DELETE FROM OP_BBS WHERE BBS_ID = @bbs_id:NUMBER";
 
@@ -419,7 +405,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
         }
 
         // 공지사항 전용 모델 public으로 선언해야 매개변수로 사용가능함
-        public class Notice
+        public class QNA
         {
             public string SelectSubj { get; set; }          // 학정번호
             public string Title { get; set; }               // 제목

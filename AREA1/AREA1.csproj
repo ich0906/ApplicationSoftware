@@ -17,6 +17,7 @@
     <Folder Include="Controllers\Lrn_Sport\Lct_Recsroom\" />
     <Folder Include="Controllers\Lrn_Sport\NewFolder\" />
   </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>
