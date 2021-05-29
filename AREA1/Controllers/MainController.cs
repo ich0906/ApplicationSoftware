@@ -125,7 +125,7 @@ namespace AREA1.Controllers {
                 ViewBag.ResultListTeacher = resultList2;
                 ViewBag.TeachesCount = resultList2.Count;
             }
-
+            
             return View("/Views/Main.cshtml");
         }
 
