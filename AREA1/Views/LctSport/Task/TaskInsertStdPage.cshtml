@@ -243,7 +243,6 @@
                 @:adit_edate: new Date('@ViewBag.result["ADIT_EDATE"]'),
                 @:adit_etimeHour: '@ViewBag.result["ADIT_ETIMEHOUR"]',
                 @:adit_etimeMin: '@ViewBag.result["ADIT_ETIMEMIN"]',
-                @: atchFileId: '@ViewBag.result["DOC_ID"]',
             } else {
                 @: title: null,
                 @: content: null,
@@ -261,8 +260,8 @@
                 @:adit_edate: '',
                 @:adit_etimeHour: '00',
                 @:adit_etimeMin: '00',
-                @: atchFileId: null,
             }
+            atchFileId: null,
             storageId: '1000'
         },
         mounted: function () {
