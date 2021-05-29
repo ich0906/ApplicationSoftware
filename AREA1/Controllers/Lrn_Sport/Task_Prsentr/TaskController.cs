@@ -148,7 +148,6 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                        + ", CASE WHEN A.BEGIN_ADIT_TMLMT <= SYSDATE THEN CASE WHEN A.END_ADIT_TMLMT >= SYSDATE THEN  'Y' ELSE 'N' END ELSE 'N' END AS B2 "
                        + ", B.NAME "
                        + ", A.TASK_SEQ "
-                       + ", A.DOC_ID "
                        + "FROM OP_TASK A "
                        + "JOIN OP_USER B "
                        + "ON A.REGISTER = B.USER_ID "
@@ -157,41 +156,14 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
 
             var result = _commonDao.SelectOne(sql, Request.Form);
 
-            //첨부파일 읽어오기
-            if (result["DOC_ID"] != "") {
-                sql = "SELECT FILE_NAME,FILE_EXTSN,FILE_ID FROM OP_FILE A JOIN OP_TASK B ON A.DOC_ID=B.DOC_ID"
-               + $" WHERE A.DOC_ID='{result["DOC_ID"]}'";
-
-                int fcount = 0;
-                var fileList = _commonDao.SelectList(sql);
-                fcount = fileList.Count;
-                ViewBag.fileList = fileList;
-                ViewBag.fileCount = fcount;
-            }
-
-            if (ViewData["fs_at"].Equals("N")) {
-                sql = $"SELECT TASK_SEQ, REGISTER, DOC_ID, TITLE, CONTENT, PRSENTR_AT, REGIST_DT FROM OP_TASK_PRSENTR WHERE REGISTER = '{userInfo.user_id}' AND TASK_SEQ = @task_id:VARCHAR";
+            if(ViewData["fs_at"].Equals("N")) {
+                sql = $"SELECT TASK_SEQ, REGISTER, TITLE, CONTENT, PRSENTR_AT, REGIST_DT FROM OP_TASK_PRSENTR WHERE REGISTER = '{userInfo.user_id}' AND TASK_SEQ = @task_id:VARCHAR";
                 var resultPrsentr = _commonDao.SelectOne(sql, Request.Form);
                 if(Request.Form.ContainsKey("prsentr_at") && Request.Form["prsentr_at"] == "N") {
                     resultPrsentr["PRSENTR_AT"] = "N";
                 }
-
-                //첨부파일 읽어오기
-                if (resultPrsentr["DOC_ID"] != "") {
-                    sql = "SELECT FILE_NAME,FILE_EXTSN,FILE_ID FROM OP_FILE A JOIN OP_TASK_PRSENTR B ON A.DOC_ID=B.DOC_ID"
-                   + $" WHERE A.DOC_ID='{resultPrsentr["DOC_ID"]}'";
-
-                    int fcount2 = 0;
-                    var fileList2 = _commonDao.SelectList(sql);
-                    fcount2 = fileList2.Count;
-                    ViewBag.fileList2 = fileList2;
-                    ViewBag.fileCount2 = fcount2;
-                }
-
                 ViewBag.ResultPrsentr = resultPrsentr;
             }
-
-            
 
             ViewBag.result = result;
             ViewBag.param = param;
@@ -201,7 +173,6 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             ViewBag.Delete = "/Task/DeleteTask";
             ViewBag.Prsentr = "/Task/PrsentrTask";
 
-           
             return View("/Views/LctSport/Task/TaskViewPage.cshtml");
         }
 
@@ -276,7 +247,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                     ", '1'" +
                     ", @Content:VARCHAR" +
                     ", @PresentForm:VARCHAR" +
-                    ", @AtchFileId:VARCHAR" +
+                    ", ''" +
                     ", @FileCpctyLlmt:VARCHAR" +
                     ", @user_id:VARCHAR)";
 
@@ -313,7 +284,6 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                       + ", A.CONTENT"
                       + ", A.PRESENT_FORM"
                       + ", A.FILE_CPCTY_LMT"
-                      + ", A.DOC_ID "
                       + ", TO_CHAR(A.BEGIN_TMLMT, 'MONTH DD, YYYY hh24:mi:ss', 'NLS_DATE_LANGUAGE=ENGLISH') AS SDATE "
                       + ", TO_CHAR(A.BEGIN_TMLMT, 'hh24') AS STIMEHOUR "
                       + ", TO_CHAR(A.BEGIN_TMLMT, 'mi') AS STIMEMIN "
@@ -373,7 +343,6 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                     ", BEGIN_ADIT_TMLMT = TO_DATE(@Adit_sdate:VARCHAR, 'YYYYMMDDHH24MI')" +
                     ", END_ADIT_TMLMT = TO_DATE(@Adit_edate:VARCHAR, 'YYYYMMDDHH24MI')" +
                     ", CONTENT = @Content:VARCHAR" +
-                    ", DOC_ID = @AtchFileId:VARCHAR" +
                     ", PRESENT_FORM = @PresentForm:VARCHAR" +
                     ", FILE_CPCTY_LMT = @FileCpctyLlmt:VARCHAR" +
                     " WHERE TASK_SEQ = @TaskId:NUMBER";
@@ -434,7 +403,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             query = "INSERT INTO OP_TASK_PRSENTR VALUES(" +
                     "@task_id:VARCHAR " +
                     $", '{userInfo.user_id}' " +
-                    ", @doc_id:VARCHAR " +
+                    ", '' " +
                     ", @prsentr_title:VARCHAR " +
                     ", @prsentr_content:VARCHAR " +
                     ", 'Y'" +
@@ -450,7 +419,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             // 한번 제출한 과제는 insert 시 에러가 나기 때문에 catch 문으로 받고 업데이트문으로 바꾸어준다.
             } catch(OracleException e) {
                 query = "UPDATE OP_TASK_PRSENTR SET " +
-                   "DOC_ID =  @doc_id:VARCHAR " +
+                   "DOC_ID = '' " +
                    ", TITLE = @prsentr_title:VARCHAR " +
                    ", CONTENT = @prsentr_content:VARCHAR " +
                    " WHERE TASK_SEQ = @task_id:VARCHAR";
