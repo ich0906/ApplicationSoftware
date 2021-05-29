@@ -88,12 +88,12 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             // 만약 조회된 공지사항이 있으면 값을 가져온다.
             if (bbsCnt > 0) {
                 sql = "SELECT *                                                                         "
-                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID                                  "
+                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID, DOC_ID                          "
                     + "      FROM(SELECT A.TITLE,                                                                             "
                     + "                   B.NAME AS REGISTER,                                                                 "
                     + "                   A.REGIST_DT,                                                                        "
                     + "                   A.RDCNT,                                                                            "
-                    + "                   A.BBS_ID                                                                            "
+                    + "                   A.BBS_ID, DOC_ID                                                                    "
                     + "            FROM OP_BBS A                                                                              "
                     + "                     JOIN OP_USER B                                                                    "
                     + "                          ON A.REGISTER = B.USER_ID                                                    "
@@ -119,14 +119,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewBag.param = param;
             ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
             ViewBag.Select = "/Notice/SelectNotice";
-            ViewBag.InsertForm = "/Notice/InsertFormNotice";
-
-            //첨부파일 표시
-            sql = "SELECT * FROM OP_BBS A JOIN OP_USER B ON A.REGISTER = B.USER_ID " +
-                "WHERE BBS_CODE='" + _codeMngTool.getCode("BBS", "NOTICE") + "' AND ACDMC_NO='"+Request.Form["selectedSubj"]+"'";
-
-            var fileExistList = _commonDao.SelectList(sql);
-            ViewBag.fileExistList = fileExistList;
+            ViewBag.InsertForm = "/Notice/InsertFormNotice";   
 
             return View("/Views/LctSport/BoardListStdPage.cshtml");
         }
