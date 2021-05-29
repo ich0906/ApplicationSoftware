@@ -19,7 +19,6 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice
         private readonly CommonDao _commonDao;
         private readonly CodeMngTool _codeMngTool;
         private readonly FileMngTool _fileMngTool;
-
         public NoticeController(ILogger<NoticeController> logger, AppSoftDbContext context) {
             _logger = logger;
             _context = context;
