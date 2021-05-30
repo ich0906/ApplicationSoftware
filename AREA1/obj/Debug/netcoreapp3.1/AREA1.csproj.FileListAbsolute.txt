@@ -820,7 +820,6 @@ C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\ne
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.RazorCoreGenerate.cache
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.dll
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.pdb
-C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\bin\Debug\netcoreapp3.1\AREA1.exe
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\bin\Debug\netcoreapp3.1\AREA1.deps.json
@@ -1208,3 +1207,4 @@ C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\ne
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.csproj.CopyComplete
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\AREA1.genruntimeconfig.cache
 C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\obj\Debug\netcoreapp3.1\Razor\Views\LctCalendar\LctCalendar.cshtml.g.cs
+C:\Users\smart\Desktop\homework\응소실\ApplicationSoftware\AREA1\bin\Debug\netcoreapp3.1\appsettings.Development.json.json

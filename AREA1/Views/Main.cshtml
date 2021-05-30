@@ -41,7 +41,7 @@
 
             <div id="appModule" class="row">
                 <div class="col-md-12 subjectbox">
-                    @if (ViewBag.userinfo.author == "2000") {
+                    @*if (ViewBag.userinfo.author == "2000") {
                         <div class="card card-body mb-4">
                             <div class="bodtitle">
                                 <p class="title-text">수강 과목 현황</p>
@@ -93,7 +93,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    }
+                    }*@
                     <div>
                         <div class="card card-body mb-4">
                             <div class="scheduletitle">
@@ -366,77 +366,3 @@
         </div>
     </div>
 </main>
-
-<script>
-
-    let appSelectSubj = new Vue({
-        el: '#appSelectSubj',
-        data: {
-            yearhakgiList: [],
-            yearhakgis: [],
-            subjList: [],
-            selectYearhakgi: null,
-            selectSubj: null,
-            selectedYearhakgi: '@ViewBag.YEAR_HAKGI',
-        },
-        mounted: function () {
-            this.getYearhakgiAtnlcSbjectList(this.selectedYearhakgi, this.selectedSubj);
-        },
-        methods: {
-            getYearhakgiAtnlcSbjectList: function (selectedYearhakgi, selectedSubj) {
-                axios.post('/Main/YearhakgiAtnlcSbjectList', {})
-                    .then(function (response) {
-                        this.yearhakgiList = response.data;
-
-                        let selectedIndex = 0;
-                        for (let i = 0; i < this.yearhakgiList.length; i++) {
-                            if (this.yearhakgiList[i]['subjList'][this.yearhakgiList.length - 1]['YEAR_HAKGI'] === selectedYearhakgi) {
-                                selectedIndex = i;
-                                break;
-                            }
-                        }
-
-                        this.selectYearhakgi = selectedIndex;
-
-                        this.onYearhakgiChange(selectedSubj);
-                    }.bind(this));
-            },
-            onYearhakgiChange: function (selectedSubj) {
-                let selectedIndex = 0;
-
-                for (let yearhakgi in this.yearhakgiList) {
-                    if (selectedSubj != undefined)
-                        this.yearhakgis.push(this.yearhakgiList[yearhakgi]['subjList'].pop(this.yearhakgiList[yearhakgi]['subjList'].length - 1));
-
-                    if (this.yearhakgiList[yearhakgi] === this.yearhakgiList[this.selectYearhakgi] || (selectedSubj == undefined && yearhakgi == this.yearhakgiList[this.selectYearhakgi])) {
-                        this.subjList = this.yearhakgiList[yearhakgi]['subjList'];
-                        this.selectYearhakgi = yearhakgi;
-
-                        for (let j = 0; j < this.subjList.length; j++) {
-                            if (this.subjList[j]["ACDMC_NO"] === selectedSubj) {
-                                selectedIndex = j;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                this.selectSubj = this.subjList[selectedIndex];
-                this.onSubjChange();
-            },
-            onSubjChange: function () {
-
-                setLctrumInfo('', '' + this.selectSubj["YEAR"] + ',' + this.selectSubj["SEMESTER"], this.selectSubj["ACDMC_NO"]);
-
-                appEvents.$emit('eventSubjChange', {
-                    selectYearhakgi: this.selectSubj["YEAR"] + ',' + this.selectSubj["SEMESTER"],
-                    selectSubj: this.selectSubj["ACDMC_NO"],
-                    selectChangeYn: 'Y',
-                    subjNm: this.selectSubj["LABEL"],
-                    yearhakgi: this.selectYearhakgi,
-                    subj: this.selectSubj
-                });
-            }
-        }
-    });
-</script>
