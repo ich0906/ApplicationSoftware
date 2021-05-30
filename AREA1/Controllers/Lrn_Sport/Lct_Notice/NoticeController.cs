@@ -88,18 +88,18 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             // 만약 조회된 공지사항이 있으면 값을 가져온다.
             if (bbsCnt > 0) {
                 sql = "SELECT *                                                                         "
-                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID, DOC_ID                          "
-                    + "      FROM(SELECT A.TITLE,                                                                             "
-                    + "                   B.NAME AS REGISTER,                                                                 "
-                    + "                   A.REGIST_DT,                                                                        "
-                    + "                   A.RDCNT,                                                                            "
-                    + "                   A.BBS_ID, DOC_ID                                                                    "
-                    + "            FROM OP_BBS A                                                                              "
-                    + "                     JOIN OP_USER B                                                                    "
-                    + "                          ON A.REGISTER = B.USER_ID                                                    "
-                    + "            WHERE BBS_CODE = '1000'                                                                    "
-                    + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                     "
-                    + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                  "
+                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID, DOC_ID, FILE_ID                     "
+                    + "      FROM(SELECT A.TITLE,                                                                                 "
+                    + "                   B.NAME AS REGISTER,                                                                     " 
+                    + "                   A.REGIST_DT,                                                                            "
+                    + "                   A.RDCNT,                                                                                "
+                    + "                   A.BBS_ID, A.DOC_ID, C.FILE_ID                                                           "
+                    + "            FROM OP_BBS A                                                                                  "
+                    + "                     JOIN OP_USER B                                                                        "
+                    + "                          ON A.REGISTER = B.USER_ID LEFT JOIN OP_FILE C on A.DOC_ID = C.DOC_ID             "
+                    + "            WHERE BBS_CODE = '1000'                                                                        "
+                    + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                         "
+                    + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                      "
                     + (param.ContainsKey("page") ? "AND RNUM > " + (Convert.ToInt32(param["page"]) - 1) + " * 10 " : "AND RNUM > 0 ")
                     + (param.ContainsKey("page") ? "AND RNUM <= " + param["page"] + "0" : "AND RNUM <= 10");
 

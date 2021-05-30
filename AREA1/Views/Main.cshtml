@@ -282,9 +282,9 @@
                                                 </a> <!----> <div class="right">
                                                 @{string yh= @ViewBag.ResultListTeacher[i]["YEAR"]+","+@ViewBag.ResultListTeacher[i]["SEMESTER"];}
                                                 <button type="button" class="btn2 btn-lightgreen btnsmall" onclick="javascript: page_move('/Notice/SelectPageListNotice','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]',@yh);">공지사항</button>
-                                                <button type="button" class="btn2 btn-lightpurple btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]',@yh);">강의자료실 </button> 
-                                                <button type="button" class="btn2 btn-lightbrown btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]',@yh);">강의Q&amp;A </button> 
-                                                <button type="button" class="btn2 btn-lightblue btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]',@yh);">학습톡톡</button>
+                                                <button type="button" class="btn2 btn-lightpurple btnsmall" onclick="javascript: page_move('/Recsroom/SelectPageListRecsroom','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]',@yh);">강의자료실 </button> 
+                                                <button type="button" class="btn2 btn-lightbrown btnsmall" onclick="javascript: page_move('/QNA/SelectPageListQNA','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]',@yh);">강의Q&amp;A </button> 
+                                                <button type="button" class="btn2 btn-lightblue btnsmall" onclick="javascript: page_move('/Task/SelectPageListTask','@ViewBag.ResultListTeacher[i]["ACDMC_NO"]',@yh);">과제</button>
                                                       </div> <!---->
                                             </li>
                                         }
@@ -316,9 +316,9 @@
                                                         </div>
                                                 </a> <!----> <div class="right">
                                                 <button type="button" class="btn2 btn-lightgreen btnsmall" onclick="javascript: page_move('/Notice/SelectPageListNotice','@ViewBag.ResultList[i]["ACDMC_NO"]','@ViewBag.ResultList[i]["YEAR"],@ViewBag.ResultList[i]["SEMESTER"]');">공지사항</button>
-                                                <button type="button" class="btn2 btn-lightpurple btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[i]["ACDMC_NO"]','@ViewBag.ResultList[i]["YEAR"],@ViewBag.ResultList[i]["SEMESTER"]');">강의자료실 </button> 
-                                                <button type="button" class="btn2 btn-lightbrown btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[i]["ACDMC_NO"]','@ViewBag.ResultList[i]["YEAR"],@ViewBag.ResultList[i]["SEMESTER"]');">강의Q&amp;A </button> 
-                                                <button type="button" class="btn2 btn-lightblue btnsmall" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[i]["ACDMC_NO"]','@ViewBag.ResultList[i]["YEAR"],@ViewBag.ResultList[i]["SEMESTER"]');">학습톡톡</button>
+                                                <button type="button" class="btn2 btn-lightpurple btnsmall" onclick="javascript: page_move('/Recsroom/SelectPageListRecsroom','@ViewBag.ResultList[i]["ACDMC_NO"]','@ViewBag.ResultList[i]["YEAR"],@ViewBag.ResultList[i]["SEMESTER"]');">강의자료실 </button> 
+                                                <button type="button" class="btn2 btn-lightbrown btnsmall" onclick="javascript: page_move('/QNA/SelectPageListQNA','@ViewBag.ResultList[i]["ACDMC_NO"]','@ViewBag.ResultList[i]["YEAR"],@ViewBag.ResultList[i]["SEMESTER"]');">강의Q&amp;A </button> 
+                                                <button type="button" class="btn2 btn-lightblue btnsmall" onclick="javascript: page_move('/Task/SelectPageListTask','@ViewBag.ResultList[i]["ACDMC_NO"]','@ViewBag.ResultList[i]["YEAR"],@ViewBag.ResultList[i]["SEMESTER"]');">과제</button>
                                                       </div> <!---->
                                             </li>
                                         }
