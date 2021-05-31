@@ -32,6 +32,20 @@ namespace AREA1.Controllers {
                 return RedirectToAction("/Login", new { alertLogin = 2 });
             }
 
+            DateTime nowDt = DateTime.Now;
+            if (nowDt.DayOfWeek == DayOfWeek.Monday)
+                ViewBag.DayOfWeek = 0;
+            else if (nowDt.DayOfWeek == DayOfWeek.Thursday)
+                ViewBag.DayOfWeek = 1;
+            else if (nowDt.DayOfWeek == DayOfWeek.Wednesday)
+                ViewBag.DayOfWeek = 2;
+            else if (nowDt.DayOfWeek == DayOfWeek.Thursday)
+                ViewBag.DayOfWeek = 3;
+            else if (nowDt.DayOfWeek == DayOfWeek.Friday)
+                ViewBag.DayOfWeek = 4;
+            else if (nowDt.DayOfWeek == DayOfWeek.Saturday)
+                ViewBag.DayOfWeek = 5;
+
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
 
