@@ -214,7 +214,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
 
             if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
-                Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
+                Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
                 Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
             }
 
@@ -288,7 +288,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
 
             if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
-                Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
+                Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
                 Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
             }
 
@@ -365,7 +365,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
 
             if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
-                Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
+                Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
                 Response.WriteAsync("<script language=\"javascript\">window.location=\"/Notice/SelectPageListNotice\"</script>");
             }
 

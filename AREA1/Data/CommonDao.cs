@@ -68,8 +68,8 @@ namespace AREA1.Data {
 
             DataTable dt = SelectTable(sqlQuery);
 
-
-            for (int i = 0; i < dt.Rows.Count; i++) {
+            int rowCnt = dt.Rows.Count != 0 ? dt.Rows.Count : 1;
+            for (int i = 0; i < rowCnt; i++) {
                 Dictionary<string, string> DataDic = new Dictionary<string, string>();
 
                 for (int j = 0; j < dt.Columns.Count; j++) {
@@ -91,8 +91,8 @@ namespace AREA1.Data {
 
             DataTable dt = SelectTable(sqlQuery, param);
 
-
-            for (int i = 0; i < dt.Rows.Count; i++) {
+            int rowCnt = dt.Rows.Count != 0 ? dt.Rows.Count : 1;
+            for (int i = 0; i < rowCnt; i++) {
                 Dictionary<string, string> DataDic = new Dictionary<string, string>();
 
                 for (int j = 0; j < dt.Columns.Count; j++) {
@@ -114,8 +114,8 @@ namespace AREA1.Data {
 
             DataTable dt = SelectTable(sqlQuery, param);
 
-
-            for (int i = 0; i < dt.Rows.Count; i++) {
+            int rowCnt = dt.Rows.Count != 0 ? dt.Rows.Count : 1;
+            for (int i = 0; i < rowCnt; i++) {
                 Dictionary<string, string> DataDic = new Dictionary<string, string>();
 
                 for (int j = 0; j < dt.Columns.Count; j++) {
