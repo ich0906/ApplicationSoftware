@@ -169,13 +169,28 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                 ViewBag.fileCount = fcount;
             }
 
+            
+            // 학생 관련 부분
             if (ViewData["fs_at"].Equals("N")) {
                 sql = $"SELECT TASK_SEQ, REGISTER, DOC_ID, TITLE, CONTENT, PRSENTR_AT, REGIST_DT FROM OP_TASK_PRSENTR WHERE REGISTER = '{userInfo.user_id}' AND TASK_SEQ = @task_id:VARCHAR";
-                var resultPrsentr = _commonDao.SelectOne(sql, Request.Form);
-                if (Request.Form.ContainsKey("prsentr_at") && Request.Form["prsentr_at"] == "N") {
-                    resultPrsentr["PRSENTR_AT"] = "N";
-                }
+            } else {
+                sql = $"SELECT TASK_SEQ, REGISTER, DOC_ID, TITLE, CONTENT, PRSENTR_AT, REGIST_DT FROM OP_TASK_PRSENTR WHERE TASK_SEQ = @task_id:VARCHAR ORDER BY REGISTER ASC";
+            }
 
+            // 학생들이 과제 제출한 부분
+            var resultPrsentList = _commonDao.SelectList(sql, Request.Form);
+
+            // 학생 과제 수정 시 기존 내용을 유지하면서 수정 폼을 띄우기 위한 구분값을 설정한다.
+            // 해당 if문이 참일 경우는 학생일 경우를 가정하고 실행시키기 때문에 배열의 0번 인덱스에 해당 학생의 과제정보가 있을 것이라고 판단한다.
+            if (Request.Form.ContainsKey("prsentr_at") && Request.Form["prsentr_at"] == "N") {
+                resultPrsentList[0]["PRSENTR_AT"] = "N";
+            }
+
+            // 학생이 업로드한 파일 리스트를 담는 리스트
+            List<List<Dictionary<string, string>>> studentFileList = new List<List<Dictionary<string, string>>>();
+
+            for (int i = 0; i < resultPrsentList.Count; i++) {
+                var resultPrsentr = resultPrsentList[i];
                 //첨부파일 읽어오기
                 if (resultPrsentr["DOC_ID"] != "") {
                     sql = "SELECT FILE_NAME,FILE_EXTSN,FILE_ID FROM OP_FILE A JOIN OP_TASK_PRSENTR B ON A.DOC_ID=B.DOC_ID"
@@ -184,15 +199,14 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                     int fcount2 = 0;
                     var fileList2 = _commonDao.SelectList(sql);
                     fcount2 = fileList2.Count;
-                    ViewBag.fileList2 = fileList2;
-                    ViewBag.fileCount2 = fcount2;
-                }
 
-                ViewBag.ResultPrsentr = resultPrsentr;
+                    studentFileList.Add(fileList2);
+                    resultPrsentr["fileCount"] = fcount2.ToString();
+                }
             }
 
-
-
+            ViewBag.resultPrsentList = resultPrsentList;
+            ViewBag.studentFileList = studentFileList;
             ViewBag.result = result;
             ViewBag.param = param;
             ViewBag.Select = "/Task/SelectTask";
@@ -224,7 +238,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
 
             if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
-                Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
+                Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
                 Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
             }
 
@@ -302,7 +316,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
 
             if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
-                Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
+                Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
                 Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
             }
 
@@ -390,29 +404,37 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
         public string DeleteTask() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
 
+            //cud 처리할 때는 트랜잭션 시작해주어야함
+            using var transaction = _context.Database.BeginTransaction();
+            string resultCode = "ok";
 
             string query = "";
 
             if (userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
                 if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
-                    Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
+                    Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
                     Response.WriteAsync("<script language=\"javascript\">window.location=\"/Task/SelectPageListTask\"</script>");
                 }
+
+                query = $"DELETE FROM OP_TASK_PRSENTR WHERE TASK_SEQ = @task_id:NUMBER";
+                // 과제에 딸려 있는 제출 내역들을 먼저 삭제하고 
+                if (_commonDao.Delete(query, Request.Form) <= 0) {
+                    resultCode = "false";
+                }
+                
+                // 과제를 삭제한다.
                 query = "DELETE FROM OP_TASK WHERE TASK_SEQ = @task_id:NUMBER";
             } else {
                 query = $"DELETE FROM OP_TASK_PRSENTR WHERE REGISTER = '{userInfo.user_id}' AND TASK_SEQ = @task_id:NUMBER";
             }
 
-            //cud 처리할 때는 트랜잭션 시작해주어야함
-            using var transaction = _context.Database.BeginTransaction();
 
-            string resultCode = "ok";
-
-            if (_commonDao.Delete(query, Request.Form) == 0) {
+            if (_commonDao.Delete(query, Request.Form) <= 0) {
                 resultCode = "false";
             }
 
-            transaction.Commit();
+            if(resultCode.Equals("false")) transaction.Rollback();
+            else transaction.Commit();
 
             return resultCode;
         }

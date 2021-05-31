@@ -145,6 +145,7 @@ namespace Tool {
             string fName;
             var willDeleteList = _commonDao.SelectList(query);
             for (int i = 0; i < willDeleteList.Count; ++i) {
+                if (willDeleteList[i]["FILE_ID"].Equals("")) continue;
                 fName = Path.Combine(uploadFolder, willDeleteList[i]["FILE_ID"]);
                 File.Delete(fName);
             }
