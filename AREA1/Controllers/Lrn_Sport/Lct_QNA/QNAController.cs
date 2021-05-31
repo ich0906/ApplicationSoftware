@@ -265,7 +265,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             query = "INSERT INTO OP_BBS " +
                     "VALUES(NOTICE_SEQ.NEXTVAL" +
                     ", @SelectSubj:VARCHAR" +
-                    ", " + _codeMngTool.getCode("BBS", "QNA") +
+                    ", '" + _codeMngTool.getCode("BBS", "QNA") + "'" +
                     ", @Title:VARCHAR" +
                     ", TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
                     ", 0" +
