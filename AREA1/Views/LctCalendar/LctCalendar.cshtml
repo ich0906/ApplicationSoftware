@@ -1,0 +1,230 @@
+﻿<main role="main">
+    <div class="py-5 bg-light">
+        <div class="container">
+
+            <form id="__form__" method="post" style="display: none;">
+                <input type="hidden" name="selectedGrcode" />
+                <input id="yearhakgi" type="hidden" name="selectedYearhakgi" />
+                <input id="_selectedSubj" type="hidden" name="selectedSubj" />
+                <input type="hidden" name="page" value="1" />
+            </form>
+
+            <form id="yearHakgiForm" name="selectedYearHakgi" method="post" style="display:none">
+                <input id="_year" name="year" type="hidden" value="" />
+                <input id="_hakgi" name="hakgi" type="hidden" value="" />
+            </form>
+
+            <script>
+                function page_move(url, acdmc_no, yearhakgi) {
+                    var form = document.getElementById("__form__");
+                    var yh = document.getElementById("yearhakgi");
+                    var subj = document.getElementById("_selectedSubj");
+                    form.action = url;
+                    form.method = "post";
+                    yh.setAttribute("value", yearhakgi);
+                    subj.setAttribute("value", acdmc_no);
+                    form.submit();
+                }
+
+                function changeYearHakgi(url) {
+                    $("#yearHakgiForm").action = url;
+                    $("#yearHakgiForm").method = "post";
+                    $("#_year").val($("#selectYear").val().split("년")[0]);
+                    $("#_hakgi").val($("#selectHakgi").val().split("학기")[0]);
+                    $("#yearHakgiForm").submit();
+                }
+
+                $(document).ready(function () {
+                    $("#selectYear option:eq(@ViewBag.selectedYearIndex)").prop("selected", true);
+                    $("#selectHakgi option:eq(@ViewBag.selectedHakgiIndex)").prop("selected", true);
+                });
+            </script>
+
+            <!-- content -->
+            <div id="appModule" class="card card-body mb-4 content">
+                <div><p class="contenttitle">수업시간표</p></div>
+                <div class="con_search">
+                    <ul>
+                        <li>
+                            <select class="form-control form-control-sm" name="selectYear" id="selectYear">
+                                @for (int i = 0; i < ViewBag.yearCount; ++i) {
+                            <option>@ViewBag.yearList[i]["YEAR"]년</option>}
+                            </select>
+                            <select class="form-control form-control-sm" name="selectHakgi" id="selectHakgi">
+                                @for (int i = 0; i < ViewBag.hakgiCount; ++i) {
+                                    <option>@ViewBag.hakgiList[i]["SEMESTER"]학기</option>}
+                            </select>
+                        </li>
+                        <li>
+                            <button type="button" class="btn2 btn-gray" name="selectYearhakgi" id="selectYearhakgi" onclick="javascript: changeYearHakgi('/Calendar/ShowCalendar')" >시간표 조회</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="schedule">
+                    <br> <div class="tablelistbox">
+                        <div>
+                            <div class="card card-body mb-4">
+                                <div class="schedule">
+                                    <table class="scheduletb">
+                                        <colgroup><col> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"> <col class="wid16pro"></colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                @if (ViewBag.DayOfWeek == 0) {
+                                                    <th><p class="today1">월</p></th>
+ } else {
+                                                    <th>월</th>
+}
+                                                @if (ViewBag.DayOfWeek == 1) {
+                                                    <th><p class="today1">화</p></th>
+ } else {
+                                                    <th>화</th>
+}
+                                                @if (ViewBag.DayOfWeek == 2) {
+                                                    <th><p class="today1">수</p></th>
+ } else {
+                                                    <th>수</th>
+}
+                                                @if (ViewBag.DayOfWeek == 3) {
+                                                    <th><p class="today1">목</p></th>
+ } else {
+                                                    <th>목</th>
+}
+                                                @if (ViewBag.DayOfWeek == 4) {
+                                                    <th><p class="today1">금</p></th>
+ } else {
+                                                    <th>금</th>
+}
+                                                @if (ViewBag.DayOfWeek == 5) {
+                                                    <th><p class="today1">토</p></th>
+ } else {
+                                                    <th>토</th>
+}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{string[] days = { "", "월", "화", "수", "목", "금", "토" };}
+                                            @{string clsStr; }
+
+                                            @for (int i = 1; i <= 6; ++i) {
+                                <tr>
+                                    <td class="time">@i</td>
+                                    @if (ViewBag.userinfo.author == "2000") {
+                    @for (int j = 1; j <= 6; ++j) {
+        @if (ViewBag.ResultCount > 0) {
+            bool found = false;
+            for (int k = 0; k < ViewBag.ResultCount; ++k) {
+                if (ViewBag.ResultList[k]["DAY1"] == days[j] && ViewBag.ResultList[k]["PERIOD1"] == i.ToString()) {
+        <text>
+            @{clsStr = "namecol0" + (k + 1) + " lessontime1";}
+            <td>
+                <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[k]["ACDMC_NO"]','@ViewBag.ResultList[k]["YEAR"],@ViewBag.ResultList[k]["SEMESTER"]');">
+                    <div class="@clsStr" style="cursor: pointer;">
+                        <p>
+                            @ViewBag.ResultList[k]["TITLE"]
+                            (@ViewBag.ResultList[k]["BUILDING"]@ViewBag.ResultList[k]["ROOM_NUMBER"] / @ViewBag.ResultList[k]["NAME"])
+                        </p>
+                    </div>
+                </a>
+            </td>
+        </text> found = true;
+                                        } else if (ViewBag.ResultList[k]["DAY2"] == days[j] && ViewBag.ResultList[k]["PERIOD2"] == i.ToString()) {
+                                            if (ViewBag.ResultList[k]["DAY1"] == "") {
+        <text>
+            <td>
+                @{clsStr = "namecol0" + (k + 1) + " lessontime2";}
+                <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[k]["ACDMC_NO"]','@ViewBag.ResultList[k]["YEAR"],@ViewBag.ResultList[k]["SEMESTER"]');">
+                    <div class="@clsStr" style="cursor: pointer;">
+                        <p>
+                            @ViewBag.ResultList[k]["TITLE"]
+                            (@ViewBag.ResultList[k]["BUILDING"]@ViewBag.ResultList[k]["ROOM_NUMBER"] / @ViewBag.ResultList[k]["NAME"])
+                        </p>
+                    </div>
+                </a>
+            </td>
+        </text> } else {
+        <text>
+            <td>
+                @{clsStr = "namecol0" + (k + 1) + " lessontime1";}
+                <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultList[k]["ACDMC_NO"]','@ViewBag.ResultList[k]["YEAR"],@ViewBag.ResultList[k]["SEMESTER"]');">
+                    <div class="@clsStr" style="cursor: pointer;">
+                        <p>
+                            @ViewBag.ResultList[k]["TITLE"]
+                            (@ViewBag.ResultList[k]["BUILDING"]@ViewBag.ResultList[k]["ROOM_NUMBER"] / @ViewBag.ResultList[k]["NAME"])
+                        </p>
+                    </div>
+                </a>
+            </td>
+        </text> }
+                                            found = true;
+                                        }
+                                    }
+                                    if (!found) {
+        <td><!----></td> }
+                                } else {
+        <td><!----></td>}} } else {
+                    @for (int j = 1; j <= 6; ++j) {
+        @if (ViewBag.TeachesCount > 0) {
+            bool found = false;
+            for (int k = 0; k < ViewBag.TeachesCount; ++k) {
+                if (ViewBag.ResultListTeacher[k]["DAY1"] == days[j] && ViewBag.ResultListTeacher[k]["PERIOD1"] == i.ToString()) {
+        <text>
+            @{clsStr = "namecol0" + (k + 1) + " lessontime1";}
+            <td>
+                <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[k]["ACDMC_NO"]','@ViewBag.ResultListTeacher[k]["YEAR"],@ViewBag.ResultListTeacher[k]["SEMESTER"]');">
+                    <div class="@clsStr" style="cursor: pointer;">
+                        <p>
+                            @ViewBag.ResultListTeacher[k]["TITLE"]
+                            (@ViewBag.ResultListTeacher[k]["BUILDING"]@ViewBag.ResultListTeacher[k]["ROOM_NUMBER"] / @ViewBag.ResultListTeacher[k]["NAME"])
+                        </p>
+                    </div>
+                </a>
+            </td>
+        </text> found = true;
+                                        } else if (ViewBag.ResultListTeacher[k]["DAY2"] == days[j] && ViewBag.ResultListTeacher[k]["PERIOD2"] == i.ToString()) {
+                                            if (ViewBag.ResultListTeacher[k]["DAY1"] == "") {
+        <text>
+            <td>
+                @{clsStr = "namecol0" + (k + 1) + " lessontime2";}
+                <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[k]["ACDMC_NO"]','@ViewBag.ResultListTeacher[k]["YEAR"],@ViewBag.ResultListTeacher[k]["SEMESTER"]');">
+                    <div class="@clsStr" style="cursor: pointer;">
+                        <p>
+                            @ViewBag.ResultListTeacher[k]["TITLE"]
+                            (@ViewBag.ResultListTeacher[k]["BUILDING"]@ViewBag.ResultListTeacher[k]["ROOM_NUMBER"] / @ViewBag.ResultListTeacher[k]["NAME"])
+                        </p>
+                    </div>
+                </a>
+            </td>
+        </text> } else {
+        <text>
+            <td>
+                @{clsStr = "namecol0" + (k + 1) + " lessontime1";}
+                <a href="#" onclick="javascript: page_move('/LctGnrlz/LctGnrlz','@ViewBag.ResultListTeacher[k]["ACDMC_NO"]','@ViewBag.ResultListTeacher[k]["YEAR"],@ViewBag.ResultListTeacher[k]["SEMESTER"]');">
+                    <div class="@clsStr" style="cursor: pointer;">
+                        <p>
+                            @ViewBag.ResultListTeacher[k]["TITLE"]
+                            (@ViewBag.ResultListTeacher[k]["BUILDING"]@ViewBag.ResultListTeacher[k]["ROOM_NUMBER"] / @ViewBag.ResultListTeacher[k]["NAME"])
+                        </p>
+                    </div>
+                </a>
+            </td>
+        </text> }
+                                            found = true;
+                                        }
+                                    }
+                                    if (!found) {
+        <td><!----></td> }
+                                } else {
+        <td><!----></td>}}}
+                                </tr>}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div> <div style="border: 1px solid rgb(213, 213, 213);"><table style="width: 100%;"><tbody><tr><td style="text-align: center;">1 교시 (09:00 ~ 10:15)</td> <td style="text-align: center;">2 교시 (10:30 ~ 11:45)</td> <td style="text-align: center;">3 교시 (12:00 ~ 13:15)</td></tr> <tr><td style="text-align: center;">4 교시 (13:30 ~ 14:45)</td> <td style="text-align: center;">5 교시 (15:00 ~ 16:15)</td> <td style="text-align: center;">6 교시 (16:30 ~ 17:45)</td></tr></tbody></table></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- content -->
+            </div>
+        </div>
+</main>

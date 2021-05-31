@@ -84,7 +84,8 @@
     <div id="appHeaderSubj" class="subjectnameba">
         <div class="container">
             <div class="row mg0" style="height: 37px">
-                <div class="col-md-10 subtitle" style="cursor: pointer;" @@click="goLctrumMain()"><span class="subjectname">{{ subjNm }}</span> <span class="subjecttime">{{ lctrumSchdul }}</span></div>
+                <div class="col-md-10 subtitle" style="cursor: pointer;" onclick="javascript: page_move('/LctGnrlz/LctGnrlz', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI')"><span class="subjectname">{{ subjNm }}</span> <span class="subjecttime">{{ lctrumSchdul }}</span>  
+                                 </span></div>
                 <div class="col-md-2 subtap">
                     <a href="#" @@click="appHeaderSubj.goOpenTalkWin(selectYearhakgi, selectSubj, subjNm);"><img src="/images/lctSport/btntap.png"></a>
                 </div>

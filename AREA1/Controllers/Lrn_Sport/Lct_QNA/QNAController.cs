@@ -94,16 +94,16 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             if (bbsCnt > 0)
             {
                 sql = "SELECT *                                                                         "
-                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, DECODE(OTHBC_AT,'Y','공개','N','비공개') AS OTHBC, RDCNT, BBS_ID                                  "
+                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, DECODE(OTHBC_AT,'Y','공개','N','비공개') AS OTHBC, RDCNT, BBS_ID, DOC_ID, FILE_ID  "
                     + "      FROM(SELECT A.TITLE,                                                                             "
                     + "                   B.NAME AS REGISTER,                                                                 "
                     + "                   A.REGIST_DT,                                                                        "
-                    + "                   A.OTHBC_AT,                                                                        "
+                    + "                   A.OTHBC_AT,                                                                         "
                     + "                   A.RDCNT,                                                                            "
-                    + "                   A.BBS_ID                                                                            "
+                    + "                   A.BBS_ID, A.DOC_ID, C.FILE_ID                                                       "
                     + "            FROM OP_BBS A                                                                              "
                     + "                     JOIN OP_USER B                                                                    "
-                    + "                          ON A.REGISTER = B.USER_ID                                                    "
+                    + "                          ON A.REGISTER = B.USER_ID LEFT JOIN OP_FILE C on A.DOC_ID = C.DOC_ID         "
                     + "            WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "QNA") + "'"
                     + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                     "
                     + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                  "
@@ -265,7 +265,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             query = "INSERT INTO OP_BBS " +
                     "VALUES(NOTICE_SEQ.NEXTVAL" +
                     ", @SelectSubj:VARCHAR" +
-                    ", " + _codeMngTool.getCode("BBS", "QNA") +
+                    ", '" + _codeMngTool.getCode("BBS", "QNA") + "'" +
                     ", @Title:VARCHAR" +
                     ", TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
                     ", 0" +
