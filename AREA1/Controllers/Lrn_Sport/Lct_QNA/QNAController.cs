@@ -225,7 +225,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
 
             //if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")))
             //{
-            //    Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
+            //    Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
             //    Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
             //}
 
@@ -265,7 +265,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             query = "INSERT INTO OP_BBS " +
                     "VALUES(NOTICE_SEQ.NEXTVAL" +
                     ", @SelectSubj:VARCHAR" +
-                    ", " + _codeMngTool.getCode("BBS", "QNA") +
+                    ", '" + _codeMngTool.getCode("BBS", "QNA") + "'" +
                     ", @Title:VARCHAR" +
                     ", TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
                     ", 0" +
@@ -302,7 +302,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
 
             if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")))
             {
-                Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
+                Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
                 Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
             }
 
@@ -381,7 +381,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
 
             if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")))
             {
-                Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
+                Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
                 Response.WriteAsync("<script language=\"javascript\">window.location=\"/QNA/SelectPageListQNA\"</script>");
             }
 
