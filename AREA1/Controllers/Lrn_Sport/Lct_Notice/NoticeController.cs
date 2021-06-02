@@ -55,6 +55,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                       + "AND ACDMC_NO = @selectedSubj:VARCHAR";
 
 
+            int empNotiCnt = 0;
             int bbsCnt = 0;
             // Form이 존재하지 않으면 오류가 나기 때문에 분기해주어야한다.
             if (Request.HasFormContentType && !Request.Form["selectedSubj"].ToString().Equals("")) {
@@ -87,10 +88,11 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
             // 만약 조회된 공지사항이 있으면 값을 가져온다.
             if (bbsCnt > 0) {
-                sql = "SELECT *                                                                         "
+
+                string empNotiquery = "SELECT *                                                                                   "
                     + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID, DOC_ID, FILE_ID                     "
                     + "      FROM(SELECT A.TITLE,                                                                                 "
-                    + "                   B.NAME AS REGISTER,                                                                     " 
+                    + "                   B.NAME AS REGISTER,                                                                     "
                     + "                   A.REGIST_DT,                                                                            "
                     + "                   A.RDCNT,                                                                                "
                     + "                   A.BBS_ID, A.DOC_ID, C.FILE_ID                                                           "
@@ -99,9 +101,40 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                     + "                          ON A.REGISTER = B.USER_ID LEFT JOIN OP_FILE C on A.DOC_ID = C.DOC_ID             "
                     + "            WHERE BBS_CODE = '1000'                                                                        "
                     + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                         "
+                    + "              AND OTHBC_AT = 'N'                                                                           "
                     + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                      "
-                    + (param.ContainsKey("page") ? "AND RNUM > " + (Convert.ToInt32(param["page"]) - 1) + " * 10 " : "AND RNUM > 0 ")
-                    + (param.ContainsKey("page") ? "AND RNUM <= " + param["page"] + "0" : "AND RNUM <= 10");
+                    + "                                                             AND RNUM > 0                                  "
+                    + "                                                             AND RNUM <= 10                                ";
+
+                // Form이 존재하지 않으면 오류가 나기 때문에 분기해주어야한다.
+                if (Request.HasFormContentType) {
+                    var resultList = _commonDao.SelectList(empNotiquery, Request.Form);
+                    if (param["page"].Equals("1")) ViewBag.EmpResultList = resultList;
+                    empNotiCnt = resultList.Count;
+                // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
+                } else {
+                    var resultList = _commonDao.SelectList(empNotiquery, param);
+                    if (param["page"].Equals("1")) ViewBag.EmpResultList = resultList;
+                    empNotiCnt = resultList.Count;
+                }
+
+
+                sql = "SELECT *                                                                         "
+                        + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID, DOC_ID, FILE_ID                     "
+                        + "      FROM(SELECT A.TITLE,                                                                                 "
+                        + "                   B.NAME AS REGISTER,                                                                     " 
+                        + "                   A.REGIST_DT,                                                                            "
+                        + "                   A.RDCNT,                                                                                "
+                        + "                   A.BBS_ID, A.DOC_ID, C.FILE_ID                                                           "
+                        + "            FROM OP_BBS A                                                                                  "
+                        + "                     JOIN OP_USER B                                                                        "
+                        + "                          ON A.REGISTER = B.USER_ID LEFT JOIN OP_FILE C on A.DOC_ID = C.DOC_ID             "
+                        + "            WHERE BBS_CODE = '1000'                                                                        "
+                        + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                         "
+                        + "              AND OTHBC_AT = 'Y'                                                                           "
+                        + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                      "
+                        + (param.ContainsKey("page") ? " AND RNUM > " + (Convert.ToInt32(param["page"]) - 1) + " * 10 - " + empNotiCnt.ToString() : " AND RNUM > 0 - " + empNotiCnt.ToString())
+                        + (param.ContainsKey("page") ? " AND RNUM <= " + param["page"] + "0 - " + empNotiCnt.ToString() : " AND RNUM <= 10 - " + empNotiCnt.ToString());
 
                 // Form이 존재하지 않으면 오류가 나기 때문에 분기해주어야한다.
                 if (Request.HasFormContentType) {
@@ -112,9 +145,9 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                     var resultList = _commonDao.SelectList(sql, param);
                     ViewBag.ResultList = resultList;
                 }
-
             }
 
+            ViewBag.EmpNotiCnt = param["page"].Equals("1") ? empNotiCnt : 0;
             ViewBag.ResultCnt = bbsCnt;
             ViewBag.param = param;
             ViewBag.SelectPageList = "/Notice/SelectPageListNotice";
@@ -215,7 +248,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
             if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
                 Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
-                Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
+                Response.WriteAsync("<script language=\"javascript\">window.location=\"/Main/Main\"</script>");
             }
 
             param.Add("page", Request.Form["page"]);
@@ -289,7 +322,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
             if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
                 Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
-                Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
+                Response.WriteAsync("<script language=\"javascript\">window.location=\"/Main/Main\"</script>");
             }
 
             param.Add("page", Request.Form["page"]);
