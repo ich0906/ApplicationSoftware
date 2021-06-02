@@ -32,13 +32,18 @@
                 </div>
                 <div class="board_notice">
                     <dl class="notice_list_top">
-                        @for (int i = 0; i < 4; ++i) {
-                            if (i < ViewBag.noticeCount) {
-                                <dt><p><a href="#" onclick="javascript: page_move('/Notice/SelectNotice', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI', '@ViewBag.noticeList[i]["BBS_ID"]')">@ViewBag.noticeList[i]["TITLE"]</a></p> <span class="date">@ViewBag.noticeList[i]["REGIST_DT"].Split(' ')[0]</span></dt>
- } else {
-                                <dt><p><a href="#"></a></p> <span class="date"></span></dt>
-}
+                        @if (ViewBag.noticeCount == 0) {
+                            <dl class="notice_list_top"><dt><p>등록된 내용이 없습니다.</p></dt> <dt><p>&nbsp;</p></dt> <dt><p>&nbsp;</p></dt> <dt><p>&nbsp;</p></dt></dl>
+                        } else {
+                            @for (int i = 0; i < 4; ++i) {
+                                if (i < ViewBag.noticeCount) {
+                                    <dt><p><a href="#" onclick="javascript: page_move('/Notice/SelectNotice', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI', '@ViewBag.noticeList[i]["BBS_ID"]')">@ViewBag.noticeList[i]["TITLE"]</a></p> <span class="date">@ViewBag.noticeList[i]["REGIST_DT"].Split(' ')[0]</span></dt>
+                                } else {
+                                    <dt><p><a href="#">&nbsp;</a></p> <span class="date"></span></dt>
+                                }
+                            }
                         }
+
                     </dl>
                 </div>
             </div>
@@ -51,12 +56,12 @@
                         <div class="col-6">
                             <ul class="subjectpresent">
                                 <li><a href="#none">강의 <span class="oval"><span class="ftred">23</span>/24</span></a></li>
-                                <li><a href="#" onclick="javascript: page_move('/Notice/SelectNotice', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI')">공지사항 <span class="oval">@ViewBag.noticeCount</span></a></li>
+                                <li><a href="#" onclick="javascript: page_move('/Notice/SelectPageListNotice', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI')">공지사항 <span class="oval">@ViewBag.noticeCount</span></a></li>
                             </ul>
                         </div>
                         <div class="col-6">
                             <ul class="subjectpresent">
-                                <li><a href="#" onclick="javascript: page_move('/Task/SelectPageListTask', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI')">과제 <span class="oval">0</span></a></li>
+                                <li><a href="#" onclick="javascript: page_move('/Task/SelectPageListTask', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI')">과제 <span class="oval">@ViewBag.taskCount</span></a></li>
                                 <li><a href="#" onclick="javascript: page_move('/Recsroom/SelectPageListRecsroom', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI')">자료 <span class="oval">@ViewBag.recsCount</span></a></li>
                             </ul>
                         </div>
@@ -73,14 +78,18 @@
                 </div>
                 <div class="board_notice">
                     <dl class="notice_list_top">
-                        @for (int i = 0; i < 4; ++i) {
-                            if (i < ViewBag.recsCount) {
-                                <dt><p><a href="#" onclick="javascript: page_move('/Recsroom/SelectRecsroom', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI', '@ViewBag.recsList[i]["BBS_ID"]')">@ViewBag.recsList[i]["TITLE"]</a></p> <span class="date">@ViewBag.recsList[i]["REGIST_DT"].Split(' ')[0]</span></dt>
-                            } else {
-                                <dt><p><a href="#"></a></p> <span class="date"></span></dt>
+                        @if (ViewBag.noticeCount == 0) {
+                            <dl class="notice_list_top"><dt><p>등록된 내용이 없습니다.</p></dt> <dt><p>&nbsp;</p></dt> <dt><p>&nbsp;</p></dt> <dt><p>&nbsp;</p></dt></dl>
+                        } else {
+                            @for (int i = 0; i < 4; ++i) {
+                                if (i < ViewBag.recsCount) {
+                                    <dt><p><a href="#" onclick="javascript: page_move('/Recsroom/SelectRecsroom', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI', '@ViewBag.recsList[i]["BBS_ID"]')">@ViewBag.recsList[i]["TITLE"]</a></p> <span class="date">@ViewBag.recsList[i]["REGIST_DT"].Split(' ')[0]</span></dt>
+                                } else {
+                                    <dt><p><a href="#">&nbsp;</a></p> <span class="date"></span></dt>
+                                }
                             }
                         }
-                    </dl>
+                        </dl>
                 </div>
             </div>
         </div> <div class="col-md-6  mb-4">
@@ -90,14 +99,18 @@
                 </div>
                 <div class="board_notice">
                     <dl class="notice_list_top">
-                        @for (int i = 0; i < 4; ++i) {
-                            if (i < ViewBag.qnaCount) {
-                                <dt><p><a href="#" onclick="javascript: page_move('/QNA/SelectQNA', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI', '@ViewBag.qnaList[i]["BBS_ID"]')">@ViewBag.qnaList[i]["TITLE"]</a></p> <span class="date">@ViewBag.qnaList[i]["REGIST_DT"].Split(' ')[0]</span></dt>
-                            } else {
-                                <dt><p><a href="#"></a></p> <span class="date"></span></dt>
+                        @if (ViewBag.noticeCount == 0) {
+                            <dl class="notice_list_top"><dt><p>등록된 내용이 없습니다.</p></dt> <dt><p>&nbsp;</p></dt> <dt><p>&nbsp;</p></dt> <dt><p>&nbsp;</p></dt></dl>
+                        } else {
+                            @for (int i = 0; i < 4; ++i) {
+                                if (i < ViewBag.qnaCount) {
+                                    <dt><p><a href="#" onclick="javascript: page_move('/QNA/SelectQNA', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI', '@ViewBag.qnaList[i]["BBS_ID"]')">@ViewBag.qnaList[i]["TITLE"]</a></p> <span class="date">@ViewBag.qnaList[i]["REGIST_DT"].Split(' ')[0]</span></dt>
+                                } else {
+                                    <dt><p><a href="#">&nbsp;</a></p> <span class="date"></span></dt>
+                                }
                             }
                         }
-                    </dl>
+                        </dl>
                 </div>
             </div>
         </div> <!----> <div class="card card-body mt-4 mb-4">
