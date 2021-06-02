@@ -371,7 +371,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Recsroom
             param.Add("OthbcAt", Recsroom.OthbcAt);
             param.Add("Content", Recsroom.Content);
             param.Add("bbs_id", Recsroom.Bbs_id);
-            param.Add("AtchFileId", Recsroom.SelectSubj);
+            param.Add("AtchFileId", Recsroom.AtchFileId);
             param.Add("user_id", userInfo.user_id);
             string query = "";
 

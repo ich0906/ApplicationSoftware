@@ -19,6 +19,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
         private readonly CodeMngTool _codeMngTool;
+        private readonly FileMngTool _fileMngTool;
 
         public QNAController(ILogger<QNAController> logger, AppSoftDbContext context)
         {
@@ -26,6 +27,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             _context = context;
             _commonDao = new CommonDao(context);
             _codeMngTool = new CodeMngTool(context);
+            _fileMngTool = new FileMngTool(context);
         }
 
         /*
@@ -169,6 +171,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
                        + ", B.NAME "
                        + ", A.BBS_ID "
                        + ", A.RDCNT "
+                       + ", DOC_ID "
                        + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
                        + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
                        + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
@@ -200,6 +203,20 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             ViewBag.SelectPageList = "/QNA/SelectPageListQNA";
             ViewBag.UpdateForm = "/QNA/UpdateFormQNA";
             ViewBag.Delete = "/QNA/DeleteQNA";
+
+            int fcount = 0;
+            //첨부파일 읽어오기
+            if (result["DOC_ID"] != "")
+            {
+                sql = "SELECT FILE_NAME,FILE_EXTSN,FILE_ID FROM OP_FILE A JOIN OP_BBS B ON A.DOC_ID=B.DOC_ID"
+               + " WHERE A.DOC_ID='" + result["DOC_ID"] + "'";
+
+                var fileList = _commonDao.SelectList(sql);
+                fcount = fileList.Count;
+                ViewBag.fileList = fileList;
+            }
+
+            ViewBag.fileCount = fcount;
 
             return View("/Views/LctSport/BoardViewStdPage.cshtml");
         }
@@ -257,7 +274,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             param.Add("Title", QNA.Title);
             param.Add("OthbcAt", QNA.OthbcAt);
             param.Add("Content", QNA.Content);
-            param.Add("AtchFileId", QNA.SelectSubj);
+            param.Add("AtchFileId", QNA.AtchFileId);
             param.Add("user_id", userInfo.user_id);
 
             string query = "";
@@ -271,7 +288,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
                     ", 0" +
                     ", @Content:VARCHAR" +
                     ", @user_id:VARCHAR" +
-                    ", ''" +
+                    ", @AtchFileId:VARCHAR" +
                     ", @OthbcAt:VARCHAR" +
                     ", NULL" +
                     ", NULL" +
@@ -339,7 +356,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             ViewBag.SelectPageList = "/QNA/SelectPageListQNA";
             ViewBag.Select = "/QNA/SelectQNA";
             ViewBag.InsertForm = "/QNA/InsertFormQNA";
-            ViewBag.Insert = "/QNA/InsertQNA";
+            ViewBag.Insert = "/QNA/UpdateQNA";
 
             return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
         }
@@ -355,7 +372,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             param.Add("OthbcAt", QNA.OthbcAt);
             param.Add("Content", QNA.Content);
             param.Add("bbs_id", QNA.Bbs_id);
-            param.Add("AtchFileId", QNA.SelectSubj);
+            param.Add("AtchFileId", QNA.AtchFileId);
             param.Add("user_id", userInfo.user_id);
             string query = "";
 
@@ -364,6 +381,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
                     ", UPDATE_DT = TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
                     ", CONTENTS = @Content:VARCHAR" +
                     ", UPDUSR = @user_id:VARCHAR" +
+                    ", DOC_ID = @AtchFileId:VARCHAR" +
                     ", OTHBC_AT = @OthbcAt:VARCHAR WHERE BBS_ID = @bbs_id:NUMBER";
 
             //cud 처리할 때는 트랜잭션 시작해주어야함
@@ -386,6 +404,16 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             }
 
             string query = "";
+
+            query = "SELECT FILE_ID, A.DOC_ID FROM OP_FILE A "
+                + "JOIN OP_BBS B "
+                + "ON A.DOC_ID=B.DOC_ID "
+                + "AND BBS_ID='" + Request.Form["bbs_id"] + "'";
+            var removeFiles = _commonDao.SelectList(query);
+            for (int i = 0; i < removeFiles.Count; ++i)
+            {
+                _fileMngTool.removeFile(removeFiles[i]["DOC_ID"]);
+            }
 
             query = "DELETE FROM OP_BBS WHERE BBS_ID = @bbs_id:NUMBER";
 
