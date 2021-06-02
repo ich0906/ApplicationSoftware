@@ -19,6 +19,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Recsroom
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
         private readonly CodeMngTool _codeMngTool;
+        private readonly FileMngTool _fileMngTool;
 
         public RecsroomController(ILogger<RecsroomController> logger, AppSoftDbContext context)
         {
@@ -26,6 +27,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Recsroom
             _context = context;
             _commonDao = new CommonDao(context);
             _codeMngTool = new CodeMngTool(context);
+            _fileMngTool = new FileMngTool(context);
         }
 
         /*
@@ -94,19 +96,18 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Recsroom
             if (bbsCnt > 0)
             {
                 sql = "SELECT *                                                                         "
-                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, DECODE(OTHBC_AT,'Y','공개','N','비공개') AS OTHBC, RDCNT, BBS_ID, DOC_ID, FILE_ID  "
-                    + "      FROM(SELECT A.TITLE,                                                                             "
-                    + "                   B.NAME AS REGISTER,                                                                 "
-                    + "                   A.REGIST_DT,                                                                        "
-                    + "                   A.OTHBC_AT,                                                                         "
-                    + "                   A.RDCNT,                                                                            "
-                    + "                   A.BBS_ID, A.DOC_ID, C.FILE_ID                                                       "
-                    + "            FROM OP_BBS A                                                                              "
-                    + "                     JOIN OP_USER B                                                                    "
-                    + "                          ON A.REGISTER = B.USER_ID LEFT JOIN OP_FILE C on A.DOC_ID = C.DOC_ID         "
+                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID, DOC_ID, FILE_ID                     "
+                    + "      FROM(SELECT A.TITLE,                                                                                 "
+                    + "                   B.NAME AS REGISTER,                                                                     "
+                    + "                   A.REGIST_DT,                                                                            "
+                    + "                   A.RDCNT,                                                                                "
+                    + "                   A.BBS_ID, A.DOC_ID, C.FILE_ID                                                           "
+                    + "            FROM OP_BBS A                                                                                  "
+                    + "                     JOIN OP_USER B                                                                        "
+                    + "                          ON A.REGISTER = B.USER_ID LEFT JOIN OP_FILE C on A.DOC_ID = C.DOC_ID             "
                     + "            WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "RECSROOM") + "'"
-                    + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                     "
-                    + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                  "
+                    + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                         "
+                    + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                      "
                     + (param.ContainsKey("page") ? "AND RNUM > " + (Convert.ToInt32(param["page"]) - 1) + " * 10 " : "AND RNUM > 0 ")
                     + (param.ContainsKey("page") ? "AND RNUM <= " + param["page"] + "0" : "AND RNUM <= 10");
 
@@ -207,7 +208,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Recsroom
             if (result["DOC_ID"] != "")
             {
                 sql = "SELECT FILE_NAME,FILE_EXTSN,FILE_ID FROM OP_FILE A JOIN OP_BBS B ON A.DOC_ID=B.DOC_ID"
-               + " WHERE A.DOC_ID=" + result["DOC_ID"];
+               + " WHERE A.DOC_ID='" + result["DOC_ID"] + "'";
 
                 var fileList = _commonDao.SelectList(sql);
                 fcount = fileList.Count;
@@ -272,7 +273,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Recsroom
             param.Add("Title", Recsroom.Title);
             param.Add("OthbcAt", Recsroom.OthbcAt);
             param.Add("Content", Recsroom.Content);
-            param.Add("AtchFileId", Recsroom.SelectSubj);
+            param.Add("AtchFileId", Recsroom.AtchFileId);
             param.Add("user_id", userInfo.user_id);
 
             string query = "";
@@ -286,7 +287,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Recsroom
                     ", 0" +
                     ", @Content:VARCHAR" +
                     ", @user_id:VARCHAR" +
-                    ", ''" +
+                    ", @AtchFileId:VARCHAR" +
                     ", @OthbcAt:VARCHAR" +
                     ", NULL" +
                     ", NULL" +
@@ -332,7 +333,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Recsroom
                         + ", B.NAME "
                         + ", A.BBS_ID "
                         + ", A.RDCNT "
-                        + ", A.DOC_ID "////////////////////////////////////////
+                        + ", A.DOC_ID "
                         + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
                         + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
                         + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
@@ -370,7 +371,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Recsroom
             param.Add("OthbcAt", Recsroom.OthbcAt);
             param.Add("Content", Recsroom.Content);
             param.Add("bbs_id", Recsroom.Bbs_id);
-            param.Add("AtchFileId", Recsroom.SelectSubj);
+            param.Add("AtchFileId", Recsroom.AtchFileId);
             param.Add("user_id", userInfo.user_id);
             string query = "";
 
@@ -379,6 +380,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Recsroom
                     ", UPDATE_DT = TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
                     ", CONTENTS = @Content:VARCHAR" +
                     ", UPDUSR = @user_id:VARCHAR" +
+                    ", DOC_ID = @AtchFileId:VARCHAR" +
                     ", OTHBC_AT = @OthbcAt:VARCHAR WHERE BBS_ID = @bbs_id:NUMBER";
 
             //cud 처리할 때는 트랜잭션 시작해주어야함
@@ -401,6 +403,16 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Recsroom
             }
 
             string query = "";
+
+            query = "SELECT FILE_ID, A.DOC_ID FROM OP_FILE A "
+                + "JOIN OP_BBS B "
+                + "ON A.DOC_ID=B.DOC_ID "
+                + "AND BBS_ID='" + Request.Form["bbs_id"] + "'";
+            var removeFiles = _commonDao.SelectList(query);
+            for (int i = 0; i < removeFiles.Count; ++i)
+            {
+                _fileMngTool.removeFile(removeFiles[i]["DOC_ID"]);
+            }
 
             query = "DELETE FROM OP_BBS WHERE BBS_ID = @bbs_id:NUMBER";
 

@@ -56,7 +56,7 @@
         }
     </div>
     <div class="btnCon">
-        @if (ViewData["fs_at"].Equals("Y")) {
+        @if ((!ViewData["pageNm"].Equals("강의 묻고답하기") && ViewData["fs_at"].Equals("Y")) || (ViewData["pageNm"].Equals("강의 묻고답하기") && @ViewBag.result["NAME"].Equals(ViewData["name"]))) {
             <button type="button" class="btn2 btn-gray">수정</button>
             <button type="button" class="btn2 btn-gray">삭제</button>
         }
@@ -104,6 +104,7 @@
 
             $("#__form__").attr("action", "@ViewBag.UpdateForm");
             $("#__form__").submit();
+        }
         });
 
         // 삭제 버튼
