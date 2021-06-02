@@ -61,7 +61,7 @@
             </tr>
         </tbody>
     </table>
-    @if (ViewData["fs_at"].Equals("N") && (ViewBag.Result["B1"].Equals("Y") || ViewBag.Result["B2"].Equals("Y")) && ViewBag.resultPrsentList[0].Equals("Y")) {
+    @if (ViewData["fs_at"].Equals("N") && (ViewBag.Result["B1"].Equals("Y") || ViewBag.Result["B2"].Equals("Y")) && ViewBag.resultPrsentList[0]["PRSENTR_AT"].Equals("N")) {
 <div class="contsubtitle icon">과제제출</div>
 
                 <table class="AType">
@@ -145,8 +145,8 @@
 
             $("[name=task_id]").val(@ViewBag.result["TASK_SEQ"]);
 
-                                            @if (ViewData["fs_at"].Equals("Y")) {
-@:$("#__form__").attr("action", "@ViewBag.UpdateForm");
+            @if (ViewData["fs_at"].Equals("Y")) {
+                @:$("#__form__").attr("action", "@ViewBag.UpdateForm");
                 @:$("#__form__").submit();
             } else {
                 if (!ViewBag.resultPrsentList[0]["PRSENTR_AT"].Equals("Y")) {
@@ -177,8 +177,9 @@
                                 } else {
                                    alert("에러가 발생헀습니다.");
                                 }
-                            }, error:function (data) {
+                            }, error: function (data) {
                                 alert("에러가 발생헀습니다.");
+                            }
                             
                         });
 

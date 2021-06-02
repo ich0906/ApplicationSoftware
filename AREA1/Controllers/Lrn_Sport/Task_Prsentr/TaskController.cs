@@ -475,7 +475,8 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                    "DOC_ID =  @doc_id:VARCHAR " +
                    ", TITLE = @prsentr_title:VARCHAR " +
                    ", CONTENT = @prsentr_content:VARCHAR " +
-                   " WHERE TASK_SEQ = @task_id:VARCHAR";
+                   " WHERE TASK_SEQ = @task_id:VARCHAR" +
+                  $" AND REGISTER = '{userInfo.user_id}'";
 
                 if (_commonDao.Insert(query, Request.Form) == 0) {
                     resultCode = "false";

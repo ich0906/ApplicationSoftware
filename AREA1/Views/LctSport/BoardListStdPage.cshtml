@@ -71,7 +71,7 @@
                         @if (ViewData["pageNm"].Equals("강의 묻고답하기")) {
                             <td><!----> <span>@ViewBag.ResultList[i]["OTHBC"]</span></td>
                         }
-                        @if (ViewData["pageNm"].Equals("강의 묻고답하기") && ViewBag.ResultList[i]["OTHBC"].Equals("비공개") && !ViewData["name"].Equals(ViewBag.ResultList[i]["REGISTER"])) {
+                        @if (ViewData["pageNm"].Equals("강의 묻고답하기") && (ViewBag.ResultList[i]["OTHBC"].Equals("비공개") && !ViewData["name"].Equals(ViewBag.ResultList[i]["REGISTER"]) || ViewData["fs_at"].Equals("N"))) {
                             <td class="lft" style="cursor: pointer;" onclick="test()">@ViewBag.ResultList[i]["TITLE"]</td>
                         } else {
                             <td class="lft" style="cursor: pointer;" onclick="goDetail(@ViewBag.ResultList[i]["BBS_ID"])">@ViewBag.ResultList[i]["TITLE"]</td>
