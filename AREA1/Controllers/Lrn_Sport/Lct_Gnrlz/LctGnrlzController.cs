@@ -211,6 +211,19 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
                 ViewBag.qnaCount = qnaCnt;
             }
 
+            //과제 개수
+            if (acdmc_no.Equals("")) { //Form 도착 없이 이동한 경우
+                sql = "SELECT COUNT(*) AS TASK_CNT " +
+                    "FROM OP_TASK " +
+                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "'";
+            } else {
+                sql = "SELECT COUNT(*) AS TASK_CNT " +
+                    "FROM OP_TASK " +
+                    "WHERE ACDMC_NO='" + acdmc_no + "'";
+            }
+            int taskCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["TASK_CNT"]);
+            ViewBag.taskCount = taskCnt;
+
             return View("/Views/LctGnrlz/LctGnrlz.cshtml");
         }
 
