@@ -356,7 +356,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             ViewBag.SelectPageList = "/QNA/SelectPageListQNA";
             ViewBag.Select = "/QNA/SelectQNA";
             ViewBag.InsertForm = "/QNA/InsertFormQNA";
-            ViewBag.Insert = "/QNA/InsertQNA";
+            ViewBag.Insert = "/QNA/UpdateQNA";
 
             return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
         }
@@ -372,7 +372,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             param.Add("OthbcAt", QNA.OthbcAt);
             param.Add("Content", QNA.Content);
             param.Add("bbs_id", QNA.Bbs_id);
-            param.Add("AtchFileId", QNA.SelectSubj);
+            param.Add("AtchFileId", QNA.AtchFileId);
             param.Add("user_id", userInfo.user_id);
             string query = "";
 
