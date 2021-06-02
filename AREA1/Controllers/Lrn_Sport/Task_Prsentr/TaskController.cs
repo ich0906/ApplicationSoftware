@@ -239,7 +239,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
 
             if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
                 Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
-                Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
+                Response.WriteAsync("<script language=\"javascript\">window.location=\"/Main/Main\"</script>");
             }
 
             param.Add("page", Request.Form["page"]);
@@ -317,7 +317,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
 
             if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
                 Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
-                Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
+                Response.WriteAsync("<script language=\"javascript\">window.location=\"/Main/Main\"</script>");
             }
 
             param.Add("page", Request.Form["page"]);

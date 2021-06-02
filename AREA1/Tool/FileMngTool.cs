@@ -91,7 +91,7 @@ namespace Tool {
             }
             return docId;
             //Response.WriteAsync("<script language=\"javascript\">alert('" + fileName + " is uploaded!');</script>");
-            //Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
+            //Response.WriteAsync("<script language=\"javascript\">window.location=\"/Main/Main\"</script>");
 
         }
         public string Downloads(IFormCollection param) {
@@ -122,7 +122,7 @@ namespace Tool {
             fileName = tmpName + "." + tmpEXTSN;
 
             //Response.WriteAsync("<script language=\"javascript\">alert('" + fileName + " is downloaded!');</script>");
-            //Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
+            //Response.WriteAsync("<script language=\"javascript\">window.location=\"/Main/Main\"</script>");
 
             //파일 다운로드(카피)
             string sourcePath = System.IO.Directory.GetCurrentDirectory() + @"\wwwroot\upload";

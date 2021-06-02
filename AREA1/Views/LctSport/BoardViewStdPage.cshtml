@@ -60,7 +60,7 @@
             <button type="button" class="btn2 btn-gray">수정</button>
             <button type="button" class="btn2 btn-gray">삭제</button>
         }
-        <button type="button" class="btn2 btn-gray">목록</button>
+        <button type="button" id="btn_list" class="btn2 btn-gray">목록</button>
     </div>
     <div class="next_prev_box">
         <dl>
@@ -134,7 +134,7 @@
         });
 
         // 목록 버튼
-        $(".btnCon").find("button").eq(2).click(function () {
+        $("#btn_list").click(function () {
             $("#__form__").attr("action", "@ViewBag.SelectPageList");
             $("#__form__").submit();
         });
