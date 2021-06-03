@@ -192,7 +192,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             ViewBag.commentCnt = commentCnt;
 
             
-            sql = "SELECT B.NAME, A.REGIST_DT, A.CONTENTS " +
+            sql = "SELECT A.BBS_ID, B.NAME, A.REGIST_DT, A.CONTENTS " +
                 "FROM OP_BBS A JOIN OP_USER B " +
                 "ON A.REGISTER = B.USER_ID WHERE A.REF_ID = @BBS_ID:VARCHAR";
             var commentList = _commonDao.SelectList(sql, Request.Form);
@@ -206,6 +206,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             ViewBag.UpdateForm = "/QNA/UpdateFormQNA";
             ViewBag.Insert = "/QNA/InsertQNA";
             ViewBag.InsertComment = "/QNA/InsertCommentQNA";
+            ViewBag.DeleteComment = "/QNA/DeleteCommentQNA";
             ViewBag.Delete = "/QNA/DeleteQNA";
 
             int fcount = 0;
@@ -449,6 +450,45 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             {
                 _fileMngTool.removeFile(removeFiles[i]["DOC_ID"]);
             }
+
+            query = "DELETE FROM OP_BBS WHERE BBS_ID = @bbs_id:NUMBER";
+
+            //cud 처리할 때는 트랜잭션 시작해주어야함
+            using var transaction = _context.Database.BeginTransaction();
+
+            string resultCode = "ok";
+
+            if (_commonDao.Delete(query, Request.Form) == 0)
+            {
+                resultCode = "false";
+            }
+
+            transaction.Commit();
+
+            return resultCode;
+        }
+
+        public string DeleteCommentQNA()
+        {
+            UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
+
+            //if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")))
+            //{
+            //    Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
+            //    Response.WriteAsync("<script language=\"javascript\">window.location=\"/QNA/SelectPageListQNA\"</script>");
+            //}
+
+            string query = "";
+
+            //query = "SELECT FILE_ID, A.DOC_ID FROM OP_FILE A "
+            //    + "JOIN OP_BBS B "
+            //    + "ON A.DOC_ID=B.DOC_ID "
+            //    + "AND BBS_ID='" + Request.Form["bbs_id"] + "'";
+            //var removeFiles = _commonDao.SelectList(query);
+            //for (int i = 0; i < removeFiles.Count; ++i)
+            //{
+            //    _fileMngTool.removeFile(removeFiles[i]["DOC_ID"]);
+            //}
 
             query = "DELETE FROM OP_BBS WHERE BBS_ID = @bbs_id:NUMBER";
 

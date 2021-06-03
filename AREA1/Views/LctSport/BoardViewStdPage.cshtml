@@ -47,7 +47,14 @@
                 <li class="text first">
                     <div>
                         @Html.Raw(ViewBag.commentList[i]["CONTENTS"])
-                    </div><label><span style="color: rgb(2, 105, 202);">(@ViewBag.commentList[i]["REGIST_DT"])</span><button type="button" class="btn2 btn-white btnsmall" style="display: none;">삭제</button></label>
+                    </div>
+                    <label><span style="color: rgb(2, 105, 202);">(@ViewBag.commentList[i]["REGIST_DT"])</span>
+                    @if(ViewBag.commentList[i]["NAME"].Equals(ViewData["name"])) { 
+                          <button type = "button" class="btn2 btn-white btnsmall" style="display: block;" onclick="deleteCmt(@ViewBag.commentList[i]["BBS_ID"])">삭제</button>
+                    } else{
+                          <button type = "button" class="btn2 btn-white btnsmall" style="display: none;">삭제</button>
+                    }
+                    </label>
                 </li>
             </ul>
         }
@@ -172,6 +179,33 @@
 
         $("#__form__").attr("action", "@ViewBag.Select");
         $("#__form__").submit();
+    }
+
+    function deleteCmt(bbs_id) {
+        var input = "<input type='hidden' name='bbs_id' />";
+        $("#__form__").append(input);
+
+        $("[name=bbs_id]").val(bbs_id);
+
+        if (confirm("삭제하시겠습니까?")) {
+            $("#__form__").attr("action", "@ViewBag.DeleteComment");
+            $("#aform").attr("method", "POST");
+
+            $("#__form__").ajaxForm({
+                success: function (data) {
+                    if (data == 'ok') {
+                        alert("삭제하였습니다.");
+                        $('#__form__').ajaxFormUnbind();
+                        $(".btnCon").find("button").eq(2).trigger("click");
+                    } else {
+                        alert("에러가 발생헀습니다.");
+                    }
+                    location.reload();
+                }
+            });
+
+            $("#__form__").submit();
+        }
     }
 </script>
 
