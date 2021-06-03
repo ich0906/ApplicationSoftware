@@ -44,8 +44,16 @@ namespace Tool {
                 tmpHash = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
 
                 string fileHash = BitConverter.ToString(tmpHash);//해쉬
-                fileEXTSN = result[1];//확장자
-                string fileNameSplit = result[0];//확장자뗀이름
+                string fileNameSplit = "";
+
+                for (int i = 0; i < result.Length - 1; i++) {
+                    fileNameSplit += result[i];
+                    if (i < result.Length - 2) {
+                        fileNameSplit += ".";//확장자뗀이름
+                    }
+                }
+                fileEXTSN = result[result.Length - 1];//확장자
+
                 string FileTimeNow = timeNow.ToString("yyyy-MM-dd HH:mm:ss");//업로드시각
 
                 //속성마다 값 넣어주기
@@ -63,8 +71,7 @@ namespace Tool {
                                                    + "@file_name:VARCHAR,"
                                                    + "@file_extsn:VARCHAR,"
                                                    + "@upload_time:VARCHAR,"
-                                                   + "@doc_id:VARCHAR,"
-                                                   + "''"
+                                                   + "@doc_id:VARCHAR"
                                                    + ")";
                 _commonDao.Insert(query, files);
 
@@ -84,7 +91,7 @@ namespace Tool {
             }
             return docId;
             //Response.WriteAsync("<script language=\"javascript\">alert('" + fileName + " is uploaded!');</script>");
-            //Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
+            //Response.WriteAsync("<script language=\"javascript\">window.location=\"/Main/Main\"</script>");
 
         }
         public string Downloads(IFormCollection param) {
@@ -93,7 +100,7 @@ namespace Tool {
             using var transaction = _context.Database.BeginTransaction();
 
             //string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM OP_FILE WHERE FILE_ID = @file_id:VARCHAR";
-            string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM OP_FILE WHERE FILE_ID = '"+param["file_id"]+"'";
+            string query = "SELECT FILE_ID, FILE_EXTSN, FILE_NAME FROM OP_FILE WHERE FILE_ID = '" + param["file_id"] + "'";
             fileData = _commonDao.SelectOne(query, param);
 
             transaction.Commit();
@@ -115,7 +122,7 @@ namespace Tool {
             fileName = tmpName + "." + tmpEXTSN;
 
             //Response.WriteAsync("<script language=\"javascript\">alert('" + fileName + " is downloaded!');</script>");
-            //Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
+            //Response.WriteAsync("<script language=\"javascript\">window.location=\"/Main/Main\"</script>");
 
             //파일 다운로드(카피)
             string sourcePath = System.IO.Directory.GetCurrentDirectory() + @"\wwwroot\upload";
@@ -138,6 +145,7 @@ namespace Tool {
             string fName;
             var willDeleteList = _commonDao.SelectList(query);
             for (int i = 0; i < willDeleteList.Count; ++i) {
+                if (willDeleteList[i]["FILE_ID"].Equals("")) continue;
                 fName = Path.Combine(uploadFolder, willDeleteList[i]["FILE_ID"]);
                 File.Delete(fName);
             }

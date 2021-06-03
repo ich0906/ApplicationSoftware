@@ -84,10 +84,8 @@
     <div id="appHeaderSubj" class="subjectnameba">
         <div class="container">
             <div class="row mg0" style="height: 37px">
-                <div class="col-md-10 subtitle" style="cursor: pointer;" @@click="goLctrumMain()"><span class="subjectname">{{ subjNm }}</span> <span class="subjecttime">{{ lctrumSchdul }}</span></div>
-                <div class="col-md-2 subtap">
-                    <a href="#" @@click="appHeaderSubj.goOpenTalkWin(selectYearhakgi, selectSubj, subjNm);"><img src="/images/lctSport/btntap.png"></a>
-                </div>
+                <div class="col-md-10 subtitle" style="cursor: pointer;" onclick="javascript: page_move('/LctGnrlz/LctGnrlz', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI')"><span class="subjectname">{{ subjNm }}</span> <span class="subjecttime">{{ lctrumSchdul }}</span>  
+                                 </span></div>
             </div>
         </div>
     </div>
@@ -163,3 +161,40 @@
 
             <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" crossorigin="anonymous"></script>
+
+
+            <form id="__form3__" method="post" style="display: none;">
+                <input id="filename" type="hidden" name="file_id" />
+            </form>
+
+            <script>
+                function sendFileId(url, fileId) {
+                    var form = document.getElementById("__form3__");
+                    var fName = document.getElementById("filename");
+                    form.action = url;
+                    form.method = "post";
+                    fName.setAttribute("value", fileId);
+                    form.submit();
+                }
+                function page_move(url, acdmc_no, yearhakgi, bbs_id) {
+                    var form = document.getElementById("__form2__");
+                    var yh = document.getElementById("yearhakgi");
+                    var subj = document.getElementById("_selectedSubj");
+                    var bbs = document.getElementById("_BBS_ID");
+                    form.action = url;
+                    form.method = "post";
+                    yh.setAttribute("value", yearhakgi);
+                    subj.setAttribute("value", acdmc_no);
+                    bbs.setAttribute("value", bbs_id);
+                    form.submit();
+                }
+
+            </script>
+
+            <form id="__form2__" method="post" style="display: none;">
+                <input type="hidden" name="selectedGrcode" />
+                <input id="yearhakgi" type="hidden" name="selectedYearhakgi" />
+                <input id="_selectedSubj" type="hidden" name="selectedSubj" />
+                <input id="_BBS_ID" type="hidden" name="BBS_ID" />
+                <input type="hidden" name="page" value="@ViewBag.param["page"]" />
+            </form>

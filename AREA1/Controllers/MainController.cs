@@ -32,6 +32,20 @@ namespace AREA1.Controllers {
                 return RedirectToAction("/Login", new { alertLogin = 2 });
             }
 
+            DateTime nowDt = DateTime.Now;
+            if (nowDt.DayOfWeek == DayOfWeek.Monday)
+                ViewBag.DayOfWeek = 0;
+            else if (nowDt.DayOfWeek == DayOfWeek.Thursday)
+                ViewBag.DayOfWeek = 1;
+            else if (nowDt.DayOfWeek == DayOfWeek.Wednesday)
+                ViewBag.DayOfWeek = 2;
+            else if (nowDt.DayOfWeek == DayOfWeek.Thursday)
+                ViewBag.DayOfWeek = 3;
+            else if (nowDt.DayOfWeek == DayOfWeek.Friday)
+                ViewBag.DayOfWeek = 4;
+            else if (nowDt.DayOfWeek == DayOfWeek.Saturday)
+                ViewBag.DayOfWeek = 5;
+
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
 
@@ -52,14 +66,14 @@ namespace AREA1.Controllers {
                     + "JOIN OP_SECTION C on A.SEC_ID = C.SEC_ID and A.COURSE_ID = C.COURSE_ID and A.SEMESTER = C.SEMESTER and A.YEAR = C.YEAR "
                     + "JOIN OP_COURSE D ON C.COURSE_ID = D.COURSE_ID "
                     + "JOIN OP_TIME_SLOT E on C.TIME_SLOT_ID = E.TIME_SLOT_ID "
-                    + "WHERE ID=" + userInfo.user_id;
+                    + "WHERE ID=" + userInfo.user_id+" ORDER BY A.YEAR DESC, A.SEMESTER DESC";
             } else {
                 sql = "SELECT DISTINCT A.YEAR,A.SEMESTER FROM OP_TAKES A "
                     + "JOIN OP_USER B ON A.ID = B.USER_ID "
                     + "JOIN OP_SECTION C on A.SEC_ID = C.SEC_ID and A.COURSE_ID = C.COURSE_ID and A.SEMESTER = C.SEMESTER and A.YEAR = C.YEAR "
                     + "JOIN OP_COURSE D ON C.COURSE_ID = D.COURSE_ID "
                     + "JOIN OP_TIME_SLOT E on C.TIME_SLOT_ID = E.TIME_SLOT_ID "
-                    + "WHERE ID=" + userInfo.user_id;
+                    + "WHERE ID=" + userInfo.user_id+ " ORDER BY A.YEAR DESC, A.SEMESTER DESC";
             }
 
             var yearHakgiList = _commonDao.SelectList(sql);

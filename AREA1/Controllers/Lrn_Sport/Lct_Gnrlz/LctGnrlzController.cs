@@ -122,12 +122,12 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
             if (acdmc_no.Equals("")) { //Form 도착 없이 이동한 경우
                 sql = "SELECT COUNT(*) AS NOTICE_CNT " +
                    "FROM OP_BBS " +
-                   "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "'";
+                   "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND BBS_CODE=1000";
                 int noticeCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["NOTICE_CNT"]);
                 if (noticeCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +
-                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND OTHBC_AT='Y'" + " ORDER BY REGIST_DT DESC";
+                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND OTHBC_AT='Y' AND BBS_CODE=1000" + " ORDER BY BBS_ID DESC";
 
                     var noticeList = _commonDao.SelectList(sql);
                     ViewBag.noticeList = noticeList;
@@ -136,18 +136,93 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
             } else {
                 sql = "SELECT COUNT(*) AS NOTICE_CNT " +
                   "FROM OP_BBS " +
-                  "WHERE ACDMC_NO='" + acdmc_no + "'";
+                  "WHERE ACDMC_NO='" + acdmc_no + "' AND BBS_CODE=1000";
                 int noticeCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["NOTICE_CNT"]);
                 if (noticeCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +
-                    "WHERE ACDMC_NO='" + acdmc_no + "' AND OTHBC_AT='Y'" + " ORDER BY REGIST_DT DESC";
+                    "WHERE ACDMC_NO='" + acdmc_no + "' AND OTHBC_AT='Y' AND BBS_CODE=1000" + " ORDER BY BBS_ID DESC";
 
                     var noticeList = _commonDao.SelectList(sql);
                     ViewBag.noticeList = noticeList;
                 }
                 ViewBag.noticeCount = noticeCnt;
             }
+
+            //자료실 4개 가져오기
+            if (acdmc_no.Equals("")) { //Form 도착 없이 이동한 경우
+                sql = "SELECT COUNT(*) AS RECS_CNT " +
+                   "FROM OP_BBS " +
+                   "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND BBS_CODE=3000";
+                int recsCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["RECS_CNT"]);
+                if (recsCnt > 0) {
+                    sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
+                    "FROM OP_BBS " +
+                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND OTHBC_AT='Y' AND BBS_CODE=3000" + " ORDER BY BBS_ID DESC";
+
+                    var recsList = _commonDao.SelectList(sql);
+                    ViewBag.recsList = recsList;
+                }
+                ViewBag.recsCount = recsCnt;
+            } else {
+                sql = "SELECT COUNT(*) AS RECS_CNT " +
+                  "FROM OP_BBS " +
+                  "WHERE ACDMC_NO='" + acdmc_no + "' AND BBS_CODE=3000";
+                int recsCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["RECS_CNT"]);
+                if (recsCnt > 0) {
+                    sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
+                    "FROM OP_BBS " +
+                    "WHERE ACDMC_NO='" + acdmc_no + "' AND OTHBC_AT='Y' AND BBS_CODE=3000" + " ORDER BY BBS_ID DESC";
+
+                    var recsList = _commonDao.SelectList(sql);
+                    ViewBag.recsList = recsList;
+                }
+                ViewBag.recsCount = recsCnt;
+            }
+
+            //Q&A 4개 가져오기
+            if (acdmc_no.Equals("")) { //Form 도착 없이 이동한 경우
+                sql = "SELECT COUNT(*) AS QNA_CNT " +
+                   "FROM OP_BBS " +
+                   "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND BBS_CODE=2000";
+                int qnaCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["QNA_CNT"]);
+                if (qnaCnt > 0) {
+                    sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
+                    "FROM OP_BBS " +
+                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND OTHBC_AT='Y' AND BBS_CODE=2000" + " ORDER BY BBS_ID DESC";
+
+                    var qnaList = _commonDao.SelectList(sql);
+                    ViewBag.qnaList = qnaList;
+                }
+                ViewBag.qnaCount = qnaCnt;
+            } else {
+                sql = "SELECT COUNT(*) AS QNA_CNT " +
+                  "FROM OP_BBS " +
+                  "WHERE ACDMC_NO='" + acdmc_no + "' AND BBS_CODE=2000";
+                int qnaCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["QNA_CNT"]);
+                if (qnaCnt > 0) {
+                    sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
+                    "FROM OP_BBS " +
+                    "WHERE ACDMC_NO='" + acdmc_no + "' AND OTHBC_AT='Y' AND BBS_CODE=2000" + " ORDER BY BBS_ID DESC";
+
+                    var qnaList = _commonDao.SelectList(sql);
+                    ViewBag.qnaList = qnaList;
+                }
+                ViewBag.qnaCount = qnaCnt;
+            }
+
+            //과제 개수
+            if (acdmc_no.Equals("")) { //Form 도착 없이 이동한 경우
+                sql = "SELECT COUNT(*) AS TASK_CNT " +
+                    "FROM OP_TASK " +
+                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "'";
+            } else {
+                sql = "SELECT COUNT(*) AS TASK_CNT " +
+                    "FROM OP_TASK " +
+                    "WHERE ACDMC_NO='" + acdmc_no + "'";
+            }
+            int taskCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["TASK_CNT"]);
+            ViewBag.taskCount = taskCnt;
 
             return View("/Views/LctGnrlz/LctGnrlz.cshtml");
         }

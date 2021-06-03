@@ -19,6 +19,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
         private readonly CodeMngTool _codeMngTool;
+        private readonly FileMngTool _fileMngTool;
 
         public QNAController(ILogger<QNAController> logger, AppSoftDbContext context)
         {
@@ -26,6 +27,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             _context = context;
             _commonDao = new CommonDao(context);
             _codeMngTool = new CodeMngTool(context);
+            _fileMngTool = new FileMngTool(context);
         }
 
         /*
@@ -94,16 +96,16 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             if (bbsCnt > 0)
             {
                 sql = "SELECT *                                                                         "
-                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, DECODE(OTHBC_AT,'Y','공개','N','비공개') AS OTHBC, RDCNT, BBS_ID                                  "
+                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, DECODE(OTHBC_AT,'Y','공개','N','비공개') AS OTHBC, RDCNT, BBS_ID, DOC_ID, FILE_ID  "
                     + "      FROM(SELECT A.TITLE,                                                                             "
                     + "                   B.NAME AS REGISTER,                                                                 "
                     + "                   A.REGIST_DT,                                                                        "
-                    + "                   A.OTHBC_AT,                                                                        "
+                    + "                   A.OTHBC_AT,                                                                         "
                     + "                   A.RDCNT,                                                                            "
-                    + "                   A.BBS_ID                                                                            "
+                    + "                   A.BBS_ID, A.DOC_ID, C.FILE_ID                                                       "
                     + "            FROM OP_BBS A                                                                              "
                     + "                     JOIN OP_USER B                                                                    "
-                    + "                          ON A.REGISTER = B.USER_ID                                                    "
+                    + "                          ON A.REGISTER = B.USER_ID LEFT JOIN OP_FILE C on A.DOC_ID = C.DOC_ID         "
                     + "            WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "QNA") + "'"
                     + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                     "
                     + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                  "
@@ -169,6 +171,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
                        + ", B.NAME "
                        + ", A.BBS_ID "
                        + ", A.RDCNT "
+                       + ", DOC_ID "
                        + ", LEAD(BBS_ID) OVER(ORDER BY BBS_ID) AS NEXT_ID "
                        + ", LEAD(TITLE) OVER(ORDER BY BBS_ID) AS NEXT_TITLE "
                        + ", LAG(BBS_ID) OVER(ORDER BY BBS_ID) AS PREV_ID "
@@ -185,21 +188,40 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             var result = _commonDao.SelectOne(sql, Request.Form);
 
             sql = "SELECT COUNT(*) AS COMMENT_CNT FROM OP_BBS WHERE REF_ID = @BBS_ID:VARCHAR";
-            var commentCnt = _commonDao.SelectOne(sql, Request.Form);
+            var commentCnt = _commonDao.SelectOne(sql, Request.Form)["COMMENT_CNT"];
             ViewBag.commentCnt = commentCnt;
 
-            sql = "SELECT B.NAME, A.REGIST_DT, A.CONTENTS " +
+            
+            sql = "SELECT A.BBS_ID, B.NAME, A.REGIST_DT, A.CONTENTS " +
                 "FROM OP_BBS A JOIN OP_USER B " +
                 "ON A.REGISTER = B.USER_ID WHERE A.REF_ID = @BBS_ID:VARCHAR";
             var commentList = _commonDao.SelectList(sql, Request.Form);
             ViewBag.commentList = commentList;
+            
 
             ViewBag.result = result;
             ViewBag.param = param;
             ViewBag.Select = "/QNA/SelectQNA";
             ViewBag.SelectPageList = "/QNA/SelectPageListQNA";
             ViewBag.UpdateForm = "/QNA/UpdateFormQNA";
+            ViewBag.Insert = "/QNA/InsertQNA";
+            ViewBag.InsertComment = "/QNA/InsertCommentQNA";
+            ViewBag.DeleteComment = "/QNA/DeleteCommentQNA";
             ViewBag.Delete = "/QNA/DeleteQNA";
+
+            int fcount = 0;
+            //첨부파일 읽어오기
+            if (result["DOC_ID"] != "")
+            {
+                sql = "SELECT FILE_NAME,FILE_EXTSN,FILE_ID FROM OP_FILE A JOIN OP_BBS B ON A.DOC_ID=B.DOC_ID"
+               + " WHERE A.DOC_ID='" + result["DOC_ID"] + "'";
+
+                var fileList = _commonDao.SelectList(sql);
+                fcount = fileList.Count;
+                ViewBag.fileList = fileList;
+            }
+
+            ViewBag.fileCount = fcount;
 
             return View("/Views/LctSport/BoardViewStdPage.cshtml");
         }
@@ -225,8 +247,8 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
 
             //if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")))
             //{
-            //    Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
-            //    Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
+            //    Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
+            //    Response.WriteAsync("<script language=\"javascript\">window.location=\"/Main/Main\"</script>");
             //}
 
             param.Add("page", Request.Form["page"]);
@@ -257,7 +279,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             param.Add("Title", QNA.Title);
             param.Add("OthbcAt", QNA.OthbcAt);
             param.Add("Content", QNA.Content);
-            param.Add("AtchFileId", QNA.SelectSubj);
+            param.Add("AtchFileId", QNA.AtchFileId);
             param.Add("user_id", userInfo.user_id);
 
             string query = "";
@@ -265,13 +287,13 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             query = "INSERT INTO OP_BBS " +
                     "VALUES(NOTICE_SEQ.NEXTVAL" +
                     ", @SelectSubj:VARCHAR" +
-                    ", " + _codeMngTool.getCode("BBS", "QNA") +
+                    ", '" + _codeMngTool.getCode("BBS", "QNA") + "'" +
                     ", @Title:VARCHAR" +
                     ", TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
                     ", 0" +
                     ", @Content:VARCHAR" +
                     ", @user_id:VARCHAR" +
-                    ", ''" +
+                    ", @AtchFileId:VARCHAR" +
                     ", @OthbcAt:VARCHAR" +
                     ", NULL" +
                     ", NULL" +
@@ -281,6 +303,37 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             using var transaction = _context.Database.BeginTransaction();
 
             _commonDao.Insert(query, param);
+
+            transaction.Commit();
+
+            return "ok";
+        }
+
+        public string InsertCommentQNA()
+        {
+            UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
+
+            string query = "";
+
+            query = "INSERT INTO OP_BBS " +
+                    "VALUES(NOTICE_SEQ.NEXTVAL" +
+                    ", NULL" +
+                    ", '" + _codeMngTool.getCode("BBS", "QNA") + "'" +
+                    ", NULL" +
+                    ", TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
+                    ", 0" +
+                    ", @content:VARCHAR" +
+                    $", '{userInfo.user_id}'" +
+                    ", NULL" +
+                    ", NULL" +
+                    ", NULL" +
+                    ", NULL" +
+                    ", @bbs_id:VARCHAR)";
+
+            //cud 처리할 때는 트랜잭션 시작해주어야함
+            using var transaction = _context.Database.BeginTransaction();
+
+            _commonDao.Insert(query, Request.Form);
 
             transaction.Commit();
 
@@ -300,11 +353,11 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
 
-            if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")))
-            {
-                Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
-                Response.WriteAsync("<script language=\"javascript\">window.location=\"Main\"</script>");
-            }
+            //if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")))
+            //{
+            //    Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
+            //    Response.WriteAsync("<script language=\"javascript\">window.location=\"/Main/Main\"</script>");
+            //}
 
             param.Add("page", Request.Form["page"]);
 
@@ -339,7 +392,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             ViewBag.SelectPageList = "/QNA/SelectPageListQNA";
             ViewBag.Select = "/QNA/SelectQNA";
             ViewBag.InsertForm = "/QNA/InsertFormQNA";
-            ViewBag.Insert = "/QNA/InsertQNA";
+            ViewBag.Insert = "/QNA/UpdateQNA";
 
             return View("/Views/LctSport/BoardQnaWriteStdPage.cshtml");
         }
@@ -355,7 +408,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             param.Add("OthbcAt", QNA.OthbcAt);
             param.Add("Content", QNA.Content);
             param.Add("bbs_id", QNA.Bbs_id);
-            param.Add("AtchFileId", QNA.SelectSubj);
+            param.Add("AtchFileId", QNA.AtchFileId);
             param.Add("user_id", userInfo.user_id);
             string query = "";
 
@@ -364,6 +417,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
                     ", UPDATE_DT = TO_CHAR(SYSDATE, 'yyyy/mm/dd hh:mi')" +
                     ", CONTENTS = @Content:VARCHAR" +
                     ", UPDUSR = @user_id:VARCHAR" +
+                    ", DOC_ID = @AtchFileId:VARCHAR" +
                     ", OTHBC_AT = @OthbcAt:VARCHAR WHERE BBS_ID = @bbs_id:NUMBER";
 
             //cud 처리할 때는 트랜잭션 시작해주어야함
@@ -381,11 +435,60 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
 
             if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")))
             {
-                Response.WriteAsync("<script language=\"javascript\">alert('잘못된 권한입니다.');</script>");
+                Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
                 Response.WriteAsync("<script language=\"javascript\">window.location=\"/QNA/SelectPageListQNA\"</script>");
             }
 
             string query = "";
+
+            query = "SELECT FILE_ID, A.DOC_ID FROM OP_FILE A "
+                + "JOIN OP_BBS B "
+                + "ON A.DOC_ID=B.DOC_ID "
+                + "AND BBS_ID='" + Request.Form["bbs_id"] + "'";
+            var removeFiles = _commonDao.SelectList(query);
+            for (int i = 0; i < removeFiles.Count; ++i)
+            {
+                _fileMngTool.removeFile(removeFiles[i]["DOC_ID"]);
+            }
+
+            query = "DELETE FROM OP_BBS WHERE BBS_ID = @bbs_id:NUMBER";
+
+            //cud 처리할 때는 트랜잭션 시작해주어야함
+            using var transaction = _context.Database.BeginTransaction();
+
+            string resultCode = "ok";
+
+            if (_commonDao.Delete(query, Request.Form) == 0)
+            {
+                resultCode = "false";
+            }
+
+            transaction.Commit();
+
+            return resultCode;
+        }
+
+        public string DeleteCommentQNA()
+        {
+            UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
+
+            //if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")))
+            //{
+            //    Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
+            //    Response.WriteAsync("<script language=\"javascript\">window.location=\"/QNA/SelectPageListQNA\"</script>");
+            //}
+
+            string query = "";
+
+            //query = "SELECT FILE_ID, A.DOC_ID FROM OP_FILE A "
+            //    + "JOIN OP_BBS B "
+            //    + "ON A.DOC_ID=B.DOC_ID "
+            //    + "AND BBS_ID='" + Request.Form["bbs_id"] + "'";
+            //var removeFiles = _commonDao.SelectList(query);
+            //for (int i = 0; i < removeFiles.Count; ++i)
+            //{
+            //    _fileMngTool.removeFile(removeFiles[i]["DOC_ID"]);
+            //}
 
             query = "DELETE FROM OP_BBS WHERE BBS_ID = @bbs_id:NUMBER";
 
