@@ -59,9 +59,9 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             int bbsCnt = 0;
             // Form이 존재하지 않으면 오류가 나기 때문에 분기해주어야한다.
             if (Request.HasFormContentType && !Request.Form["selectedSubj"].ToString().Equals("")) {
-                param.Add("page", Request.Form["page"]);
-
                 bbsCnt = Convert.ToInt32(_commonDao.SelectOne(sql, Request.Form)["BBS_CNT"]);
+                if(bbsCnt + 10 < 10 * Convert.ToInt32(Request.Form["page"])) param.Add("page",  "1");
+                else param.Add("page", Request.Form["page"]);
 
                 ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
                 ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
@@ -88,6 +88,22 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
             // 만약 조회된 공지사항이 있으면 값을 가져온다.
             if (bbsCnt > 0) {
+                string empNotiCntquery = "SELECT COUNT(*) AS CNT                                                                                "
+                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID, DOC_ID, FILE_ID                     "
+                    + "      FROM(SELECT A.TITLE,                                                                                 "
+                    + "                   B.NAME AS REGISTER,                                                                     "
+                    + "                   A.REGIST_DT,                                                                            "
+                    + "                   A.RDCNT,                                                                                "
+                    + "                   A.BBS_ID, A.DOC_ID, C.FILE_ID                                                           "
+                    + "            FROM OP_BBS A                                                                                  "
+                    + "                     JOIN OP_USER B                                                                        "
+                    + "                          ON A.REGISTER = B.USER_ID LEFT JOIN OP_FILE C on A.DOC_ID = C.DOC_ID             "
+                    + "            WHERE BBS_CODE = '1000'                                                                        "
+                    + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                         "
+                    + "              AND OTHBC_AT = 'N'                                                                           "
+                    + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                      "
+                    + "                                                             AND RNUM > 0                                  "
+                    + "                                                             AND RNUM <= 10                                ";
 
                 string empNotiquery = "SELECT *                                                                                   "
                     + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID, DOC_ID, FILE_ID                     "
@@ -106,16 +122,17 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                     + "                                                             AND RNUM > 0                                  "
                     + "                                                             AND RNUM <= 10                                ";
 
+
                 // Form이 존재하지 않으면 오류가 나기 때문에 분기해주어야한다.
                 if (Request.HasFormContentType) {
                     var resultList = _commonDao.SelectList(empNotiquery, Request.Form);
+                    empNotiCnt = Convert.ToInt32(_commonDao.SelectOne(empNotiCntquery, Request.Form)["CNT"]);
                     if (param["page"].Equals("1")) ViewBag.EmpResultList = resultList;
-                    empNotiCnt = resultList.Count;
                 // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
                 } else {
                     var resultList = _commonDao.SelectList(empNotiquery, param);
+                    empNotiCnt = Convert.ToInt32(_commonDao.SelectOne(empNotiCntquery, param)["CNT"]);
                     if (param["page"].Equals("1")) ViewBag.EmpResultList = resultList;
-                    empNotiCnt = resultList.Count;
                 }
 
 

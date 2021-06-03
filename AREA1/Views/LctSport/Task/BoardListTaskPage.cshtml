@@ -8,8 +8,6 @@
     <div id="btnCon" class="btnCon">
         @if (ViewData["fs_at"].Equals("Y")) {
         <button type="button" class="btn2 btn-white">과제 등록</button>
-        } else {
-        <button type="button" class="btn2 btn-white">과제 이력</button>
         }
     </div>
     <div style="color: red;">
@@ -53,7 +51,7 @@
                                 @ViewBag.ResultList[i]["END_TMLMT"]
                              }
                         </td>
-                        <td rowspan="2">미제출</td>
+                        <td rowspan="2">@ViewBag.ResultList[i]["PRSENTR_AT"]</td>
                         <td rowspan="2">
                             <button type="button" class="btn2 btn-gray" onclick="goDetail(@ViewBag.ResultList[i]["TASK_SEQ"])">조회</button>
                         </td>

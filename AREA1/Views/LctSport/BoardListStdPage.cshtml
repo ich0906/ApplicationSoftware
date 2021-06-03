@@ -65,13 +65,14 @@
                 }
             }
             @if (ViewBag.ResultCnt > 0) {
+                int empNotiCnt = ViewData["pageNm"].Equals("강의 공지사항") ? ViewBag.EmpNotiCnt : 0;
                 for (int i = 0; i < ViewBag.ResultList.Count; i++) {
                     <tr>
-                        <td><!----> <span>@( ViewBag.ResultCnt - ViewBag.EmpNotiCnt - 10 * (Convert.ToInt32(ViewBag.param["page"])- 1) - @i )</span></td>
+                        <td><!----> <span>@( ViewBag.ResultCnt - empNotiCnt - 10 * (Convert.ToInt32(ViewBag.param["page"])- 1) - @i )</span></td>
                         @if (ViewData["pageNm"].Equals("강의 묻고답하기")) {
                             <td><!----> <span>@ViewBag.ResultList[i]["OTHBC"]</span></td>
                         }
-                        @if (ViewData["pageNm"].Equals("강의 묻고답하기") && ViewBag.ResultList[i]["OTHBC"].Equals("비공개") && !ViewData["name"].Equals(ViewBag.ResultList[i]["REGISTER"])) {
+                        @if (ViewData["pageNm"].Equals("강의 묻고답하기") && (ViewBag.ResultList[i]["OTHBC"].Equals("비공개") && !ViewData["name"].Equals(ViewBag.ResultList[i]["REGISTER"]) || ViewData["fs_at"].Equals("N"))) {
                             <td class="lft" style="cursor: pointer;" onclick="test()">@ViewBag.ResultList[i]["TITLE"]</td>
                         } else {
                             <td class="lft" style="cursor: pointer;" onclick="goDetail(@ViewBag.ResultList[i]["BBS_ID"])">@ViewBag.ResultList[i]["TITLE"]</td>
@@ -96,33 +97,34 @@
 
     @{
         int k = 1;
+        string active = "";
     }
-    <ul class="paging typeA">
-        <!---->
-        <li style="cursor:pointer" class="go-prev
+<ul class="paging typeA">
+    <!---->
+    <li style="cursor:pointer" class="go-prev
                                            @if (ViewBag.param["page"].Equals("1")) {
                                                 @:disabled
                                             }
                                         ">
-            <a tabindex="-1">Prev</a>
+        <a tabindex="-1">Prev</a>
+    </li>
+    @for (int j = ViewBag.ResultCnt; j > 0; j -= 10, k++) {
+        @if (ViewBag.param["page"].Equals(k.ToString())) {
+            active = "active";
+        } else { active = ""; }
+        <li onclick="goPage(@k);" style="cursor:pointer" class="@active">
+            <a tabindex="0">@k</a>
         </li>
-        @for (int j = ViewBag.ResultCnt; j > 0; j -= 10, k++) {
-            <li onclick="goPage(@k);" style="cursor:pointer" class=@if (ViewBag.param["page"].Equals(k.ToString())) {
-                                    @:" active"
-                } else { @: ""
-                }>
-                <a tabindex="0">@k</a>
-            </li>
-        }
-        <li style="cursor:pointer" class="go-next
+    }
+    <li style="cursor:pointer" class="go-next
                                         @if (ViewBag.param["page"].Equals((k-1).ToString())) {
                                             @:disabled
                                         }
                                      ">
-            <a tabindex="-1">Next</a>
-        </li>
-        <!---->
-    </ul>
+        <a tabindex="-1">Next</a>
+    </li>
+    <!---->
+</ul>
 </div>
 <!-- content -->
 <script type="text/javascript">
