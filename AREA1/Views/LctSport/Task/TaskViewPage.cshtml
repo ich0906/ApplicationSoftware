@@ -61,7 +61,7 @@
             </tr>
         </tbody>
     </table>
-    @if (ViewData["fs_at"].Equals("N") && (ViewBag.Result["B1"].Equals("Y") || ViewBag.Result["B2"].Equals("Y")) && ViewBag.resultPrsentList[0].Equals("Y")) {
+    @if (ViewData["fs_at"].Equals("N") && (ViewBag.Result["B1"].Equals("Y") || ViewBag.Result["B2"].Equals("Y")) && !ViewBag.resultPrsentList[0]["PRSENTR_AT"].Equals("Y")) {
 <div class="contsubtitle icon">과제제출</div>
 
                 <table class="AType">
@@ -92,32 +92,48 @@
                 <div class="contsubtitle icon">과제제출</div>
                                 @for (int i = 0; i < ViewBag.resultPrsentList.Count; i++) {
                                     var ResultPrsentr = ViewBag.resultPrsentList[i];
-                                    if (ViewData["fs_at"].Equals("Y")) { 
-                                        <span style="font-size:18px">●@ResultPrsentr["REGISTER"]</span>
+                                    if (!ResultPrsentr["REGISTER"].Equals("")) {
+                                        if (ViewData["fs_at"].Equals("Y")) {
+                                            <span style="font-size:18px">●@ResultPrsentr["REGISTER"]</span>
+                                        }
+                                        <table class="tablegw" style="margin-bottom:20px;">
+                                            <colgroup>
+                                                <col style="width: 20%;">
+                                                <col>
+                                            </colgroup>
+                                            <tbody>
+                                                <tr>
+                                                    <th> 파일</th>
+                                                    <td class="lft">
+                                                        @for (int j = 0; j < Convert.ToInt32(ResultPrsentr["fileCount"]); ++j) {
+                                                        <div class="board_viewfile"><a href="#" onclick="javascript: sendFileId('/File/DownloadDocument', '@ViewBag.studentFileList[i][j]["FILE_ID"]')"> @ViewBag.studentFileList[i][j]["FILE_NAME"].@ViewBag.studentFileList[i][j]["FILE_EXTSN"]</a></div>}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>제목</th>
+                                                    <td class="lft">@ResultPrsentr["TITLE"]</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>내용</th>
+                                                    <td class="lft">@Html.Raw(ResultPrsentr["CONTENT"].Replace("\n", "</br>"))</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    } else {
+                                        <text>
+                                        <table class="tablegw" style="margin-bottom:20px;">
+                                            <colgroup>
+                                                <col style="width: 20%;">
+                                                <col>
+                                            </colgroup>
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="2" class="disnone">과제를 제출한 학생이 없습니다.</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        </text>
                                     }
-                                    <table class="tablegw" style="margin-bottom:20px;">
-                                        <colgroup>
-                                            <col style="width: 20%;">
-                                            <col>
-                                        </colgroup>
-                                        <tbody>
-                                            <tr>
-                                                <th> 파일</th>
-                                                <td class="lft">
-                                                    @for (int j = 0; j < Convert.ToInt32(ResultPrsentr["fileCount"]); ++j) {
-                                <div class="board_viewfile"><a href="#" onclick="javascript: sendFileId('/File/DownloadDocument', '@ViewBag.studentFileList[i][j]["FILE_ID"]')"> @ViewBag.studentFileList[i][j]["FILE_NAME"].@ViewBag.studentFileList[i][j]["FILE_EXTSN"]</a></div>}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>제목</th>
-                                                <td class="lft">@ResultPrsentr["TITLE"]</td>
-                                            </tr>
-                                            <tr>
-                                                <th>내용</th>
-                                                <td class="lft">@Html.Raw(ResultPrsentr["CONTENT"].Replace("\n", "</br>"))</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
                                 }
                             }
     <div class="btnCon">
@@ -145,8 +161,8 @@
 
             $("[name=task_id]").val(@ViewBag.result["TASK_SEQ"]);
 
-                                            @if (ViewData["fs_at"].Equals("Y")) {
-@:$("#__form__").attr("action", "@ViewBag.UpdateForm");
+            @if (ViewData["fs_at"].Equals("Y")) {
+                @:$("#__form__").attr("action", "@ViewBag.UpdateForm");
                 @:$("#__form__").submit();
             } else {
                 if (!ViewBag.resultPrsentList[0]["PRSENTR_AT"].Equals("Y")) {
@@ -177,8 +193,9 @@
                                 } else {
                                    alert("에러가 발생헀습니다.");
                                 }
-                            }, error:function (data) {
+                            }, error: function (data) {
                                 alert("에러가 발생헀습니다.");
+                            }
                             
                         });
 

@@ -27,9 +27,9 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
         }
 
         /*
-         * 강의 공지사항 리스트 페이지
+         * 강의 과제 리스트 페이지
          * 작성자 : 김정원
-         * 기능 : 공지사항 리스트 페이지 호출
+         * 기능 : 과제 리스트 페이지 호출
          * */
         public IActionResult SelectPageListTask() {
             Dictionary<string, string> param = new Dictionary<string, string>();
@@ -43,7 +43,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
 
             string sql = "";
 
-            // 공지사항 개수 체크
+            // 과제 개수 체크
             sql = "SELECT COUNT(*) AS TASK_CNT "
                       + "FROM OP_TASK A "
                       + "JOIN OP_USER B "
@@ -61,7 +61,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                 ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
                 ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
 
-                // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
+                // Form이 없거나 과목을 선택하지 않고 과제 페이지에 넘어오는 경우
             } else {
                 // 디폴트 과목을 선택함
                 string sql2 = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))
@@ -80,7 +80,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             }
 
 
-            // 만약 조회된 공지사항이 있으면 값을 가져온다.
+            // 만약 조회된 과제가 있으면 값을 가져온다.
             if (bbsCnt > 0) {
                 sql = "SELECT *                                                                                               "
                     + "FROM(SELECT ROWNUM AS RNUM, AA.*                                                                       "
@@ -103,12 +103,30 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                 if (Request.HasFormContentType) {
                     var resultList = _commonDao.SelectList(sql, Request.Form);
                     ViewBag.ResultList = resultList;
-                    // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
+                    // Form이 없거나 과목을 선택하지 않고 과제 페이지에 넘어오는 경우
                 } else {
                     var resultList = _commonDao.SelectList(sql, param);
                     ViewBag.ResultList = resultList;
                 }
 
+                for(int i = 0; i< ViewBag.ResultList.Count; i++) {
+                    if(ViewData["fs_at"].Equals("Y")) {
+                        sql = "SELECT("
+                            + "SELECT COUNT(*) AS PRSENTR_CNT FROM OP_TASK_PRSENTR  WHERE TASK_SEQ = '81') || ' / ' || "
+                            + "(SELECT COUNT(*) TOTAL_TAKES FROM OP_TAKES A "
+                            + "JOIN OP_SECTION B ON A.SEC_ID = B.SEC_ID and A.COURSE_ID = B.COURSE_ID and A.SEMESTER = B.SEMESTER and A.YEAR = B.YEAR "
+                            + "WHERE B.ACDMC_NO = 'H030-3-9876-01') AS PRSENTR_AT "
+                            + "FROM DUAL ";
+                    } else {
+                        sql = $"SELECT PRSENTR_AT FROM OP_TASK_PRSENTR WHERE REGISTER = '{userInfo.user_id}'";
+                    }
+
+                    if (Request.HasFormContentType) {
+                        ViewBag.ResultList[i]["PRSENTR_AT"] = _commonDao.SelectOne(sql, Request.Form)["PRSENTR_AT"].Equals("") ? "미제출" : _commonDao.SelectOne(sql, Request.Form)["PRSENTR_AT"];
+                    } else {
+                        ViewBag.ResultList[i]["PRSENTR_AT"] = _commonDao.SelectOne(sql, param)["PRSENTR_AT"].Equals("") ? "미제출" : _commonDao.SelectOne(sql, param)["PRSENTR_AT"];
+                    }
+                }
             }
             param.Add("page", "1");
 
@@ -220,9 +238,9 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
         }
 
         /*
-         * 강의 공지사항 작성 페이지
+         * 강의 과제 작성 페이지
          * 작성자 : 김정원
-         * 기능 : 공지사항 작성 페이지 호출
+         * 기능 : 과제 작성 페이지 호출
          * */
         public IActionResult InsertFormTask() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
@@ -256,9 +274,9 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
 
 
         /*
-         * 강의 공지사항 작성
+         * 강의 과제 작성
          * 작성자 : 김정원
-         * 기능 : 공지사항 작성 로직
+         * 기능 : 과제 작성 로직
          * */
         [HttpPost]
         public string InsertTask([FromBody] Task Task) {
@@ -475,7 +493,8 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
                    "DOC_ID =  @doc_id:VARCHAR " +
                    ", TITLE = @prsentr_title:VARCHAR " +
                    ", CONTENT = @prsentr_content:VARCHAR " +
-                   " WHERE TASK_SEQ = @task_id:VARCHAR";
+                   " WHERE TASK_SEQ = @task_id:VARCHAR" +
+                  $" AND REGISTER = '{userInfo.user_id}'";
 
                 if (_commonDao.Insert(query, Request.Form) == 0) {
                     resultCode = "false";
