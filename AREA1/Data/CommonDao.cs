@@ -72,7 +72,8 @@ namespace AREA1.Data {
             for (int i = 0; i < dt.Rows.Count; i++) {
                 Dictionary<string, string> DataDic = new Dictionary<string, string>();
 
-                for (int j = 0; j < dt.Columns.Count; j++) {
+                for (int j = 0; j < dt.Columns.Count; j++) 
+                {
                     if (dt.Rows.Count != 0)
                         DataDic.Add(dt.Columns[j].ColumnName, dt.Rows[i][j].ToString());
                     else
