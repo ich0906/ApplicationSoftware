@@ -324,6 +324,21 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
         {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
 
+            Dictionary<string, string> param = new Dictionary<string, string>();
+          
+            string src = Request.Form["content"].ToString();
+
+            if (src != null) {
+                src = src.Replace("&", "&amp;");
+                src = src.Replace("<", "&lt;");
+                src = src.Replace(">", "&gt;");
+                src = src.Replace("\"", "&quot;");
+                src = src.Replace("\'", "&#039;");
+            }
+
+            param.Add("bbs_id", Request.Form["bbs_id"]);
+            param.Add("content", src);
+
             string query = "";
 
             query = "INSERT INTO OP_BBS " +
@@ -344,7 +359,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             //cud 처리할 때는 트랜잭션 시작해주어야함
             using var transaction = _context.Database.BeginTransaction();
 
-            _commonDao.Insert(query, Request.Form);
+            _commonDao.Insert(query, param);
 
             transaction.Commit();
 
