@@ -119,12 +119,12 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
             if (acdmc_no.Equals("")) { //Form 도착 없이 이동한 경우
                 sql = "SELECT COUNT(*) AS NOTICE_CNT " +
                    "FROM OP_BBS " +
-                   "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND BBS_CODE=1000";
+                   "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND BBS_CODE=1000 AND REF_ID IS NULL";
                 int noticeCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["NOTICE_CNT"]);
                 if (noticeCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +
-                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND BBS_CODE=1000" + " ORDER BY BBS_ID DESC";
+                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND BBS_CODE=1000 AND REF_ID IS NULL" + " ORDER BY BBS_ID DESC";
 
                     var noticeList = _commonDao.SelectList(sql);
                     ViewBag.noticeList = noticeList;
@@ -133,12 +133,12 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
             } else {
                 sql = "SELECT COUNT(*) AS NOTICE_CNT " +
                   "FROM OP_BBS " +
-                  "WHERE ACDMC_NO='" + acdmc_no + "' AND BBS_CODE=1000";
+                  "WHERE ACDMC_NO='" + acdmc_no + "' AND BBS_CODE=1000 AND REF_ID IS NULL";
                 int noticeCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["NOTICE_CNT"]);
                 if (noticeCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +
-                    "WHERE ACDMC_NO='" + acdmc_no + "' AND BBS_CODE=1000" + " ORDER BY BBS_ID DESC";
+                    "WHERE ACDMC_NO='" + acdmc_no + "' AND BBS_CODE=1000 AND REF_ID IS NULL" + " ORDER BY BBS_ID DESC";
 
                     var noticeList = _commonDao.SelectList(sql);
                     ViewBag.noticeList = noticeList;
@@ -150,12 +150,12 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
             if (acdmc_no.Equals("")) { //Form 도착 없이 이동한 경우
                 sql = "SELECT COUNT(*) AS RECS_CNT " +
                    "FROM OP_BBS " +
-                   "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND BBS_CODE=3000";
+                   "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND OTHBC_AT='Y' AND BBS_CODE=3000 AND REF_ID IS NULL";
                 int recsCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["RECS_CNT"]);
                 if (recsCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +
-                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND OTHBC_AT='Y' AND BBS_CODE=3000" + " ORDER BY BBS_ID DESC";
+                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND OTHBC_AT='Y' AND BBS_CODE=3000 AND REF_ID IS NULL" + " ORDER BY BBS_ID DESC";
 
                     var recsList = _commonDao.SelectList(sql);
                     ViewBag.recsList = recsList;
@@ -164,12 +164,12 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
             } else {
                 sql = "SELECT COUNT(*) AS RECS_CNT " +
                   "FROM OP_BBS " +
-                  "WHERE ACDMC_NO='" + acdmc_no + "' AND BBS_CODE=3000";
+                  "WHERE ACDMC_NO='" + acdmc_no + "' AND BBS_CODE=3000 AND OTHBC_AT='Y' AND REF_ID IS NULL";
                 int recsCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["RECS_CNT"]);
                 if (recsCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +
-                    "WHERE ACDMC_NO='" + acdmc_no + "' AND OTHBC_AT='Y' AND BBS_CODE=3000" + " ORDER BY BBS_ID DESC";
+                    "WHERE ACDMC_NO='" + acdmc_no + "' AND OTHBC_AT='Y' AND BBS_CODE=3000 AND REF_ID IS NULL" + " ORDER BY BBS_ID DESC";
 
                     var recsList = _commonDao.SelectList(sql);
                     ViewBag.recsList = recsList;
@@ -181,12 +181,12 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
             if (acdmc_no.Equals("")) { //Form 도착 없이 이동한 경우
                 sql = "SELECT COUNT(*) AS QNA_CNT " +
                    "FROM OP_BBS " +
-                   "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND BBS_CODE=2000";
+                   "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND OTHBC_AT='Y' AND BBS_CODE=2000 AND REF_ID IS NULL";
                 int qnaCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["QNA_CNT"]);
                 if (qnaCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +
-                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND OTHBC_AT='Y' AND BBS_CODE=2000" + " ORDER BY BBS_ID DESC";
+                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND OTHBC_AT='Y' AND BBS_CODE=2000 AND REF_ID IS NULL" + " ORDER BY BBS_ID DESC";
 
                     var qnaList = _commonDao.SelectList(sql);
                     ViewBag.qnaList = qnaList;
@@ -195,12 +195,12 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
             } else {
                 sql = "SELECT COUNT(*) AS QNA_CNT " +
                   "FROM OP_BBS " +
-                  "WHERE ACDMC_NO='" + acdmc_no + "' AND BBS_CODE=2000";
+                  "WHERE ACDMC_NO='" + acdmc_no + "' AND OTHBC_AT='Y' AND BBS_CODE=2000 AND REF_ID IS NULL";
                 int qnaCnt = Convert.ToInt32(_commonDao.SelectOne(sql)["QNA_CNT"]);
                 if (qnaCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +
-                    "WHERE ACDMC_NO='" + acdmc_no + "' AND OTHBC_AT='Y' AND BBS_CODE=2000" + " ORDER BY BBS_ID DESC";
+                    "WHERE ACDMC_NO='" + acdmc_no + "' AND OTHBC_AT='Y' AND BBS_CODE=2000 AND REF_ID IS NULL" + " ORDER BY BBS_ID DESC";
 
                     var qnaList = _commonDao.SelectList(sql);
                     ViewBag.qnaList = qnaList;

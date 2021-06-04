@@ -11,37 +11,34 @@
             </dt>
             <dd><input type="text" id="title" v-model="title" class="es" style="width: 100%;"></dd>
         </dl>
-        @if (ViewData["pageNm"].Equals("강의 공지사항"))
-        {
-            <text>
-                <dl>
-                    <dt>
-                        최우선공지여부
-                    </dt>
-                    <dd>
-                        <input type="radio" id="two" value="N" v-model="othbcAt">
-                        <label for="two">Y</label>
-                        <input type="radio" id="one" value="Y" v-model="othbcAt">
-                        <label for="one">N</label>
-                    </dd>
-                </dl>
-            </text>
-        }
-        else if (ViewData["pageNm"].Equals("강의 묻고답하기"))
-        {
-            <text>
-                <dl>
-                    <dt>
-                        공개여부
-                    </dt>
-                    <dd>
-                        <input type="radio" id="one" value="Y" v-model="othbcAt">
-                        <label for="one">공개</label>
-                        <input type="radio" id="two" value="N" v-model="othbcAt">
-                        <label for="two">비공개</label>
-                    </dd>
-                </dl>
-            </text>
+        @if (ViewData["pageNm"].Equals("강의 공지사항")) {
+        <text>
+        <dl>
+            <dt>
+                최우선공지여부
+            </dt>
+            <dd>
+                <input type="radio" id="two" value="N" v-model="othbcAt">
+                <label for="two">Y</label>
+                <input type="radio" id="one" value="Y" v-model="othbcAt">
+                <label for="one">N</label>
+            </dd>
+        </dl>
+        </text>
+        } else if (ViewData["pageNm"].Equals("강의 묻고답하기")) {
+        <text>
+        <dl>
+            <dt>
+                공개여부
+            </dt>
+            <dd>
+                <input type="radio" id="one" value="Y" v-model="othbcAt">
+                <label for="one">공개</label>
+                <input type="radio" id="two" value="N" v-model="othbcAt">
+                <label for="two">비공개</label>
+            </dd>
+        </dl>
+        </text>
         }
         <dl>
             <dt>
