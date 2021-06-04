@@ -136,31 +136,22 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                 }
 
 
-                sql = "SELECT * " +
-                    "FROM (SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, DECODE(OTHBC_AT, 'Y', '공개', 'N', '비공개') AS OTHBC, RDCNT, BBS_ID, DOC_ID, FILE_ID, EACH_CMTCNT " +
-                    "FROM (SELECT A.TITLE, " +
-                    "B.NAME AS REGISTER, " +
-                    "A.REGIST_DT, " +
-                    "A.OTHBC_AT, " +
-                    "A.RDCNT, " +
-                    "A.BBS_ID, " +
-                    "A.DOC_ID, " +
-                    "C.FILE_ID, " +
-                    "NVL2(D.EACH_CMTCNT, " +
-                    "' (' || D.EACH_CMTCNT || ')', NULL) AS EACH_CMTCNT " +
-                    "FROM OP_BBS A " +
-                    "JOIN OP_USER B " +
-                    "ON A.REGISTER = B.USER_ID LEFT JOIN OP_FILE C on A.DOC_ID = C.DOC_ID " +
-                    "JOIN (SELECT A.BBS_ID, A.REF_ID, (SELECT COUNT(REF_ID) FROM OP_BBS WHERE REF_ID = A.BBS_ID GROUP BY REF_ID HAVING REF_ID IS NOT NULL) AS EACH_CMTCNT " +
-                    "FROM OP_BBS " +
-                    "A WHERE A.BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' " +
-                    "AND REF_ID IS NULL) D " +
-                    "ON A.BBS_ID = D.BBS_ID " +
-                    "WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' " +
-                    "AND ACDMC_NO = @selectedSubj:VARCHAR " +
-                    "ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1 "
-                    + (param.ContainsKey("page") ? "AND RNUM > " + (Convert.ToInt32(param["page"]) - 1) + " * 10 " : "AND RNUM > 0 ")
-                    + (param.ContainsKey("page") ? "AND RNUM <= " + param["page"] + "0" : "AND RNUM <= 10");
+                sql = "SELECT *                                                                         "
+                        + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID, DOC_ID, FILE_ID                     "
+                        + "      FROM(SELECT A.TITLE,                                                                                 "
+                        + "                   B.NAME AS REGISTER,                                                                     "
+                        + "                   A.REGIST_DT,                                                                            "
+                        + "                   A.RDCNT,                                                                                "
+                        + "                   A.BBS_ID, A.DOC_ID, C.FILE_ID                                                           "
+                        + "            FROM OP_BBS A                                                                                  "
+                        + "                     JOIN OP_USER B                                                                        "
+                        + "                          ON A.REGISTER = B.USER_ID LEFT JOIN OP_FILE C on A.DOC_ID = C.DOC_ID             "
+                        + "            WHERE BBS_CODE = '1000'                                                                        "
+                        + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                         "
+                        + "              AND OTHBC_AT = 'Y'                                                                           "
+                        + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                      "
+                        + (param.ContainsKey("page") ? " AND RNUM > " + (Convert.ToInt32(param["page"]) - 1) + " * 10 - " + empNotiCnt.ToString() : " AND RNUM > 0 - " + empNotiCnt.ToString())
+                        + (param.ContainsKey("page") ? " AND RNUM <= " + param["page"] + "0 - " + empNotiCnt.ToString() : " AND RNUM <= 10 - " + empNotiCnt.ToString());
 
                 // Form이 존재하지 않으면 오류가 나기 때문에 분기해주어야한다.
                 if (Request.HasFormContentType) {
