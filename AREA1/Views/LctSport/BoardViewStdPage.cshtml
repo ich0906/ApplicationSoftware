@@ -42,6 +42,8 @@
 <div class="board_view_comment">
         @for (int i = 0; i < ViewBag.commentList.Count; i++)
         {
+            if (!ViewBag.commentList[i]["BBS_ID"].Equals(""))
+            {
             <ul class="board_viewcomment">
                 <li class="name first">@ViewBag.commentList[i]["NAME"]</li>
                 <li class="text first">
@@ -49,13 +51,17 @@
                         @Html.Raw(ViewBag.commentList[i]["CONTENTS"])
                     </div>
                     <div style="text-align: right;"><span style="color: rgb(2, 105, 202);">(@ViewBag.commentList[i]["REGIST_DT"])</span></div>
-                    @if(ViewBag.commentList[i]["NAME"].Equals(ViewData["name"])) { 
+                    @if (ViewBag.commentList[i]["NAME"].Equals(ViewData["name"]))
+                    {
                           <button type = "button" class="btn2 btn-white btnsmall" style="display: block; float: right;" onclick="deleteCmt(@ViewBag.commentList[i]["BBS_ID"])">삭제</button>
-                    } else{
+                    }
+                    else
+                    {
                           <button type = "button" class="btn2 btn-white btnsmall" style="display: none;">삭제</button>
                     }
                 </li>
             </ul>
+            }
         }
         <ul class="board_viewcomment_input"><li><textarea name="cm" id="cm"></textarea><label><button type="button" id="insert_cmt" class="btn2 btn-input">입력</button></label></li></ul>
     </div>
