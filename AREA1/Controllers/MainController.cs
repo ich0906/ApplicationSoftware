@@ -213,7 +213,7 @@ namespace AREA1.Controllers {
 
                 for (int i = 0; i < yearhakgiList.Count; i++) {
                     // 과목명
-                    sql = "SELECT B.ACDMC_NO, A.SEMESTER, A.YEAR, D.TITLE || ' (' || B.ACDMC_NO || ') - ' || (SELECT BB.NAME FROM OP_TEACHES AA JOIN OP_USER BB ON AA.ID=BB.USER_ID WHERE COURSE_ID=D.COURSE_ID ) AS LABEL" +
+                    sql = "SELECT B.ACDMC_NO, A.SEMESTER, A.YEAR, D.TITLE || ' (' || B.ACDMC_NO || ') - ' || (SELECT BB.NAME FROM OP_TEACHES AA JOIN OP_USER BB ON AA.ID=BB.USER_ID WHERE COURSE_ID=D.COURSE_ID AND SEMESTER=B.SEMESTER AND YEAR=B.YEAR) AS LABEL" +
                         ",  A.YEAR || ',' || A.SEMESTER AS YEAR_HAKGI"
                                + " FROM OP_TAKES A"
                                + " JOIN OP_SECTION B"
