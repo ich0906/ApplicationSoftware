@@ -106,7 +106,9 @@
                                                     <th> 파일</th>
                                                     <td class="lft">
                                                         @for (int j = 0; j < Convert.ToInt32(ResultPrsentr["fileCount"]); ++j) {
-                                                        <div class="board_viewfile"><a href="#" onclick="javascript: sendFileId('/File/DownloadDocument', '@ViewBag.studentFileList[i][j]["FILE_ID"]')"> @ViewBag.studentFileList[i][j]["FILE_NAME"].@ViewBag.studentFileList[i][j]["FILE_EXTSN"]</a></div>}
+                                                            if (!ViewBag.studentFileList[i][j]["FILE_ID"].Equals("")) {
+                                                            <div class="board_viewfile"><a href="#" onclick="javascript: sendFileId('/File/DownloadDocument', '@ViewBag.studentFileList[i][j]["FILE_ID"]')"> @ViewBag.studentFileList[i][j]["FILE_NAME"].@ViewBag.studentFileList[i][j]["FILE_EXTSN"]</a></div>}
+                                                        }
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -128,7 +130,11 @@
                                             </colgroup>
                                             <tbody>
                                                 <tr>
+                                                    @if (ViewData["fs_at"].Equals("Y")) {
                                                     <td colspan="2" class="disnone">과제를 제출한 학생이 없습니다.</td>
+                                                    } else {
+                                                    <td colspan="2" class="disnone">과제를 제출하지 않았습니다.</td>
+                                                    }
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -138,14 +144,15 @@
                             }
     <div class="btnCon">
         @if (ViewData["fs_at"].Equals("N")) {
-                                        if (!ViewBag.resultPrsentList[0]["PRSENTR_AT"].Equals("Y")) {
-<button type="button" id="btn_assign" class="btn2 btn-gray">제출</button>
-                    <button type="button" id="btn_clean" class="btn2 btn-gray">다시</button> } else if (ViewBag.Result["B1"].Equals("Y") || ViewBag.Result["B2"].Equals("Y")) {
+                     if ((ViewBag.Result["B1"].Equals("Y") || ViewBag.Result["B2"].Equals("Y")) && !ViewBag.resultPrsentList[0]["PRSENTR_AT"].Equals("Y")) {
+                    <button type="button" id="btn_assign" class="btn2 btn-gray">제출</button>
+                    <button type="button" id="btn_clean" class="btn2 btn-gray">다시</button> 
+                    } else if (ViewBag.Result["B1"].Equals("Y") || ViewBag.Result["B2"].Equals("Y")) {
                     <button type="button" id="btn_modify" class="btn2 btn-gray">수정</button>
-                                        <button type="button" id="btn_delete" class="btn2 btn-gray">삭제</button> }
-                                                    } else {
-                                        <button type="button" id="btn_modify" class="btn2 btn-gray">수정</button>
-                                                        <button type="button" id="btn_delete" class="btn2 btn-gray">삭제</button>}
+                    <button type="button" id="btn_delete" class="btn2 btn-gray">삭제</button> }
+                    } else {
+                    <button type="button" id="btn_modify" class="btn2 btn-gray">수정</button>
+                    <button type="button" id="btn_delete" class="btn2 btn-gray">삭제</button>}
         <button type="button" id="btn_list" class="btn2 btn-gray">목록</button>
     </div>
 </div>
