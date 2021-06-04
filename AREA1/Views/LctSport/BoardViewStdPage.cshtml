@@ -102,7 +102,7 @@
 
             input = "<input type='hidden' name='content' />";
             $("#__form__").append(input);
-            $("[name=content]").val($("#cm").val());
+            $("[name=content]").val($("#cm").val().replace(/\n/gi,"<br>"));
 
             $("#__form__").attr("action", "@ViewBag.InsertComment");
 
