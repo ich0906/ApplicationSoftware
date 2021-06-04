@@ -51,8 +51,8 @@
                             <option>@ViewBag.yearList[i]["YEAR"]년</option>}
                             </select>
                             <select class="form-control form-control-sm" name="selectHakgi" id="selectHakgi">
-                               <option>1학기</option>
-                               <option>2학기</option>}
+                                @for (int i = 0; i < ViewBag.hakgiCount; ++i) {
+                                    <option>@ViewBag.hakgiList[i]["SEMESTER"]학기</option>}
                             </select>
                         </li>
                         <li>
