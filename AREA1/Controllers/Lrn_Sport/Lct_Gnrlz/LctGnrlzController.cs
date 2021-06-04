@@ -11,6 +11,7 @@ using System.Diagnostics;
 using Tool;
 
 namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
+    [LoginActionFilter]
     public class LctGnrlzController : Controller {
         private readonly ILogger<LctGnrlzController> _logger;
         private readonly AppSoftDbContext _context;
@@ -27,10 +28,6 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
 
         public IActionResult LctGnrlz() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
-
-            if (userInfo == null) {
-                return RedirectToAction("/Login", new { alertLogin = 2 });
-            }
 
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
@@ -127,7 +124,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
                 if (noticeCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +
-                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND OTHBC_AT='Y' AND BBS_CODE=1000" + " ORDER BY BBS_ID DESC";
+                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND BBS_CODE=1000" + " ORDER BY BBS_ID DESC";
 
                     var noticeList = _commonDao.SelectList(sql);
                     ViewBag.noticeList = noticeList;
@@ -141,7 +138,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
                 if (noticeCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +
-                    "WHERE ACDMC_NO='" + acdmc_no + "' AND OTHBC_AT='Y' AND BBS_CODE=1000" + " ORDER BY BBS_ID DESC";
+                    "WHERE ACDMC_NO='" + acdmc_no + "' AND BBS_CODE=1000" + " ORDER BY BBS_ID DESC";
 
                     var noticeList = _commonDao.SelectList(sql);
                     ViewBag.noticeList = noticeList;

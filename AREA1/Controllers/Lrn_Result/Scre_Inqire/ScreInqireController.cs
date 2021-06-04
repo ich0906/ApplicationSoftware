@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using Tool;
 
-namespace AREA1.Controllers.Lrn_Result.SCRE_INQIRE
+namespace AREA1.Controllers
 {
     [LoginActionFilter]
     public class ScreInqireController : Controller
