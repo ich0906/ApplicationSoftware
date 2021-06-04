@@ -384,6 +384,11 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
             Dictionary<string, string> param = new Dictionary<string, string>();
 
+            if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR"))) {
+                Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
+                Response.WriteAsync("<script language=\"javascript\">window.location=\"/Notice/SelectPageListNotice\"</script>");
+            }
+
             // Notice 데이터 파싱
             param.Add("SelectSubj", notice.SelectSubj);
             param.Add("Title", notice.Title);
