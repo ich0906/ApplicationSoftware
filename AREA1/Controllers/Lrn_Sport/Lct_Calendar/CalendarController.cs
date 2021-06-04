@@ -83,23 +83,12 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Calendar {
             ViewBag.yearList = yearList;
             ViewBag.yearCount = yearList.Count;
 
-            if (userInfo.author.Equals("1000")) {
-                sql = "SELECT DISTINCT A.SEMESTER FROM OP_TEACHES A "
-                    + "JOIN OP_USER B ON A.ID = B.USER_ID "
-                    + "JOIN OP_SECTION C on A.SEC_ID = C.SEC_ID and A.COURSE_ID = C.COURSE_ID and A.SEMESTER = C.SEMESTER and A.YEAR = C.YEAR "
-                    + "JOIN OP_COURSE D ON C.COURSE_ID = D.COURSE_ID "
-                    + "JOIN OP_TIME_SLOT E on C.TIME_SLOT_ID = E.TIME_SLOT_ID "
-                    + "WHERE ID=" + userInfo.user_id+ " ORDER BY A.SEMESTER";
-            } else {
-                sql = "SELECT DISTINCT A.SEMESTER FROM OP_TAKES A "
-                    + "JOIN OP_USER B ON A.ID = B.USER_ID "
-                    + "JOIN OP_SECTION C on A.SEC_ID = C.SEC_ID and A.COURSE_ID = C.COURSE_ID and A.SEMESTER = C.SEMESTER and A.YEAR = C.YEAR "
-                    + "JOIN OP_COURSE D ON C.COURSE_ID = D.COURSE_ID "
-                    + "JOIN OP_TIME_SLOT E on C.TIME_SLOT_ID = E.TIME_SLOT_ID "
-                    + "WHERE ID=" + userInfo.user_id+ " ORDER BY A.SEMESTER";
-            }
+            var hakgiList = new List<Dictionary<string, string>>();
+            hakgiList.Add(new Dictionary<string, string>());
+            hakgiList.Add(new Dictionary<string, string>());
+            hakgiList[0].Add("SEMESTER", "1");
+            hakgiList[1].Add("SEMESTER", "2");
 
-            var hakgiList = _commonDao.SelectList(sql);
             ViewBag.hakgiList = hakgiList;
             ViewBag.hakgiCount = hakgiList.Count;
 
