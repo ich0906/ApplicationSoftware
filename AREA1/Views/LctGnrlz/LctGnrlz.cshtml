@@ -55,12 +55,12 @@
                     <div class="row">
                         <div class="col-6">
                             <ul class="subjectpresent">
-                                <li><a href="#none">강의 <span class="oval"><span class="ftred">23</span>/24</span></a></li>
                                 <li><a href="#" onclick="javascript: page_move('/Notice/SelectPageListNotice', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI')">공지사항 <span class="oval">@ViewBag.noticeCount</span></a></li>
-                         </div>
+                                <li><a href="#" onclick="javascript: page_move('/Task/SelectPageListTask', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI')">과제 <span class="oval">@ViewBag.taskCount</span></a></li>
+                            </ul>
+                        </div>
                         <div class="col-6">
                             <ul class="subjectpresent">
-                                <li><a href="#" onclick="javascript: page_move('/Task/SelectPageListTask', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI')">과제 <span class="oval">@ViewBag.taskCount</span></a></li>
                                 <li><a href="#" onclick="javascript: page_move('/Recsroom/SelectPageListRecsroom', '@ViewBag.ACDMC_NO', '@ViewBag.YEAR_HAKGI')">자료 <span class="oval">@ViewBag.recsCount</span></a></li>
                             </ul>
                         </div>
@@ -113,58 +113,6 @@
                         </dl>
                 </div>
             </div>
-        </div> <!----> <div class="card card-body mt-4 mb-4">
-            <div class=" tablelistbox">
-                <div class="listtitle">
-                    <p class="title-text">
-                        온라인 강의리스트
-                        <button type="button" class="btn2 btn-learn btn-cooltime">2분 쿨타임 제거</button>
-                        <button type="button" class="btn2 btn-gray btn-clean">강의 숨기기 On / Off</button>
-                    </p>
-                </div> <table class="tablegw">
-                    <tbody>
-                        <tr><th class="disnone">주차</th> <th class="disnone">회차</th> <th>제목</th> <th>학습목차</th> <th>학습기간</th> <th>[진도율]학습시간</th> <th class="disnone">강의보기</th></tr>
-                        <tr>
-                            <td> 1</td>
-                            <td class="disnone">1</td>
-                            <td class="lft">Introduction</td>
-                            <td class="lft">Introduction</td>
-                            <td class="pro" style="width: 120px;">
-                                2021-03-02 00:00 <br>~ 2021-03-08 23:59
-                            </td>
-                            <td class="pro" style="width: 120px;">
-                                [100%]&nbsp;49분
-                                <!---->
-                            </td>
-                            <td><button type="button" class="btn2 btn-gray">보기</button> <!----> <!----></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div> <div class="mtablelistbox">
-                <div class="listtitle">
-                    <p class="title-text">
-                        온라인 강의리스트
-                        <button type="button" class="btn2 btn-gray btn-clean">강의 숨기기 On / Off</button>
-                    </p>
-                </div>
-                <table class="tablegw">
-                    <tbody>
-                        <tr>
-                            <th>제목</th>
-                            <th>학습목차</th>
-                            <th>학습기간</th>
-                            <th>[진도율]학습시간</th>
-                        </tr>
-                        <tr>
-                            <td>Introduction</td>
-                            <td>Introduction</td>
-                            <td class="pro">2021-03-02 00:00 <br>~ 2021-03-08 23:59</td>
-                            <td class="pro">[100%]&nbsp;49분</td>
-                        </tr>
-                        <!---->
-                    </tbody>
-                </table>
-            </div>
         </div>
     </div> <form id="viewForm" name="viewForm" method="post"><input id="grcode" name="grcode" type="hidden"><input id="subj" name="subj" type="hidden"><input id="year" name="year" type="hidden"><input id="hakgi" name="hakgi" type="hidden"><input id="bunban" name="bunban" type="hidden"><input id="module" name="module" type="hidden"><input id="lesson" name="lesson" type="hidden"><input id="oid" name="oid" type="hidden"><input id="ptime" name="ptime" type="hidden"><input id="weeklyseq" name="weeklyseq" type="hidden"><input id="weeklysubseq" name="weeklysubseq" type="hidden"><input id="totalTime" name="totalTime" type="hidden"><input id="prog" name="prog" type="hidden"><input id="profYN" name="profYN" type="hidden" value="N"><input id="previewYN" name="previewYN" type="hidden" value="N"></form>
 </div>
@@ -183,4 +131,4 @@
             $("[name=selectSubj]").trigger('change');
         });
     });</script>
-@Html.Partial("~/Views/Shared/LctSportFooter.cshtml")2
+@Html.Partial("~/Views/Shared/LctSportFooter.cshtml")

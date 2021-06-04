@@ -84,12 +84,13 @@
                             @: title: '@ViewBag.result["TITLE"]',
                             @: content: '@Html.Raw(@ViewBag.result["CONTENTS"])',
                             @: atchFileId: '@ViewBag.result["DOC_ID"]',
+                            @: othbcAt: '@ViewBag.result["OTHBC_AT"]',
                         } else {
                             @: title: null,
                             @: content: null,
                             @: atchFileId: null,
+                            @: othbcAt: 'Y',
                         }
-                        othbcAt: 'Y',
                         preOthbcAt: 'Y',
                         storageId: '1000',
                         cmd: 'insert',
