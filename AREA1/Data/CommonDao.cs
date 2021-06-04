@@ -21,7 +21,7 @@ namespace AREA1.Data {
             Dictionary<string, string> DataDic = new Dictionary<string, string>();
 
             for (int i = 0; i < dt.Columns.Count; i++) {
-                if(dt.Rows.Count != 0)
+                if (dt.Rows.Count != 0)
                     DataDic.Add(dt.Columns[i].ColumnName, dt.Rows[0][i].ToString());
                 else
                     DataDic.Add(dt.Columns[i].ColumnName, "");
@@ -295,8 +295,7 @@ namespace AREA1.Data {
                     } else if (prmType.Contains("DATE")) {
                         sqlparam = new OracleParameter(prmNm, OracleDbType.Date);
                         sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
-                    } else if (prmType.Contains("CHAR"))
-                    {
+                    } else if (prmType.Contains("CHAR")) {
                         sqlparam = new OracleParameter(prmNm, OracleDbType.Char);
                         sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
                     }
@@ -540,8 +539,7 @@ namespace AREA1.Data {
                     } else if (prmType.Contains("DATE")) {
                         sqlparam = new OracleParameter(prmNm, OracleDbType.Date);
                         sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
-                    } else if (prmType.Contains("CHAR"))
-                    {
+                    } else if (prmType.Contains("CHAR")) {
                         sqlparam = new OracleParameter(prmNm, OracleDbType.Char);
                         sqlparam.Value = param[prmNm.Replace(":", "")].ToString();
                     }
