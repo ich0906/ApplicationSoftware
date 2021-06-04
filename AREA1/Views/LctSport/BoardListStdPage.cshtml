@@ -75,15 +75,15 @@
                     }
                     @if (ViewData["fs_at"].Equals("Y"))
                     {
-                <td class="lft" style="cursor: pointer;" onclick="goDetail(@ViewBag.ResultList[i]["BBS_ID"])">@ViewBag.ResultList[i]["TITLE"]<span style="color:blue;">@ViewBag.ResultList[i]["EACH_CMTCNT"]</span></td>
+                <td class="lft" style="cursor: pointer;" onclick="goDetail(@ViewBag.ResultList[i]["BBS_ID"])">@ViewBag.ResultList[i]["TITLE"] @if (!ViewData["pageNm"].Equals("강의 공지사항")) {<span style="color:blue;">@ViewBag.ResultList[i]["EACH_CMTCNT"]</span>}</td>
                     }
                     else if (ViewData["pageNm"].Equals("강의 묻고답하기") && (ViewBag.ResultList[i]["OTHBC"].Equals("비공개") && !ViewData["name"].Equals(ViewBag.ResultList[i]["REGISTER"])))
                     {
-                <td class="lft" style="cursor: pointer;" onclick="test()">@ViewBag.ResultList[i]["TITLE"]<span style="color:blue;">@ViewBag.ResultList[i]["EACH_CMTCNT"]</span></td>
+                <td class="lft" style="cursor: pointer;" onclick="test()">@ViewBag.ResultList[i]["TITLE"]@if (!ViewData["pageNm"].Equals("강의 공지사항")){<span style="color:blue;"> @ViewBag.ResultList[i]["EACH_CMTCNT"]</span>}</td>
                     }
                     else
                     {
-                <td class="lft" style="cursor: pointer;" onclick="goDetail(@ViewBag.ResultList[i]["BBS_ID"])">@ViewBag.ResultList[i]["TITLE"]<span style="color:blue;">@ViewBag.ResultList[i]["EACH_CMTCNT"]</span></td>
+                <td class="lft" style="cursor: pointer;" onclick="goDetail(@ViewBag.ResultList[i]["BBS_ID"])">@ViewBag.ResultList[i]["TITLE"]@if (!ViewData["pageNm"].Equals("강의 공지사항")) {<span style="color:blue;"> @ViewBag.ResultList[i]["EACH_CMTCNT"]</span>}</td>
                     }
                     @if (ViewBag.ResultList[i]["DOC_ID"] != "")
                     {
