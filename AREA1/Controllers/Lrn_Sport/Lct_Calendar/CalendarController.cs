@@ -6,11 +6,8 @@ using AREA1.Data;
 using AREA1.Filters;
 using AREA1.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System;
 using Tool;
 using AREA1.Tool;
 
