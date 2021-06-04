@@ -28,10 +28,6 @@ namespace AREA1.Controllers {
             // DAY2만 채워져 있다면 3연속 수업, 둘 다 채워져 있다면 일반적.
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
 
-            if (userInfo == null) {
-                return RedirectToAction("/Login", new { alertLogin = 2 });
-            }
-
             DateTime nowDt = DateTime.Now;
             if (nowDt.DayOfWeek == DayOfWeek.Monday)
                 ViewBag.DayOfWeek = 0;

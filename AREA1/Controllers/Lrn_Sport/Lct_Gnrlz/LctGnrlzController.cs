@@ -11,6 +11,7 @@ using System.Diagnostics;
 using Tool;
 
 namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
+    [LoginActionFilter]
     public class LctGnrlzController : Controller {
         private readonly ILogger<LctGnrlzController> _logger;
         private readonly AppSoftDbContext _context;
@@ -27,10 +28,6 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
 
         public IActionResult LctGnrlz() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
-
-            if (userInfo == null) {
-                return RedirectToAction("/Login", new { alertLogin = 2 });
-            }
 
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
