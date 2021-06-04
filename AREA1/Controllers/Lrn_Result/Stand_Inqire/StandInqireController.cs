@@ -96,7 +96,7 @@ namespace AREA1.Controllers {
                     + "                                 JOIN(                                                                                "
                     + "                            SELECT YEAR, SEMESTER                                                                     "
                     + "                            FROM OP_TAKES                                                                             "
-                    + "                            WHERE ID = '2017203062') B                                                                "
+                    + $"                            WHERE ID = '{userInfo.user_id}') B                                                       "
                     + "                                      ON A.YEAR = B.YEAR AND A.SEMESTER = B.SEMESTER                                  "
                     + "                                 JOIN OP_COURSE C                                                                     "
                     + "                                      ON A.COURSE_ID = C.COURSE_ID                                                    "
