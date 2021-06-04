@@ -124,7 +124,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
                 if (noticeCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +
-                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND OTHBC_AT='Y' AND BBS_CODE=1000" + " ORDER BY BBS_ID DESC";
+                    "WHERE ACDMC_NO='" + param["ACDMC_NO"] + "' AND BBS_CODE=1000" + " ORDER BY BBS_ID DESC";
 
                     var noticeList = _commonDao.SelectList(sql);
                     ViewBag.noticeList = noticeList;
@@ -138,7 +138,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
                 if (noticeCnt > 0) {
                     sql = "SELECT ACDMC_NO,TITLE,REGIST_DT,CONTENTS,REGISTER,OTHBC_AT,BBS_ID " +
                     "FROM OP_BBS " +
-                    "WHERE ACDMC_NO='" + acdmc_no + "' AND OTHBC_AT='Y' AND BBS_CODE=1000" + " ORDER BY BBS_ID DESC";
+                    "WHERE ACDMC_NO='" + acdmc_no + "' AND BBS_CODE=1000" + " ORDER BY BBS_ID DESC";
 
                     var noticeList = _commonDao.SelectList(sql);
                     ViewBag.noticeList = noticeList;
