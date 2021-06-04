@@ -26,7 +26,6 @@
                 <span>작성자 :</span> @ViewBag.result["NAME"] <span>등록일 :</span>@ViewBag.result["REGIST_DT"] <span>조회수 :</span> @ViewBag.result["RDCNT"]
             </div>
         </div>
-        <div></div>
         @for (int i = 0; i < ViewBag.fileCount; ++i) {
             <div class="board_viewfile"><span>파일 : </span><a href="#" onclick="javascript: sendFileId('/File/DownloadDocument', '@ViewBag.fileList[i]["FILE_ID"]')"> @ViewBag.fileList[i]["FILE_NAME"].@ViewBag.fileList[i]["FILE_EXTSN"]</a></div>
         }
