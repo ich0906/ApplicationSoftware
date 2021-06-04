@@ -124,11 +124,13 @@ namespace AREA1.Controllers
                             if (tmpresult.TryGetValue("CREDITS", out string tmpCredit))
                             {
                                 tmp = tmpCredit;
+                                if (tmp.Equals("")) continue;
                                 credList.Add(tmp);
                             }
                             if (tmpresult.TryGetValue("GRADE", out string tmpGrd))
                             {
                                 tmp = tmpGrd;
+                                if (tmp.Equals("")) continue;
                                 grdList.Add(tmp);
                             }
                         }
@@ -430,11 +432,13 @@ namespace AREA1.Controllers
                             if (tmpresult.TryGetValue("CREDITS", out string tmpCredit))
                             {
                                 tmp = tmpCredit;
+                                if (tmp.Equals("")) continue;
                                 credList.Add(tmp);
                             }
                             if (tmpresult.TryGetValue("GRADE", out string tmpGrd))
                             {
                                 tmp = tmpGrd;
+                                if (tmp.Equals("")) continue;
                                 grdList.Add(tmp);
                             }
                         }
