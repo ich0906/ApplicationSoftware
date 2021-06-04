@@ -78,7 +78,7 @@
                 </div>
                 <div class="board_notice">
                     <dl class="notice_list_top">
-                        @if (ViewBag.noticeCount == 0) {
+                        @if (ViewBag.recsCount == 0) {
                             <dl class="notice_list_top"><dt><p>등록된 내용이 없습니다.</p></dt> <dt><p>&nbsp;</p></dt> <dt><p>&nbsp;</p></dt> <dt><p>&nbsp;</p></dt></dl>
                         } else {
                             @for (int i = 0; i < 4; ++i) {
@@ -99,7 +99,7 @@
                 </div>
                 <div class="board_notice">
                     <dl class="notice_list_top">
-                        @if (ViewBag.noticeCount == 0) {
+                        @if (ViewBag.qnaCount == 0) {
                             <dl class="notice_list_top"><dt><p>등록된 내용이 없습니다.</p></dt> <dt><p>&nbsp;</p></dt> <dt><p>&nbsp;</p></dt> <dt><p>&nbsp;</p></dt></dl>
                         } else {
                             @for (int i = 0; i < 4; ++i) {
