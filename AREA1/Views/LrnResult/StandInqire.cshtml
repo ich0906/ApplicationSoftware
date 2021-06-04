@@ -19,20 +19,20 @@
                         <thead><tr><th>학과/학부</th> <th>학번</th> <th>이름</th> <th>학적상황</th></tr></thead>
                         <tbody>
                             <tr>
-                                <td>시스템소프트웨어/소프트웨어학부</td>
+                                <td>응용소프트웨어/소프트웨어학부</td>
                                 <td>@ViewBag.user_id</td>
                                 <td>@ViewBag.name</td>
-                                <td>3학년 재학</td>
+                                <td>@ViewBag.takesYear 학년 재학</td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table><form id="aform">
+    <button type="button" id="listButton" class="btn2 btn-learn">이전 석차 내역 불러오기</button>
+</form>
 
                     <br><br><br><br>
 
                     <div id="test" style="margin-top: 10px">
-                        <form id="aform">
-                            <button type="button" id="listButton" class="btn2 btn-learn">이전 석차 내역 불러오기</button>
-                        </form>
+                        
 
                         <table id="test4" class="AType">
                             <colgroup><col width="12.5%"> <col width="12.5%"> <col width="12.5%"> <col width="12.5%"> <col width="12.5%"> <col width="12.5%"> <col width="12.5%"> <col width="12.5%"></colgroup>
@@ -61,14 +61,7 @@
                                 </thread>
                                 <tbody id="test2">
                                     <tr id="test7">
-                                        <td>2021</td>
-                                        <td>1</td>
-                                        <td>@ViewBag.allcred10</td>
-                                        <td>@ViewBag.allgrd10</td>
-                                        <td>@ViewBag.grd10</td>
-                                        <td>@ViewBag.per10</td>
-                                        <td>@ViewBag.rank10/@ViewBag.countstudents10</td>
-                                        <td>@ViewBag.probation01</td>
+                                       <td colspan="8">@ViewBag.year 학년도 @ViewBag.hakgi 학기의 성적내역이 없습니다.</td>
                                     </tr>
 
                                 </tbody>
@@ -120,8 +113,9 @@
 
                         $("#rank_by_yearhakgi").html('');
                         $("#test3").html(table);
-                        for (let i = 0; i < data.length; ++i) {
-                            $("#rank_by_yearhakgi").append("<tr><td>"
+                        for (let i = data.length-1; i >= 0; i--) {
+                            $("#rank_by_yearhakgi").append(
+                                "<tr><td>"
                                 + data[i].value['YEAR'] + "</td><td>" +
                                 data[i].value['SEMESTER'] + "</td><td>" +
                                 data[i].value['CREDIT'] + "</td><td>" +
