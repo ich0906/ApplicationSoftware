@@ -30,7 +30,9 @@ namespace AREA1.Controllers
             ViewData["user_id"] = userInfo.user_id;
             ViewData["name"] = userInfo.name;
             ViewData["Title"] = HttpContext.Session.GetString("_Key");
-
+            string query_year = "SELECT COUNT(DISTINCT YEAR) AS CNTTT FROM OP_TAKES WHERE" + $" ID = '{userInfo.user_id}' ORDER BY YEAR";
+            int count_year = Convert.ToInt32(_commonDao.SelectOne(query_year)["CNTTT"]);
+            ViewData["takesYear"] = count_year;
             List<string> yArr = new List<string>();
             yArr.Add("2020");
             yArr.Add("2021");
@@ -642,6 +644,5 @@ namespace AREA1.Controllers
         }//for(y)
     }
 }
-
 
 
