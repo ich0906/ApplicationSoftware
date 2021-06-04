@@ -769,7 +769,7 @@ ul.tab-list-col5 li {
             top: -4px;
             left: -10px;
             display: block;
-            content: '-';
+            content: 'ㆍ';
         }
 
         .depth03ul > li > a:hover {
