@@ -87,23 +87,23 @@ namespace AREA1.Controllers
                 }
                 yearHakgiList[i]["SUM"] = sum.ToString();
 
-                if (sbjSumF == 0) yearHakgiList[i]["AVG_GRADE_F"] = string.Format("{0:0.#}",gradeF);
-                else yearHakgiList[i]["AVG_GRADE_F"] = string.Format("{0:0.#}", gradeF / sbjSumF);
+                if (sbjSumF == 0) yearHakgiList[i]["AVG_GRADE_F"] = string.Format("{0:0.0#}",gradeF);
+                else yearHakgiList[i]["AVG_GRADE_F"] = string.Format("{0:0.0#}", gradeF / sbjSumF);
 
-                if (sbjSum == 0) yearHakgiList[i]["AVG_GRADE"] = string.Format("{0:0.#}", grade);
-                else yearHakgiList[i]["AVG_GRADE"] = string.Format("{0:0.#}", grade / sbjSum);
+                if (sbjSum == 0) yearHakgiList[i]["AVG_GRADE"] = string.Format("{0:0.0#}", grade);
+                else yearHakgiList[i]["AVG_GRADE"] = string.Format("{0:0.0#}", grade / sbjSum);
 
-                if (softSumF == 0) yearHakgiList[i]["SOFT_GRADE_F"] = string.Format("{0:0.#}", softGradeF);
-                else yearHakgiList[i]["SOFT_GRADE_F"] = string.Format("{0:0.#}", softGradeF / softSumF);
+                if (softSumF == 0) yearHakgiList[i]["SOFT_GRADE_F"] = string.Format("{0:0.0#}", softGradeF);
+                else yearHakgiList[i]["SOFT_GRADE_F"] = string.Format("{0:0.0#}", softGradeF / softSumF);
 
-                if (softSum == 0) yearHakgiList[i]["SOFT_GRADE"] = string.Format("{0:0.#}", softGrade);
-                else yearHakgiList[i]["SOFT_GRADE"] = string.Format("{0:0.#}", softGrade / softSum);
+                if (softSum == 0) yearHakgiList[i]["SOFT_GRADE"] = string.Format("{0:0.0#}", softGrade);
+                else yearHakgiList[i]["SOFT_GRADE"] = string.Format("{0:0.0#}", softGrade / softSum);
 
-                if (notSoftSumF == 0) yearHakgiList[i]["NOT_SOFT_GRADE_F"] = string.Format("{0:0.#}", notSoftGradeF);
-                else yearHakgiList[i]["NOT_SOFT_GRADE_F"] = string.Format("{0:0.#}", notSoftGradeF / notSoftSumF);
+                if (notSoftSumF == 0) yearHakgiList[i]["NOT_SOFT_GRADE_F"] = string.Format("{0:0.0#}", notSoftGradeF);
+                else yearHakgiList[i]["NOT_SOFT_GRADE_F"] = string.Format("{0:0.0#}", notSoftGradeF / notSoftSumF);
 
-                if (notSoftSumF == 0) yearHakgiList[i]["NOT_SOFT_GRADE"] = string.Format("{0:0.#}", notSoftGrade);
-                else yearHakgiList[i]["NOT_SOFT_GRADE"] = string.Format("{0:0.#}", notSoftGrade / notSoftSum);
+                if (notSoftSumF == 0) yearHakgiList[i]["NOT_SOFT_GRADE"] = string.Format("{0:0.0#}", notSoftGrade);
+                else yearHakgiList[i]["NOT_SOFT_GRADE"] = string.Format("{0:0.0#}", notSoftGrade / notSoftSum);
             }
 
             ViewBag.yearHakgiList = yearHakgiList;
