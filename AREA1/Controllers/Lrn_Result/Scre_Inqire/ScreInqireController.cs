@@ -29,211 +29,112 @@ namespace AREA1.Controllers
             ViewData["user_id"] = userInfo.user_id;
             ViewData["name"] = userInfo.name;
             ViewData["Title"] = HttpContext.Session.GetString("_Key");
+            ViewData["phone"] = userInfo.phone;
 
-            List<string> yArr = new List<string>();
-            yArr.Add("2020");
-            yArr.Add("2021");
-            List<string> sArr = new List<string>();
-            sArr.Add("1");
-            sArr.Add("2");
-            int Count_sem = 2;
-            int totalcred = 0;
-            string all_sum_grd = "0.0"; // 전학년 평점*학점
-            double allsumGrade = 0.0;
-            string query3 = "SELECT I_ID FROM OP_ADVISOR " + $"WHERE S_ID = '{userInfo.user_id}'";
-            ViewData["advisor"] = Convert.ToString(_commonDao.SelectOne(query3)["I_ID"]);
+            string sql = "";
 
-            for (int y = 0; y < yArr.Count; y++)
-            {
-                for (int j = 0; j < Count_sem; j++)
-                {
-                    if (y == 1)
-                        Count_sem = 1;
-                    int sum = 0;
-                    double sum_grd = 0;
-                    string tmp = "";
-                    List<string> credList = new List<string>();
-                    List<string> grdList = new List<string>();
-                    List<string> anList = new List<string>();
-                    List<string> titleList = new List<string>();
-                    List<string> deptList = new List<string>();
+            //지도교수 정보
+            sql = "SELECT C.EMAIL AS I_EMAIL, A.PHONE AS S_PHONE, C.NAME AS I_NAME, I_ID "
+                + "FROM OP_USER A JOIN OP_ADVISOR B "
+                + "ON A.USER_ID=B.S_ID "
+                +"JOIN OP_USER C ON B.I_ID=C.USER_ID "
+                + "WHERE S_ID='" + userInfo.user_id + "'";
+            var advisorList = _commonDao.SelectOne(sql);
+            ViewBag.advisorList = advisorList;
 
-                    //표테이블4
-                    string query = "SELECT A.ACDMC_NO ,B.TITLE, B.DEPT_NAME, B.CREDITS, OT.GRADE " +
-                        "FROM OP_SECTION A JOIN OP_COURSE B " +
-                        "ON A.COURSE_ID = B.COURSE_ID " +
-                        "RIGHT JOIN OP_TAKES OT " +
-                        "on A.SEC_ID = OT.SEC_ID " +
-                        "and A.COURSE_ID = OT.COURSE_ID " +
-                        "and A.SEMESTER = OT.SEMESTER " +
-                       "and A.YEAR = OT.YEAR "
-                       + $"WHERE OT.ID = '{userInfo.user_id}' and OT.YEAR = '{yArr[y]}' and OT.SEMESTER = '{sArr[j]}'";
-                    List<Dictionary<string, string>> subjList = _commonDao.SelectList(query);
+            sql = "SELECT DISTINCT YEAR,SEMESTER "
+                + "FROM OP_TAKES A JOIN OP_COURSE B "
+                + "ON A.COURSE_ID=B.COURSE_ID "
+                + "WHERE ID='" + userInfo.user_id + "' ORDER BY A.YEAR, A.SEMESTER";
+            var yearHakgiList = _commonDao.SelectList(sql);
+            
 
-                    //학정번호, 과목명, 학부명, 학점, 평점 리스트에 넣음
-                    for (int i = 0; i < subjList.Count; i++)
-                    {
-                        var tmpsubj = new Dictionary<string, string>()
-                        {
-                        {"ACDMC_NO",subjList[i]["ACDMC_NO"]},
-                        {"TITLE",subjList[i]["TITLE"]},
-                        {"DEPT_NAME",subjList[i]["DEPT_NAME"]},
-                        {"CREDITS",subjList[i]["CREDITS"]},
-                        {"GRADE",subjList[i]["GRADE"]}
-                        };
-                        if (tmpsubj.TryGetValue("ACDMC_NO", out string tmpAN))
-                        {
-                            string tmptmp = tmpAN;
-                            anList.Add(tmptmp);
-                        }
-                        if (tmpsubj.TryGetValue("TITLE", out string tmptitle))
-                        {
-                            string tmptmp = tmptitle;
-                            titleList.Add(tmptmp);
-                        }
-                        if (tmpsubj.TryGetValue("DEPT_NAME", out string tmpdept))
-                        {
-                            string tmptmp = tmpdept;
-                            deptList.Add(tmptmp);
-                        }
-                        if (tmpsubj.TryGetValue("CREDITS", out string tmpCredit))
-                        {
-                            tmp = tmpCredit;
-                            credList.Add(tmp);
-                        }
-                        if (tmpsubj.TryGetValue("GRADE", out string tmpGrd))
-                        {
-                            tmp = tmpGrd;
-                            grdList.Add(tmp);
-                        }
+            sql = "SELECT * "
+                + "FROM OP_TAKES A JOIN OP_COURSE B "
+                + "ON A.COURSE_ID=B.COURSE_ID "
+                + "JOIN OP_SECTION OS on A.SEC_ID = OS.SEC_ID and A.COURSE_ID = OS.COURSE_ID and A.SEMESTER = OS.SEMESTER and A.YEAR = OS.YEAR "
+                + "WHERE ID='" + userInfo.user_id + "' ORDER BY A.YEAR, A.SEMESTER";
+            var gradeList = _commonDao.SelectList(sql);
 
-                        ViewData["credit" + y + j + i] = credList[i];
-                        ViewData["an" + y + j + i] = anList[i];
-                        ViewData["title" + y + j + i] = titleList[i];
-                        ViewData["dept" + y + j + i] = deptList[i];
-                        ViewData["grade" + y + j + i] = grdList[i];
+            for(int i = 0; i < yearHakgiList.Count; ++i) {
+                double sum = 0.0;
+                double grade = 0.0, gradeF = 0.0;
+                double softGrade = 0.0, softGradeF = 0.0;
+                double notSoftGrade = 0.0, notSoftGradeF = 0.0;
+                int sbjSum = 0,sbjSumF=0;
+                int softSum = 0,softSumF=0, notSoftSum = 0,notSoftSumF=0;
+
+                for(int j = 0; j < gradeList.Count; ++j) {
+                    if(yearHakgiList[i]["YEAR"]==gradeList[j]["YEAR"] && yearHakgiList[i]["SEMESTER"] == gradeList[j]["SEMESTER"]) {
+                        if (gradeList[j]["GRADE"] != "-") { sbjSumF += Convert.ToInt32(gradeList[j]["CREDITS"]); }
+                        if (getGrade(gradeList[j]["GRADE"])!=0.0) {
+                            sum += Convert.ToDouble(gradeList[j]["CREDITS"]);
+                        }
+                        gradeF += getGrade(gradeList[j]["GRADE"]) * Convert.ToInt32(gradeList[j]["CREDITS"]);
+                        if (gradeList[j]["GRADE"] != "F") { sbjSum += Convert.ToInt32(gradeList[j]["CREDITS"]); grade += (getGrade(gradeList[j]["GRADE"])*Convert.ToInt32(gradeList[j]["CREDITS"])); }
+
+                        if (gradeList[j]["DEPT_NAME"] == "소프트웨어학부" && gradeList[j]["GRADE"]!="-") {
+                            softSumF += Convert.ToInt32(gradeList[j]["CREDITS"]);
+                            softGradeF += getGrade(gradeList[j]["GRADE"]) * Convert.ToInt32(gradeList[j]["CREDITS"]);
+                            if (gradeList[j]["GRADE"] != "F") { softSum += Convert.ToInt32(gradeList[j]["CREDITS"]); softGrade += getGrade(gradeList[j]["GRADE"]) * Convert.ToInt32(gradeList[j]["CREDITS"]); }
+
+                        } else if(gradeList[j]["DEPT_NAME"] != "소프트웨어학부" && gradeList[j]["GRADE"] != "-") {
+                            notSoftSumF += Convert.ToInt32(gradeList[j]["CREDITS"]);
+                            notSoftGradeF += getGrade(gradeList[j]["GRADE"]) * Convert.ToInt32(gradeList[j]["CREDITS"]);
+                            if (gradeList[j]["GRADE"] != "F") { notSoftSum += Convert.ToInt32(gradeList[j]["CREDITS"]); notSoftGrade += getGrade(gradeList[j]["GRADE"]) * Convert.ToInt32(gradeList[j]["CREDITS"]); }
+                        }
                     }
-
-                    //총점계산
-                    for (int i = 0; i < credList.Count; i++)
-                    {
-                        int tmpCredit = Convert.ToInt32(credList[i]);
-                        sum += tmpCredit;
-                    }
-                    //전학년 총점계산
-                    totalcred += sum;
-                    ViewData["tc"] = totalcred;
-                    //character 당 평점할당 
-                    int count = 0; // 포문 입장 전 카운트 초기화 (초기선언 포함)
-                    int mulcountcredit = 0; //초기화
-                    for (int i = 0; i < grdList.Count; i++)
-                    {
-                        if (grdList[i] == "A+")
-                        {
-                            grdList[i] = "4.5";
-                            double cvtgrd = Convert.ToDouble(grdList[i]);
-                            double cvtCredit = Convert.ToDouble(credList[i]);
-                            double totalscore = cvtgrd * cvtCredit;
-                            sum_grd += totalscore;
-                        }
-                        if (grdList[i] == "A")
-                        {
-                            grdList[i] = "4.0";
-                            double cvtgrd = Convert.ToDouble(grdList[i]);
-                            double cvtCredit = Convert.ToDouble(credList[i]);
-                            double totalscore = cvtgrd * cvtCredit;
-                            sum_grd += totalscore;
-                        }
-                        if (grdList[i] == "B+")
-                        {
-                            grdList[i] = "3.5";
-                            double cvtgrd = Convert.ToDouble(grdList[i]);
-                            double cvtCredit = Convert.ToDouble(credList[i]);
-                            double totalscore = cvtgrd * cvtCredit;
-                            sum_grd += totalscore;
-                        }
-                        if (grdList[i] == "B")
-                        {
-                            grdList[i] = "3.0";
-                            double cvtgrd = Convert.ToDouble(grdList[i]);
-                            double cvtCredit = Convert.ToDouble(credList[i]);
-                            double totalscore = cvtgrd * cvtCredit;
-                            sum_grd += totalscore;
-                        }
-                        if (grdList[i] == "C+")
-                        {
-                            grdList[i] = "2.5";
-                            double cvtgrd = Convert.ToDouble(grdList[i]);
-                            double cvtCredit = Convert.ToDouble(credList[i]);
-                            double totalscore = cvtgrd * cvtCredit;
-                            sum_grd += totalscore;
-                        }
-                        if (grdList[i] == "C")
-                        {
-                            grdList[i] = "2.0";
-                            double cvtgrd = Convert.ToDouble(grdList[i]);
-                            double cvtCredit = Convert.ToDouble(credList[i]);
-                            double totalscore = cvtgrd * cvtCredit;
-                            sum_grd += totalscore;
-                        }
-                        if (grdList[i] == "D+")
-                        {
-                            grdList[i] = "1.5";
-                            double cvtgrd = Convert.ToDouble(grdList[i]);
-                            double cvtCredit = Convert.ToDouble(credList[i]);
-                            double totalscore = cvtgrd * cvtCredit;
-                            sum_grd += totalscore;
-                        }
-                        if (grdList[i] == "D")
-                        {
-                            grdList[i] = "1.0";
-                            double cvtgrd = Convert.ToDouble(grdList[i]);
-                            double cvtCredit = Convert.ToDouble(credList[i]);
-                            double totalscore = cvtgrd * cvtCredit;
-                            sum_grd += totalscore;
-                        }
-
-                        if (grdList[i] == "F")
-                        {
-                            grdList[i] = "0.0";
-                            double cvtgrd = Convert.ToDouble(grdList[i]);
-                            double cvtCredit = Convert.ToDouble(credList[i]);
-                            double totalscore = cvtgrd * cvtCredit;
-                            sum_grd += totalscore;//학기별 총 평점*학점
-                            //F가 몇개 들어오는 센 다음에 전체sum(크레딧)에서 뺀다음 총평점에 뺀 크레딧을 나눠준다.
-                            count++;
-                            int credToInt = Convert.ToInt32(credList[i]);
-                            mulcountcredit = count * credToInt;
-                        }
-
-                        double mulcountcredit_doub = Convert.ToDouble(mulcountcredit);
-                        double grd = sum_grd / sum;
-                        double grd_noF = sum_grd / (sum - mulcountcredit_doub);
-                        string grd_noF_str = grd_noF.ToString("N2");
-                        string sumTostr = sum.ToString();
-                        string allgrd = sum_grd.ToString();
-                        string grdTostr = grd.ToString("N2");
-                        ViewData["allcred" + y + j] = sumTostr; //학기당신청학점
-                        ViewData["ag" + y + j] = sum_grd; //학기당총점
-                        ViewData["grd" + y + j] = grdTostr; //학기당평점
-                        all_sum_grd = allgrd;
-                        ViewData["grd_noF" + y + j] = grd_noF_str;
-                    }
-                    //00번 학기에 총점을 allgrd에 넣었음. allgrd = allgrd00
-                    //00번 학기 종료->01학기 시작
-                    double temp = Convert.ToDouble(all_sum_grd);
-                    allsumGrade += temp;
-                    double temp2 = allsumGrade / totalcred;
-                    string temp3 = temp2.ToString("N2");
-                    double temp4 = allsumGrade / (totalcred - mulcountcredit);
-                    string temp5 = temp4.ToString("N2");
-                    ViewData["ag"] = temp3;
-                    ViewData["agnf"] = temp5;
                 }
+                yearHakgiList[i]["SUM"] = sum.ToString();
+
+                if (sbjSumF == 0) yearHakgiList[i]["AVG_GRADE_F"] = string.Format("{0:0.#}",gradeF);
+                else yearHakgiList[i]["AVG_GRADE_F"] = string.Format("{0:0.#}", gradeF / sbjSumF);
+
+                if (sbjSum == 0) yearHakgiList[i]["AVG_GRADE"] = string.Format("{0:0.#}", grade);
+                else yearHakgiList[i]["AVG_GRADE"] = string.Format("{0:0.#}", grade / sbjSum);
+
+                if (softSumF == 0) yearHakgiList[i]["SOFT_GRADE_F"] = string.Format("{0:0.#}", softGradeF);
+                else yearHakgiList[i]["SOFT_GRADE_F"] = string.Format("{0:0.#}", softGradeF / softSumF);
+
+                if (softSum == 0) yearHakgiList[i]["SOFT_GRADE"] = string.Format("{0:0.#}", softGrade);
+                else yearHakgiList[i]["SOFT_GRADE"] = string.Format("{0:0.#}", softGrade / softSum);
+
+                if (notSoftSumF == 0) yearHakgiList[i]["NOT_SOFT_GRADE_F"] = string.Format("{0:0.#}", notSoftGradeF);
+                else yearHakgiList[i]["NOT_SOFT_GRADE_F"] = string.Format("{0:0.#}", notSoftGradeF / notSoftSumF);
+
+                if (notSoftSumF == 0) yearHakgiList[i]["NOT_SOFT_GRADE"] = string.Format("{0:0.#}", notSoftGrade);
+                else yearHakgiList[i]["NOT_SOFT_GRADE"] = string.Format("{0:0.#}", notSoftGrade / notSoftSum);
             }
-            //for문 종료
+
+            ViewBag.yearHakgiList = yearHakgiList;
+            ViewBag.yearHakgiCount = yearHakgiList.Count;
+            ViewBag.gradeList = gradeList;
+            ViewBag.gradeCount = gradeList.Count;
 
             return View("/Views/LrnResult/ScreInqire.cshtml");
+        }
+
+        public double getGrade(string grade) {
+            switch (grade) {
+                case "A+":
+                    return 4.5;
+                case "A":
+                    return 4.0;
+                case "B+":
+                    return 3.5;
+                case "B":
+                    return 3.0;
+                case "C+":
+                    return 2.5;
+                case "C":
+                    return 2.0;
+                case "D+":
+                    return 1.5;
+                case "D":
+                    return 1.0;
+                default:
+                    return 0.0;
+            }
         }
 
     }

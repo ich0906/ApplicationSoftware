@@ -1,0 +1,213 @@
+﻿<body>
+
+    <form id="__form__" method="post" style="display: none;">
+        <input type="hidden" name="selectedGrcode">
+        <input type="hidden" name="selectedYearhakgi">
+        <input type="hidden" name="selectedSubj">
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+
+    <main role="main">
+        <div class="py-5 bg-light">
+            <div class="container">
+
+                <div id="appModule" class="card card-body mb-4 content">
+                    <div><p class="contenttitle">수강 /성적조회</p></div> <div class="tablelistbox">
+                        <div id="hakbu">
+                            <table class="tablegw">
+                                <colgroup>
+                                    <col style="width: 5%;">
+                                    <col style="width: 25%;">
+                                    <col style="width: 15%;">
+                                    <col style="width: 15%;">
+                                    <col style="width: 17%;">
+                                    <col style="width: 23%;">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>구분</th>
+                                        <th>학부</th>
+                                        <th>학번</th>
+                                        <th>이름</th>
+                                        <th>전화번호</th>
+                                        <th>지도교수</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>학부</td>
+                                        <td>소프트웨어학부</td>
+                                        <td>@ViewData["user_id"] </td>
+                                        <td>@ViewData["name"]</td>
+                                        <td>@ViewData["phone"]</td>
+                                        <td>@ViewBag.advisorList["I_NAME"]<br>@ViewBag.advisorList["I_EMAIL"]</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br> <table id="synthesis-score-table" class="tablegw" style="margin: 25px 0">
+                                <colgroup>
+                                    <col width="25%">
+                                    <col width="15%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                    <col width="10%">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">학기</th>
+                                        <th rowspan="2">취득 학점</th>
+                                        <th colspan="2">소프트웨어학부 평점</th>
+                                        <th colspan="2">그외 평점</th>
+                                        <th colspan="2">평균 평점</th>
+                                    </tr>
+                                    <tr>
+                                        <th>F 포함</th>
+                                        <th>미포함</th>
+                                        <th>F 포함</th>
+                                        <th>미포함</th>
+                                        <th>F 포함</th>
+                                        <th>미포함</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < ViewBag.yearHakgiCount; ++i) {
+                                        <tr style="">
+                                            <td>@ViewBag.yearHakgiList[i]["YEAR"]학년도 @ViewBag.yearHakgiList[i]["SEMESTER"]학기</td>
+                                            <td>@ViewBag.yearHakgiList[i]["SUM"]</td>
+                                            <td>@ViewBag.yearHakgiList[i]["SOFT_GRADE_F"]</td>
+                                            <td>@ViewBag.yearHakgiList[i]["SOFT_GRADE"]</td>
+                                            <td>@ViewBag.yearHakgiList[i]["NOT_SOFT_GRADE_F"]</td>
+                                            <td>@ViewBag.yearHakgiList[i]["NOT_SOFT_GRADE"]</td>
+                                            <td>@ViewBag.yearHakgiList[i]["AVG_GRADE_F"]</td>
+                                            <td>@ViewBag.yearHakgiList[i]["AVG_GRADE"]</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div style="margin-bottom: 25px">
+                                <div class="chartjs-size-monitor">
+                                    <div class="chartjs-size-monitor-expand">
+                                        <div class=""></div>
+                                    </div>
+                                    <div class="chartjs-size-monitor-shrink">
+                                        <div class=""></div>
+                                    </div>
+                                </div>
+                                <canvas id="synthesis-score-chart" height="215" style="display: block; height: 172px; width: 648px;" width="810" class="chartjs-render-monitor"></canvas>
+                            </div>
+
+                            <br>
+                            @for (int i = 0; i < ViewBag.yearHakgiCount; ++i) {
+                                <table class="AType">
+                                    <colgroup>
+                                        <col width="13%">
+                                        <col width="23%">
+                                        <col width="15%">
+                                        <col width="5%">
+                                        <col width="10%">
+                                        <col width="10%">
+                                        <col width="10%">
+                                        <col width="15%">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th colspan="9">@ViewBag.yearHakgiList[i]["YEAR"]학년도 @ViewBag.yearHakgiList[i]["SEMESTER"]<span>학기</span></th>
+                                        </tr>
+                                        <tr>
+                                            <th>학정번호</th>
+                                            <th>과목명</th>
+                                            <th>개설학과</th>
+                                            <th>학점</th>
+                                            <th>성적</th>
+                                            <th>인증구분</th>
+                                            <th>재수강여부</th>
+                                            <th>재수강이후 <br>삭제여부</th>
+                                        </tr>
+                                    </thead>
+
+                                    @for (int j = 0; j < ViewBag.gradeCount; ++j) {
+                                        @if (ViewBag.gradeList[j]["YEAR"] == ViewBag.yearHakgiList[i]["YEAR"] && ViewBag.gradeList[j]["SEMESTER"] == ViewBag.yearHakgiList[i]["SEMESTER"]) {
+                                            <tbody>
+                                                <tr>
+                                                    <td> @ViewBag.gradeList[j]["ACDMC_NO"]</td>
+                                                    <td> @ViewBag.gradeList[j]["TITLE"]</td>
+                                                    <td> @ViewBag.gradeList[j]["DEPT_NAME"]</td>
+                                                    <td> @ViewBag.gradeList[j]["CREDITS"]</td>
+                                                    <td> @ViewBag.gradeList[j]["GRADE"]</td>
+                                                    <td> </td>
+                                                    <td><font color="red"></font></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                            </tbody>
+                                        }
+                                    }
+                                </table>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <form id="printForm" name="printForm" method="post"><input name="reprtParamVos[0].reprtParam" type="hidden" value="sungjukPrint"><input id="reprtParam1" name="reprtParamVos[1].reprtParam" type="hidden" value=""></form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const chart = document.getElementById("synthesis-score-chart").getContext("2d");
+
+        let yearHakgi = [];
+        let avg = [];
+        let soft = [];
+        let notSoft = [];
+
+        @for(int i = 0; i < ViewBag.yearHakgiCount; ++i) {
+            <text>yearHakgi.push('@ViewBag.yearHakgiList[i]["YEAR"]' + '년 ' + '@ViewBag.yearHakgiList[i]["SEMESTER"]' + '학기');</text>
+            <text>avg.push(@ViewBag.yearHakgiList[i]["AVG_GRADE_F"]);</text>
+            <text>soft.push(@ViewBag.yearHakgiList[i]["SOFT_GRADE_F"]);</text>
+            <text>notSoft.push(@ViewBag.yearHakgiList[i]["NOT_SOFT_GRADE_F"]);</text>
+        }
+
+
+        const gradeChart = new Chart(chart, {
+            type: "line",
+            data: {
+                labels: yearHakgi,
+                datasets: [
+                    {
+                        label: "소프트웨어 과목 평점",
+                        data: soft,
+                        fill:false,
+                        borderColor: [
+                            "rgba(255, 99, 132, 1)",     
+                        ],
+                        borderWidth: 2,
+                    },
+                    {
+                        label: "그외 과목 평점",
+                        data: notSoft,
+                        fill: false,
+                        borderColor: [                        
+                            "rgba(54, 162, 235, 1)",  
+                        ],
+                        borderWidth: 2,
+                    },
+                    {
+                        label: "평균 평점",
+                        data: avg,
+                        fill: false,
+                        borderColor: [                     
+                            "rgba(255, 206, 86, 1)",
+                        ],
+                        borderWidth: 2,
+                    }
+                ]
+            }
+        });
+    </script>
+</body>
