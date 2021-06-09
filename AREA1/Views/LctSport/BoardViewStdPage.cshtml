@@ -126,8 +126,13 @@
         $(".btnCon").find("button").eq(0).click(function () {
             var input = "<input type='hidden' name='bbs_id' />";
             $("#__form__").append(input);
-
             $("[name=bbs_id]").val(@ViewBag.result["BBS_ID"]);
+            input = "<input type='hidden' name='search_type' />";
+            $("#__form__").append(input);
+            $("[name=search_type]").val('@ViewBag.SEARCH_TYPE');
+            input = "<input type='hidden' name='search_txt' />";
+            $("#__form__").append(input);
+            $("[name=search_txt]").val('@ViewBag.SEARCH_TXT');
 
             $("#__form__").attr("action", "@ViewBag.UpdateForm");
             $("#__form__").submit();
@@ -162,6 +167,13 @@
 
         // 목록 버튼
         $("#btn_list").click(function () {
+            input = "<input type='hidden' name='search_type' />";
+            $("#__form__").append(input);
+            $("[name=search_type]").val('@ViewBag.SEARCH_TYPE');
+            input = "<input type='hidden' name='search_txt' />";
+            $("#__form__").append(input);
+            $("[name=search_txt]").val('@ViewBag.SEARCH_TXT');
+
             $("#__form__").attr("action", "@ViewBag.SelectPageList");
             $("#__form__").submit();
         });

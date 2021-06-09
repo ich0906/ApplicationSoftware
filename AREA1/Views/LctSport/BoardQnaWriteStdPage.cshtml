@@ -180,41 +180,54 @@
 </script>
 
 <script type="text/javascript">
-                //SmartEditor :항상 Textarea보다 아래에 이 스크립트가 있어야 합니다.
-                var oEditors = [];
-                var oContents = new Array(1);
-                oContents[0] = "content";
+    //SmartEditor :항상 Textarea보다 아래에 이 스크립트가 있어야 합니다.
+    var oEditors = [];
+    var oContents = new Array(1);
+    oContents[0] = "content";
 
-                $(function () {
-                    @if(ViewData["command"].Equals("UPDATE")) {
-                        @:$("#title").val('@ViewBag.result["TITLE"]');
-                        @:$("#content").html('@Html.Raw(@ViewBag.result["CONTENTS"])');
-                    }
+    $(function () {
+        @if (ViewData["command"].Equals("UPDATE")) {
+            @:$("#title").val('@ViewBag.result["TITLE"]');
+            @:$("#content").html('@Html.Raw(@ViewBag.result["CONTENTS"])');
+        }
 
-                    $(".btnCon").find("button").eq(1).click(function () {
-                        $("#__form__").attr("action", "@ViewBag.SelectPageList");
-                        $("#__form__").submit();
-                    });
+        $(".btnCon").find("button").eq(1).click(function () {
+            input = "<input type='hidden' name='search_type' />";
+            $("#__form__").append(input);
+            $("[name=search_type]").val('@ViewBag.SEARCH_TYPE');
+            input = "<input type='hidden' name='search_txt' />";
+            $("#__form__").append(input);
+            $("[name=search_txt]").val('@ViewBag.SEARCH_TXT');
 
-                    $("[name=selectSubj]").change(function () {
-                        $("#__form__").attr("action", "@ViewBag.SelectPageList");
-                        $("#__form__").submit();
-                    });
+            $("#__form__").attr("action", "@ViewBag.SelectPageList");
+            $("#__form__").submit();
+        });
 
-                    $("[name=selectYearhakgi]").change(function () {
-                        $("[name=selectSubj]").trigger('change');
-                    });
-                });
+        $("[name=selectSubj]").change(function () {
+            $("#__form__").attr("action", "@ViewBag.SelectPageList");
+            $("#__form__").submit();
+        });
 
-                function goDetail(bbs_id) {
-                    var input = "<input type='hidden' name='bbs_id' />";
-                    $("#__form__").append(input);
+        $("[name=selectYearhakgi]").change(function () {
+            $("[name=selectSubj]").trigger('change');
+        });
+    });
 
-                    $("[name=bbs_id]").val(bbs_id);
+    function goDetail(bbs_id) {
+        var input = "<input type='hidden' name='bbs_id' />";
+        $("#__form__").append(input);
+        input = "<input type='hidden' name='search_type' />";
+        $("#__form__").append(input);
+        $("[name=search_type]").val('@ViewBag.SEARCH_TYPE');
+        input = "<input type='hidden' name='search_txt' />";
+        $("#__form__").append(input);
+        $("[name=search_txt]").val('@ViewBag.SEARCH_TXT');
 
-                    $("#__form__").attr("action", "@ViewBag.Select");
-                    $("#__form__").submit();
-                }
+        $("[name=bbs_id]").val(bbs_id);
+
+        $("#__form__").attr("action", "@ViewBag.Select");
+        $("#__form__").submit();
+    }
 </script>
 
 <script type="text/javascript" src="~/lib/smarteditor/HuskyEZCreator.js" charset="utf-8"></script>
