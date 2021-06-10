@@ -31,7 +31,7 @@ namespace AREA1.Controllers {
             DateTime nowDt = DateTime.Now;
             if (nowDt.DayOfWeek == DayOfWeek.Monday)
                 ViewBag.DayOfWeek = 0;
-            else if (nowDt.DayOfWeek == DayOfWeek.Thursday)
+            else if (nowDt.DayOfWeek == DayOfWeek.Tuesday)
                 ViewBag.DayOfWeek = 1;
             else if (nowDt.DayOfWeek == DayOfWeek.Wednesday)
                 ViewBag.DayOfWeek = 2;
