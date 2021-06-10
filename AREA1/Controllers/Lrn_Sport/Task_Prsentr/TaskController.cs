@@ -40,6 +40,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             ViewData["user_id"] = userInfo.user_id;                                 // 유저 ID(학번)
             ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";         // 교수 여부
             ViewData["pageNm"] = "과제 제출";
+            ViewData["author"] = userInfo.author;
 
             string sql = "";
 
@@ -146,6 +147,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
             ViewData["pageNm"] = "과제 제출";
+            ViewData["author"] = userInfo.author;
             ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";
             ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
@@ -248,6 +250,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             ViewData["user_id"] = userInfo.user_id;
             ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";         // 교수 여부
             ViewData["pageNm"] = "과제 제출";
+            ViewData["author"] = userInfo.author;
             ViewData["command"] = "INSERT";
 
             Dictionary<string, string> param = new Dictionary<string, string>();
@@ -327,6 +330,7 @@ namespace AREA1.Controllers.Lrn_Sport.Task_Prsentr {
             ViewData["user_id"] = userInfo.user_id;
             ViewData["pageNm"] = "과제 제출";
             ViewData["command"] = "UPDATE";
+            ViewData["author"] = userInfo.author;
 
             Dictionary<string, string> param = new Dictionary<string, string>();
 

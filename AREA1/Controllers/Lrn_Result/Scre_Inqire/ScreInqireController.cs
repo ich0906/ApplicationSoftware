@@ -30,6 +30,7 @@ namespace AREA1.Controllers
             ViewData["name"] = userInfo.name;
             ViewData["Title"] = HttpContext.Session.GetString("_Key");
             ViewData["phone"] = userInfo.phone;
+            ViewData["author"]=userInfo.author;
 
             string sql = "";
 

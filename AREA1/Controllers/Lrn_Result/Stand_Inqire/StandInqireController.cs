@@ -24,6 +24,7 @@ namespace AREA1.Controllers {
             ViewData["name"] = userInfo.name;                                       // 이름
             ViewData["user_id"] = userInfo.user_id;                                 // 유저 ID(학번)
             ViewBag.userInfo = userInfo;
+            ViewData["author"] = userInfo.author;
 
             string query = "";
 
