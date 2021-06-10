@@ -47,6 +47,21 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             ViewData["pageNm"] = "강의 묻고답하기";
 
             string sql = "";
+            string searchCondition = "";
+
+            if (Request.HasFormContentType && Request.Form.ContainsKey("search_txt")) {
+                if (Request.Form["search_type"].Equals("TLE")) {
+                    searchCondition += " AND A.TITLE LIKE '%" + Request.Form["search_txt"] + "%' ";
+                } else if (Request.Form["search_type"].Equals("CNT")) {
+                    searchCondition += " AND A.CONTENTS LIKE '%" + Request.Form["search_txt"] + "%' ";
+                } else if (Request.Form["search_type"].Equals("AUT")) {
+                    searchCondition += " AND B.NAME LIKE '%" + Request.Form["search_txt"] + "%' ";
+                } else {
+                    searchCondition += " AND ( A.TITLE LIKE '%" + Request.Form["search_txt"] + "%' "
+                        + " OR A.CONTENTS LIKE '%" + Request.Form["search_txt"] + "%' "
+                        + " OR B.NAME LIKE '%" + Request.Form["search_txt"] + "%') ";
+                }
+            }
 
             // 게시판글 개수 체크
             sql = "SELECT COUNT(*) AS BBS_CNT "
@@ -56,7 +71,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
                       /*+ "JOIN OP_FILE C "
                       + "ON A.DOC_ID = C.DOC_ID AND C.FILE_NUM = 1 "*/
                       + "WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "QNA") + "' "
-                      + "AND ACDMC_NO = @selectedSubj:VARCHAR";
+                      + "AND ACDMC_NO = @selectedSubj:VARCHAR" + searchCondition;
 
 
             int bbsCnt = 0;
@@ -69,7 +84,8 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
 
                 ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
                 ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
-
+                ViewBag.SEARCH_TYPE = Request.Form["search_type"];
+                ViewBag.SEARCH_TXT = Request.Form["search_txt"].ToString().Replace("\\", "\\\\");
                 // Form이 없거나 과목을 선택하지 않고 QNA 페이지에 넘어오는 경우
             }
             else
@@ -89,6 +105,8 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
 
                 ViewBag.YEAR_HAKGI = param["YEAR_HAKGI"];
                 ViewBag.ACDMC_NO = param["selectedSubj"];
+                ViewBag.SEARCH_TYPE = "ALL";
+                ViewBag.SEARCH_TXT = "";
             }
 
 
@@ -116,7 +134,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
                     "AND REF_ID IS NULL) D " +
                     "ON A.BBS_ID = D.BBS_ID " +
                     "WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "QNA") + "' " +
-                    "AND ACDMC_NO = @selectedSubj:VARCHAR " +
+                    "AND ACDMC_NO = @selectedSubj:VARCHAR " + searchCondition +
                     "ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1 "
                     + (param.ContainsKey("page") ? "AND RNUM > " + (Convert.ToInt32(param["page"]) - 1) + " * 10 " : "AND RNUM > 0 ")
                     + (param.ContainsKey("page") ? "AND RNUM <= " + param["page"] + "0" : "AND RNUM <= 10");
@@ -157,6 +175,8 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";
             ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
+            ViewBag.SEARCH_TYPE = Request.Form["search_type"];
+            ViewBag.SEARCH_TXT = Request.Form["search_txt"].ToString().Replace("\\", "\\\\");
 
 
             // 조회수 증가 쿼리
@@ -249,6 +269,8 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             ViewData["user_id"] = userInfo.user_id;
             ViewData["pageNm"] = "강의 묻고답하기";
             ViewData["command"] = "INSERT";
+            ViewBag.SEARCH_TYPE = Request.Form["search_type"];
+            ViewBag.SEARCH_TXT = Request.Form["search_txt"].ToString().Replace("\\", "\\\\");
 
 
             Dictionary<string, string> param = new Dictionary<string, string>();
@@ -373,6 +395,8 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
             ViewData["user_id"] = userInfo.user_id;
             ViewData["pageNm"] = "강의 묻고답하기";
             ViewData["command"] = "UPDATE";
+            ViewBag.SEARCH_TYPE = Request.Form["search_type"];
+            ViewBag.SEARCH_TXT = Request.Form["search_txt"].ToString().Replace("\\", "\\\\");
 
             Dictionary<string, string> param = new Dictionary<string, string>();
 

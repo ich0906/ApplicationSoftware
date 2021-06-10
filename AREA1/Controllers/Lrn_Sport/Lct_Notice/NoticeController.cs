@@ -43,6 +43,21 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewData["pageNm"] = "강의 공지사항";
 
             string sql = "";
+            string searchCondition = "";
+
+            if (Request.HasFormContentType && Request.Form.ContainsKey("search_txt")) {
+                if (Request.Form["search_type"].Equals("TLE")) {
+                    searchCondition += " AND A.TITLE LIKE '%" + Request.Form["search_txt"] + "%' ";
+                } else if (Request.Form["search_type"].Equals("CNT")) {
+                    searchCondition += " AND A.CONTENTS LIKE '%" + Request.Form["search_txt"] + "%' ";
+                } else if (Request.Form["search_type"].Equals("AUT")) {
+                    searchCondition += " AND B.NAME LIKE '%" + Request.Form["search_txt"] + "%' ";
+                } else {
+                    searchCondition += " AND ( A.TITLE LIKE '%" + Request.Form["search_txt"] + "%' "
+                        + " OR A.CONTENTS LIKE '%" + Request.Form["search_txt"] + "%' "
+                        + " OR B.NAME LIKE '%" + Request.Form["search_txt"] + "%') ";
+                }
+            }
 
             // 공지사항 개수 체크
             sql = "SELECT COUNT(*) AS BBS_CNT "
@@ -52,9 +67,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                       /*+ "JOIN OP_FILE C "
                       + "ON A.DOC_ID = C.DOC_ID AND C.FILE_NUM = 1 "*/
                       + "WHERE BBS_CODE = '" + _codeMngTool.getCode("BBS", "NOTICE") + "' "
-                      + "AND ACDMC_NO = @selectedSubj:VARCHAR";
-
-
+                      + "AND ACDMC_NO = @selectedSubj:VARCHAR" + searchCondition;
             int empNotiCnt = 0;
             int bbsCnt = 0;
             // Form이 존재하지 않으면 오류가 나기 때문에 분기해주어야한다.
@@ -65,6 +78,8 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
                 ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
                 ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
+                ViewBag.SEARCH_TYPE = Request.Form["search_type"];
+                ViewBag.SEARCH_TXT = Request.Form["search_txt"].ToString().Replace("\\", "\\\\");
 
                 // Form이 없거나 과목을 선택하지 않고 공지사항 페이지에 넘어오는 경우
             } else {
@@ -83,14 +98,16 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
                 ViewBag.YEAR_HAKGI = param["YEAR_HAKGI"];
                 ViewBag.ACDMC_NO = param["selectedSubj"];
+                ViewBag.SEARCH_TYPE = "ALL";
+                ViewBag.SEARCH_TXT = "";
             }
 
 
             // 만약 조회된 공지사항이 있으면 값을 가져온다.
             if (bbsCnt > 0) {
                 string empNotiCntquery = "SELECT COUNT(*) AS CNT                                                                                "
-                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID, DOC_ID, FILE_ID                     "
-                    + "      FROM(SELECT A.TITLE,                                                                                 "
+                    + "FROM(SELECT ROWNUM AS RNUM, CONTENTS, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID, DOC_ID, FILE_ID                     "
+                    + "      FROM(SELECT A.TITLE, A.CONTENTS,                                                                                 "
                     + "                   B.NAME AS REGISTER,                                                                     "
                     + "                   A.REGIST_DT,                                                                            "
                     + "                   A.RDCNT,                                                                                "
@@ -100,14 +117,14 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                     + "                          ON A.REGISTER = B.USER_ID LEFT JOIN OP_FILE C on A.DOC_ID = C.DOC_ID             "
                     + "            WHERE BBS_CODE = '1000'                                                                        "
                     + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                         "
-                    + "              AND OTHBC_AT = 'N'                                                                           "
+                    + "              AND OTHBC_AT = 'N'                                                                           " + searchCondition
                     + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                      "
                     + "                                                             AND RNUM > 0                                  "
                     + "                                                             AND RNUM <= 10                                ";
 
                 string empNotiquery = "SELECT *                                                                                   "
-                    + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID, DOC_ID, FILE_ID                     "
-                    + "      FROM(SELECT A.TITLE,                                                                                 "
+                    + "FROM(SELECT ROWNUM AS RNUM, CONTENTS, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID, DOC_ID, FILE_ID                     "
+                    + "      FROM(SELECT A.TITLE, A.CONTENTS,                                                                              "
                     + "                   B.NAME AS REGISTER,                                                                     "
                     + "                   A.REGIST_DT,                                                                            "
                     + "                   A.RDCNT,                                                                                "
@@ -117,7 +134,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                     + "                          ON A.REGISTER = B.USER_ID LEFT JOIN OP_FILE C on A.DOC_ID = C.DOC_ID             "
                     + "            WHERE BBS_CODE = '1000'                                                                        "
                     + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                         "
-                    + "              AND OTHBC_AT = 'N'                                                                           "
+                    + "              AND OTHBC_AT = 'N'                                                                           " + searchCondition
                     + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                      "
                     + "                                                             AND RNUM > 0                                  "
                     + "                                                             AND RNUM <= 10                                ";
@@ -138,7 +155,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
 
                 sql = "SELECT *                                                                         "
                         + "FROM(SELECT ROWNUM AS RNUM, TITLE, REGISTER, REGIST_DT, RDCNT, BBS_ID, DOC_ID, FILE_ID                     "
-                        + "      FROM(SELECT A.TITLE,                                                                                 "
+                        + "      FROM(SELECT A.TITLE, A.CONTENTS,                                                                                 "
                         + "                   B.NAME AS REGISTER,                                                                     "
                         + "                   A.REGIST_DT,                                                                            "
                         + "                   A.RDCNT,                                                                                "
@@ -148,7 +165,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
                         + "                          ON A.REGISTER = B.USER_ID LEFT JOIN OP_FILE C on A.DOC_ID = C.DOC_ID             "
                         + "            WHERE BBS_CODE = '1000'                                                                        "
                         + "              AND ACDMC_NO = @selectedSubj:VARCHAR                                                         "
-                        + "              AND OTHBC_AT = 'Y'                                                                           "
+                        + "              AND OTHBC_AT = 'Y'                                                                           " + searchCondition
                         + "            ORDER BY BBS_ID DESC, REGIST_DT DESC) AA) AAA WHERE 1 = 1                                      "
                         + (param.ContainsKey("page") ? " AND RNUM > " + (Convert.ToInt32(param["page"]) - 1) + " * 10 - " + empNotiCnt.ToString() : " AND RNUM > 0 - " + empNotiCnt.ToString())
                         + (param.ContainsKey("page") ? " AND RNUM <= " + param["page"] + "0 - " + empNotiCnt.ToString() : " AND RNUM <= 10 - " + empNotiCnt.ToString());
@@ -184,6 +201,8 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";
             ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
+            ViewBag.SEARCH_TYPE = Request.Form["search_type"];
+            ViewBag.SEARCH_TXT = Request.Form["search_txt"].ToString().Replace("\\", "\\\\");
 
 
             // 조회수 증가 쿼리
@@ -257,6 +276,8 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewData["user_id"] = userInfo.user_id;
             ViewData["pageNm"] = "강의 공지사항";
             ViewData["command"] = "INSERT";
+            ViewBag.SEARCH_TYPE = Request.Form["search_type"];
+            ViewBag.SEARCH_TXT = Request.Form["search_txt"].ToString().Replace("\\", "\\\\");
 
             Dictionary<string, string> param = new Dictionary<string, string>();
 
@@ -331,6 +352,8 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewData["user_id"] = userInfo.user_id;
             ViewData["pageNm"] = "강의 공지사항";
             ViewData["command"] = "UPDATE";
+            ViewBag.SEARCH_TYPE = Request.Form["search_type"];
+            ViewBag.SEARCH_TXT = Request.Form["search_txt"].ToString().Replace("\\", "\\\\");
 
             Dictionary<string, string> param = new Dictionary<string, string>();
 

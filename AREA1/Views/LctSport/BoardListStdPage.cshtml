@@ -2,23 +2,37 @@
 <!-- content -->
 <div id="appModule" class="card card-body mb-4 content">
     <div><p class="contenttitle">@ViewData["pageNm"]</p></div>
-    <form id="aform">
         <div class="con_search">
             <ul>
                 <li>
-                    <select class="form-control form-control-sm">
-                        <option value="ALL">전체</option>
-                        <option value="TLE">제목</option>
-                        <option value="CNT">내용</option>
-                        <option value="AUT">작성자</option>
-                    </select> <input type="text" maxlength="50" placeholder="검색어를 입력하세요">
+                    <select name="search_type" class="form-control form-control-sm">
+                        @if (ViewBag.SEARCH_TYPE.Equals("ALL") || ViewBag.SEARCH_TYPE.Equals("")) {
+                            <option value="ALL" selected>전체</option>
+                        } else {
+                            <option value="ALL">전체</option>
+                        }
+                        @if (ViewBag.SEARCH_TYPE.Equals("TLE")) {
+                            <option value="TLE" selected>제목</option>
+                        } else {
+                            <option value="TLE">제목</option>
+                        }
+                        @if (ViewBag.SEARCH_TYPE.Equals("CNT")) {
+                            <option value="CNT" selected>내용</option>
+                        } else {
+                            <option value="CNT">내용</option>
+                        }
+                        @if (ViewBag.SEARCH_TYPE.Equals("AUT")) {
+                            <option value="AUT" selected>작성자</option>
+                        } else {
+                            <option value="AUT">작성자</option>
+                        }
+                    </select> <input id="search_txt" type="text" maxlength="50" placeholder="검색어를 입력하세요" value="@ViewBag.SEARCH_TXT.ToString().Replace("\\\\", "\\")"  onKeypress="javascript: if (event.keyCode == 13) { $('#search_btn').trigger('click'); }" />
                 </li>
                 <li>
-                    <button type="button" class="btn2  btn-gray">검색</button>
+                    <button id="search_btn" type="button" class="btn2  btn-gray">검색</button>
                 </li>
             </ul>
         </div>
-    </form>
     @if (ViewData["fs_at"].Equals("Y") || ViewData["pageNm"].Equals("강의 묻고답하기")) {
         <div class="btnCon"><button type="button" class="btn2 btn-gray">글쓰기</button></div>
     }
@@ -67,6 +81,7 @@
             @if (ViewBag.ResultCnt > 0) {
                 int empNotiCnt = ViewData["pageNm"].Equals("강의 공지사항") ? ViewBag.EmpNotiCnt : 0;
                 for (int i = 0; i < ViewBag.ResultList.Count; i++) {
+                    if(@ViewBag.ResultList[i]["TITLE"].Equals("")) { continue; }
                 <tr>
                     <td><!----> <span>@( ViewBag.ResultCnt - empNotiCnt - 10 * (Convert.ToInt32(ViewBag.param["page"])- 1) - @i )</span></td>
                     @if (ViewData["pageNm"].Equals("강의 묻고답하기"))
@@ -139,51 +154,76 @@
 </div>
 <!-- content -->
 <script type="text/javascript">
-            $(function () {
-                $(".go-prev").click(function () {
-                    var page = $("[name=page]").val() * 1 - 1;
-                    if (!$(this).hasClass('disabled'))
-                        goPage(page);
-                });
+    $(function () {
+        $(".go-prev").click(function () {
+            var page = $("[name=page]").val() * 1 - 1;
+            if (!$(this).hasClass('disabled'))
+                goPage(page);
+        });
 
-                $(".go-next").click(function () {
-                    var page = $("[name=page]").val() * 1 + 1;
-                    if (!$(this).hasClass('disabled'))
-                        goPage(page);
-                });
-            });
-            function goPage(page) {
-                $("[name=page]").val(page);
+        $(".go-next").click(function () {
+            var page = $("[name=page]").val() * 1 + 1;
+            if (!$(this).hasClass('disabled'))
+                goPage(page);
+        });
+    });
+    function goPage(page) {
+        $("[name=page]").val(page);
 
-                $("#__form__").attr("action", "@ViewBag.SelectPageList");
-                $("#__form__").submit();
-            }
-            function goDetail(bbs_id) {
-                var input = "<input type='hidden' name='bbs_id' />";
-                $("#__form__").append(input);
+        $("#search_btn").trigger('click');
+    }
+    function goDetail(bbs_id) {
+        var input = "<input type='hidden' name='bbs_id' />";
+        $("#__form__").append(input);
+        $("[name=bbs_id]").val(bbs_id);
+        input = "<input type='hidden' name='search_type' />";
+        $("#__form__").append(input);
+        $("[name=search_type]").val($("[name=search_type] option:selected").val());
+        input = "<input type='hidden' name='search_txt' />";
+        $("#__form__").append(input);
+        $("[name=search_txt]").val($("#search_txt").val());
 
-                $("[name=bbs_id]").val(bbs_id);
-
-                $("#__form__").attr("action", "@ViewBag.Select");
-                $("#__form__").submit();
-            }
+        $("#__form__").attr("action", "@ViewBag.Select");
+        $("#__form__").submit();
+    }
 
 
-            $(function () {
-                $(".btnCon").find("button").click(function () {
-                    $("#__form__").attr("action", "@ViewBag.InsertForm");
-                    $("#__form__").submit();
-                });
+    $(function () {
 
-                $("[name=selectSubj]").change(function () {
-                    $("#__form__").attr("action", "@ViewBag.SelectPageList");
-                    $("#__form__").submit();
-                });
+        $(".btnCon").find("button").click(function () {
+            input = "<input type='hidden' name='search_type' />";
+            $("#__form__").append(input);
+            $("[name=search_type]").val('@ViewBag.SEARCH_TYPE');
+            input = "<input type='hidden' name='search_txt' />";
+            $("#__form__").append(input);
+            $("[name=search_txt]").val('@ViewBag.SEARCH_TXT');
 
-                $("[name=selectYearhakgi]").change(function () {
-                    $("[name=selectSubj]").trigger('change');
-                });
-            });
+            $("#__form__").attr("action", "@ViewBag.InsertForm");
+            $("#__form__").submit();
+        });
+
+        $("[name=selectSubj]").change(function () {
+            $("#__form__").attr("action", "@ViewBag.SelectPageList");
+            $("#__form__").submit();
+        });
+
+        $("[name=selectYearhakgi]").change(function () {
+            $("[name=selectSubj]").trigger('change');
+        });
+
+        $("#search_btn").click(function () {
+            input = "<input type='hidden' name='search_type' />";
+            $("#__form__").append(input);
+            $("[name=search_type]").val($("[name=search_type] option:selected").val());
+
+            input = "<input type='hidden' name='search_txt' />";
+            $("#__form__").append(input);
+            $("[name=search_txt]").val($("#search_txt").val());
+
+            $("#__form__").attr("action", "@ViewBag.SelectPageList");
+            $("#__form__").submit();
+        });
+    });
 
     function test() {
         alert("비공개글입니다.");
