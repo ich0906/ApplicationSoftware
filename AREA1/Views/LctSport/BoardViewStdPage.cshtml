@@ -147,7 +147,7 @@
 
             if (confirm("삭제하시겠습니까?")) {
                 $("#__form__").attr("action", "@ViewBag.Delete");
-                $("#aform").attr("method", "POST");
+                $("#__form__").attr("method", "POST");
 
                 $("#__form__").ajaxForm({
                     success: function (data) {

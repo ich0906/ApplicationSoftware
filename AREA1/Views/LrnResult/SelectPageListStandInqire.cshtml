@@ -66,7 +66,7 @@
                                 } 
                                 @for (int i = 0; i < ViewBag.RankList.Count; i++) {
                                     var Rank = ViewBag.RankList[i];
-                                    if (!Rank["YEAR"].Equals("")) {
+                                    if (!Rank["TOTAL_GRADE_JUMSU"].Equals("0") && !Rank["TOTAL_GRADE_JUMSU"].Equals("")) {
                                         <tr name="rank_tr" @if (!Rank["YEAR"].Equals(ViewBag.RecentYear) || !Rank["SEMESTER"].Equals(ViewBag.RecentHakgi)) { <text>style="display:none"</text> }>
                                         <td>@Rank["YEAR"]</td>
                                         <td>@Rank["SEMESTER"]</td>
