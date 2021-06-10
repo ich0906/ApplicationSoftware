@@ -487,12 +487,6 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
         {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
 
-            if (!userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")))
-            {
-                Response.WriteAsync("<script language=\"javascript\">alert('Invalid Author!!');</script>");
-                Response.WriteAsync("<script language=\"javascript\">window.location=\"/QNA/SelectPageListQNA\"</script>");
-            }
-
             string query = "";
 
             query = "SELECT FILE_ID, A.DOC_ID FROM OP_FILE A "
