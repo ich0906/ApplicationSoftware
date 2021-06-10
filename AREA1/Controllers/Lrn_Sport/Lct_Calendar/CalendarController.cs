@@ -48,7 +48,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Calendar {
 
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
-
+            ViewData["author"] = userInfo.author;
             ViewData["Today"] = DateTime.Now.ToString().Split(' ')[0];
 
             ViewBag.userinfo = userInfo;

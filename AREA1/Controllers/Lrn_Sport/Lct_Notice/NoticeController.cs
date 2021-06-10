@@ -41,6 +41,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewData["user_id"] = userInfo.user_id;                                 // 유저 ID(학번)
             ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";         // 교수 여부
             ViewData["pageNm"] = "강의 공지사항";
+            ViewData["author"] = userInfo.author;
 
             string sql = "";
             string searchCondition = "";
@@ -199,6 +200,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewData["user_id"] = userInfo.user_id;
             ViewData["pageNm"] = "강의 공지사항";
             ViewData["fs_at"] = userInfo.author.Equals(_codeMngTool.getCode("AUTHOR", "PROFESSOR")) ? "Y" : "N";
+            ViewData["author"] = userInfo.author;
             ViewBag.ACDMC_NO = Request.Form["selectedSubj"];
             ViewBag.YEAR_HAKGI = Request.Form["selectedYearhakgi"];
             ViewBag.SEARCH_TYPE = Request.Form["search_type"];
@@ -276,6 +278,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewData["user_id"] = userInfo.user_id;
             ViewData["pageNm"] = "강의 공지사항";
             ViewData["command"] = "INSERT";
+            ViewData["author"] = userInfo.author;
             ViewBag.SEARCH_TYPE = Request.Form["search_type"];
             ViewBag.SEARCH_TXT = Request.Form["search_txt"].ToString().Replace("\\", "\\\\");
 
@@ -352,6 +355,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Notice {
             ViewData["user_id"] = userInfo.user_id;
             ViewData["pageNm"] = "강의 공지사항";
             ViewData["command"] = "UPDATE";
+            ViewData["author"] = userInfo.author;
             ViewBag.SEARCH_TYPE = Request.Form["search_type"];
             ViewBag.SEARCH_TXT = Request.Form["search_txt"].ToString().Replace("\\", "\\\\");
 

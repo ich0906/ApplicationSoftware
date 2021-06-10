@@ -124,10 +124,13 @@
                     },
                     methods: {
                         saveData: function () {
-
-
-                            this.$refs.attach.upload();
-                        },
+                            @if (ViewData["command"].Equals("UPDATE")) {
+                                    @:if ($('input[type="file"]').val() != "" && confirm("기존 첨부파일을 삭제하고 다시 업로드합니다."))
+                                        @:this.$refs.attach.upload();
+                             } else {
+                                @:this.$refs.attach.upload();
+                            }
+                            },
                         uploadComplete: function (attachId) {
                             this.atchFileId = attachId;
 

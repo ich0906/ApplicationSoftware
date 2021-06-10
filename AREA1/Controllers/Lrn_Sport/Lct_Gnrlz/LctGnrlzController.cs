@@ -31,7 +31,7 @@ namespace AREA1.Controllers.Lrn_Sport.Lct_Gnrlz {
 
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
-
+            ViewData["author"] = userInfo.author;
             ViewData["Title"] = HttpContext.Session.GetString("_Key");
 
             ViewBag.userinfo = userInfo;

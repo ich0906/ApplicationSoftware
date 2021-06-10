@@ -398,7 +398,7 @@
 
 
                 <div class="col-md-6 navtxt">
-                    <a href="https://klas.kw.ac.kr/std/ads/admst/MyInfoStdPage.do"><i class="fas fa-cog"></i>@(ViewData["name"])(@ViewData["user_id"])</a> &nbsp;&nbsp; <a href="/Login/DoLogout">Logout</a><i class="fas fa-sign-out-alt"></i>
+                    <a href="#"><i class="fas fa-cog"></i>@(ViewData["name"])(@ViewData["user_id"])</a> &nbsp;&nbsp; <a href="/Login/DoLogout">Logout</a><i class="fas fa-sign-out-alt"></i>
                 </div>
 
             </div>
@@ -420,20 +420,22 @@
                         </ul>
                     </div>
 
-                    <div class="col-sm-3 py-4">
-                        <h4 class="titlecolor01">
-                            <a href="javascript:void(0)"><font color="white">학습결과</font></a>
-                        </h4>
+                    @if (ViewData["author"].Equals("2000")) {
+                        <div class="col-sm-3 py-4">
+                            <h4 class="titlecolor01">
+                                <a href="javascript:void(0)"><font color="white">학습결과</font></a>
+                            </h4>
 
-                        <ul class="depth03ul">
-                            <li>
-                                <a href="/StandInqire/SelectPageListStandInqire">석차조회</a>
-                            </li>
-                            <li>
-                                <a href="/ScreInqire/ScreInqire">성적조회</a>
-                            </li>
-                        </ul>
-                    </div>
+                            <ul class="depth03ul">
+                                <li>
+                                    <a href="/StandInqire/SelectPageListStandInqire">석차조회</a>
+                                </li>
+                                <li>
+                                    <a href="/ScreInqire/ScreInqire">성적조회</a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
 
                     <div class="col-sm-3 py-4">
                         <h4 class="titlecolor01">

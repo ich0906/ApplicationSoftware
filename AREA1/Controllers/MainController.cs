@@ -31,7 +31,7 @@ namespace AREA1.Controllers {
             DateTime nowDt = DateTime.Now;
             if (nowDt.DayOfWeek == DayOfWeek.Monday)
                 ViewBag.DayOfWeek = 0;
-            else if (nowDt.DayOfWeek == DayOfWeek.Thursday)
+            else if (nowDt.DayOfWeek == DayOfWeek.Tuesday)
                 ViewBag.DayOfWeek = 1;
             else if (nowDt.DayOfWeek == DayOfWeek.Wednesday)
                 ViewBag.DayOfWeek = 2;
@@ -44,7 +44,7 @@ namespace AREA1.Controllers {
 
             ViewData["name"] = userInfo.name;
             ViewData["user_id"] = userInfo.user_id;
-
+            ViewData["author"] = userInfo.author;
             ViewData["Today"] = DateTime.Now.ToString().Split(' ')[0];
 
             ViewBag.userinfo = userInfo;
@@ -213,7 +213,7 @@ namespace AREA1.Controllers {
 
                 for (int i = 0; i < yearhakgiList.Count; i++) {
                     // 과목명
-                    sql = "SELECT B.ACDMC_NO, A.SEMESTER, A.YEAR, D.TITLE || ' (' || B.ACDMC_NO || ') - ' || (SELECT BB.NAME FROM OP_TEACHES AA JOIN OP_USER BB ON AA.ID=BB.USER_ID WHERE COURSE_ID=D.COURSE_ID AND SEMESTER=B.SEMESTER AND YEAR=B.YEAR) AS LABEL" +
+                    sql = "SELECT B.ACDMC_NO, A.SEMESTER, A.YEAR, D.TITLE || ' (' || B.ACDMC_NO || ') - ' || (SELECT BB.NAME FROM OP_TEACHES AA JOIN OP_USER BB ON AA.ID=BB.USER_ID WHERE COURSE_ID=D.COURSE_ID AND SEMESTER=B.SEMESTER AND YEAR=B.YEAR AND SEC_ID=B.SEC_ID) AS LABEL" +
                         ",  A.YEAR || ',' || A.SEMESTER AS YEAR_HAKGI"
                                + " FROM OP_TAKES A"
                                + " JOIN OP_SECTION B"
