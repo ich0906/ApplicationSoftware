@@ -8,22 +8,18 @@ using System;
 using System.Collections.Generic;
 using Tool;
 
-namespace AREA1.Controllers
-{
+namespace AREA1.Controllers {
     [LoginActionFilter]
-    public class ScreInqireController : Controller
-    {
+    public class ScreInqireController : Controller {
         private readonly ILogger<ScreInqireController> _logger;
         private readonly AppSoftDbContext _context;
         private readonly CommonDao _commonDao;
-        public ScreInqireController(ILogger<ScreInqireController> logger, AppSoftDbContext context)
-        {
+        public ScreInqireController(ILogger<ScreInqireController> logger, AppSoftDbContext context) {
             _logger = logger;
             _context = context;
             _commonDao = new CommonDao(context);
         }
-        public IActionResult ScreInqire()
-        {
+        public IActionResult ScreInqire() {
             UserModel userInfo = SessionExtensionTool.GetObject<UserModel>(HttpContext.Session, "userInfo");
 
             ViewData["user_id"] = userInfo.user_id;
@@ -37,7 +33,7 @@ namespace AREA1.Controllers
             sql = "SELECT C.EMAIL AS I_EMAIL, A.PHONE AS S_PHONE, C.NAME AS I_NAME, I_ID "
                 + "FROM OP_USER A JOIN OP_ADVISOR B "
                 + "ON A.USER_ID=B.S_ID "
-                +"JOIN OP_USER C ON B.I_ID=C.USER_ID "
+                + "JOIN OP_USER C ON B.I_ID=C.USER_ID "
                 + "WHERE S_ID='" + userInfo.user_id + "'";
             var advisorList = _commonDao.SelectOne(sql);
             ViewBag.advisorList = advisorList;
@@ -47,7 +43,7 @@ namespace AREA1.Controllers
                 + "ON A.COURSE_ID=B.COURSE_ID "
                 + "WHERE ID='" + userInfo.user_id + "' ORDER BY A.YEAR, A.SEMESTER";
             var yearHakgiList = _commonDao.SelectList(sql);
-            
+
 
             sql = "SELECT * "
                 + "FROM OP_TAKES A JOIN OP_COURSE B "
@@ -56,29 +52,29 @@ namespace AREA1.Controllers
                 + "WHERE ID='" + userInfo.user_id + "' ORDER BY A.YEAR, A.SEMESTER";
             var gradeList = _commonDao.SelectList(sql);
 
-            for(int i = 0; i < yearHakgiList.Count; ++i) {
+            for (int i = 0; i < yearHakgiList.Count; ++i) {
                 double sum = 0.0;
                 double grade = 0.0, gradeF = 0.0;
                 double softGrade = 0.0, softGradeF = 0.0;
                 double notSoftGrade = 0.0, notSoftGradeF = 0.0;
-                int sbjSum = 0,sbjSumF=0;
-                int softSum = 0,softSumF=0, notSoftSum = 0,notSoftSumF=0;
+                int sbjSum = 0, sbjSumF = 0;
+                int softSum = 0, softSumF = 0, notSoftSum = 0, notSoftSumF = 0;
 
-                for(int j = 0; j < gradeList.Count; ++j) {
-                    if(yearHakgiList[i]["YEAR"]==gradeList[j]["YEAR"] && yearHakgiList[i]["SEMESTER"] == gradeList[j]["SEMESTER"]) {
+                for (int j = 0; j < gradeList.Count; ++j) {
+                    if (yearHakgiList[i]["YEAR"] == gradeList[j]["YEAR"] && yearHakgiList[i]["SEMESTER"] == gradeList[j]["SEMESTER"]) {
                         if (gradeList[j]["GRADE"] != "-") { sbjSumF += Convert.ToInt32(gradeList[j]["CREDITS"]); }
-                        if (getGrade(gradeList[j]["GRADE"])!=0.0) {
+                        if (getGrade(gradeList[j]["GRADE"]) != 0.0) {
                             sum += Convert.ToDouble(gradeList[j]["CREDITS"]);
                         }
                         gradeF += getGrade(gradeList[j]["GRADE"]) * Convert.ToInt32(gradeList[j]["CREDITS"]);
-                        if (gradeList[j]["GRADE"] != "F") { sbjSum += Convert.ToInt32(gradeList[j]["CREDITS"]); grade += (getGrade(gradeList[j]["GRADE"])*Convert.ToInt32(gradeList[j]["CREDITS"])); }
+                        if (gradeList[j]["GRADE"] != "F") { sbjSum += Convert.ToInt32(gradeList[j]["CREDITS"]); grade += (getGrade(gradeList[j]["GRADE"]) * Convert.ToInt32(gradeList[j]["CREDITS"])); }
 
-                        if (gradeList[j]["DEPT_NAME"] == "소프트웨어학부" && gradeList[j]["GRADE"]!="-") {
+                        if (gradeList[j]["DEPT_NAME"] == "소프트웨어학부" && gradeList[j]["GRADE"] != "-") {
                             softSumF += Convert.ToInt32(gradeList[j]["CREDITS"]);
                             softGradeF += getGrade(gradeList[j]["GRADE"]) * Convert.ToInt32(gradeList[j]["CREDITS"]);
                             if (gradeList[j]["GRADE"] != "F") { softSum += Convert.ToInt32(gradeList[j]["CREDITS"]); softGrade += getGrade(gradeList[j]["GRADE"]) * Convert.ToInt32(gradeList[j]["CREDITS"]); }
 
-                        } else if(gradeList[j]["DEPT_NAME"] != "소프트웨어학부" && gradeList[j]["GRADE"] != "-") {
+                        } else if (gradeList[j]["DEPT_NAME"] != "소프트웨어학부" && gradeList[j]["GRADE"] != "-") {
                             notSoftSumF += Convert.ToInt32(gradeList[j]["CREDITS"]);
                             notSoftGradeF += getGrade(gradeList[j]["GRADE"]) * Convert.ToInt32(gradeList[j]["CREDITS"]);
                             if (gradeList[j]["GRADE"] != "F") { notSoftSum += Convert.ToInt32(gradeList[j]["CREDITS"]); notSoftGrade += getGrade(gradeList[j]["GRADE"]) * Convert.ToInt32(gradeList[j]["CREDITS"]); }
@@ -87,7 +83,7 @@ namespace AREA1.Controllers
                 }
                 yearHakgiList[i]["SUM"] = sum.ToString();
 
-                if (sbjSumF == 0) yearHakgiList[i]["AVG_GRADE_F"] = string.Format("{0:0.0#}",gradeF);
+                if (sbjSumF == 0) yearHakgiList[i]["AVG_GRADE_F"] = string.Format("{0:0.0#}", gradeF);
                 else yearHakgiList[i]["AVG_GRADE_F"] = string.Format("{0:0.0#}", gradeF / sbjSumF);
 
                 if (sbjSum == 0) yearHakgiList[i]["AVG_GRADE"] = string.Format("{0:0.0#}", grade);
