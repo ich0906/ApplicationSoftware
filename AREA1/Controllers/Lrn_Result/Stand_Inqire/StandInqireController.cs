@@ -33,8 +33,8 @@ namespace AREA1.Controllers {
                     + "FROM OP_TAKES A                                                                              "
                     + "         JOIN(SELECT Distinct(YEAR) AS YEAR, SEMESTER                                        "
                     + "               FROM(                                                                         "
-                    + "                        SELECT FIRST_VALUE(YEAR) over(ORDER BY YEAR DESC)         AS YEAR,   "
-                    + "                               FIRST_VALUE(SEMESTER) over(ORDER BY SEMESTER DESC) AS SEMESTER"
+                    + "                        SELECT FIRST_VALUE(YEAR) over(ORDER BY YEAR DESC, SEMESTER DESC)         AS YEAR,   "
+                    + "                               FIRST_VALUE(SEMESTER) over(ORDER BY YEAR DESC, SEMESTER DESC) AS SEMESTER"
                     + "                        FROM OP_SECTION)) B                                                  "
                     + "              ON A.YEAR = B.YEAR AND A.SEMESTER = B.SEMESTER                                 "
                     + $"WHERE A.ID = '{userInfo.user_id}'";
@@ -45,8 +45,8 @@ namespace AREA1.Controllers {
             // 최신 연도, 학기
             query = "SELECT Distinct(YEAR) AS YEAR, SEMESTER                                        "
                     + "FROM(                                                                        "
-                    + "        SELECT FIRST_VALUE(YEAR) over(ORDER BY YEAR DESC)         AS YEAR,   "
-                    + "               FIRST_VALUE(SEMESTER) over(ORDER BY SEMESTER DESC) AS SEMESTER"
+                    + "        SELECT FIRST_VALUE(YEAR) over(ORDER BY YEAR DESC, SEMESTER DESC)         AS YEAR,   "
+                    + "               FIRST_VALUE(SEMESTER) over(ORDER BY YEAR DESC, SEMESTER DESC) AS SEMESTER"
                     + "        FROM OP_SECTION)";
 
             var recentYearHakgi = _commonDao.SelectOne(query);

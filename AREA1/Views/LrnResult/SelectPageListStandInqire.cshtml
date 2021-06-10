@@ -24,13 +24,13 @@
                             </tr>
                         </tbody>
                     </table><form id="aform">
-    <button type="button" id="listButton" class="btn2 btn-learn">이전 석차 내역 불러오기</button>
-</form>
+                        <button type="button" id="listButton" class="btn2 btn-learn">이전 석차 내역 불러오기</button>
+                    </form>
 
                     <br><br><br><br>
 
                     <div id="test" style="margin-top: 10px">
-                        
+
 
                         <table class="AType">
                             <colgroup><col width="12.5%"> <col width="12.5%"> <col width="12.5%"> <col width="12.5%"> <col width="12.5%"> <col width="12.5%"> <col width="12.5%"> <col width="12.5%"></colgroup>
@@ -58,27 +58,27 @@
                                     </tr>
                                 </thread>
                                 <tbody>
-                                @* 최신 학기에 성적이 반영되어있지 않다면 *@
-                                @if (ViewBag.RecentlyGradeAt.Equals("N")) {
-                                    <tr>
-                                    <td colspan="8">@ViewBag.RecentYear 년도 @ViewBag.RecentHakgi 학기의 석차정보가 아직 입력되어 있지 않습니다.</td>
-                                    </tr>
-                                } 
-                                @for (int i = 0; i < ViewBag.RankList.Count; i++) {
-                                    var Rank = ViewBag.RankList[i];
-                                    if (!Rank["YEAR"].Equals("")) {
-                                        <tr name="rank_tr" @if (!Rank["YEAR"].Equals(ViewBag.RecentYear) || !Rank["SEMESTER"].Equals(ViewBag.RecentHakgi)) { <text>style="display:none"</text> }>
-                                        <td>@Rank["YEAR"]</td>
-                                        <td>@Rank["SEMESTER"]</td>
-                                        <td>@Rank["TOTAL_CREDITS"]</td>
-                                        <td>@Rank["TOTAL_GRADE_JUMSU"]</td>
-                                        <td>@Rank["AVG_JUMSU"]</td>
-                                        <td>@Rank["PERCENTAGE"]</td>
-                                        <td>@Rank["RANK"]</td>
-                                        <td></td>
+                                    @* 최신 학기에 성적이 반영되어있지 않다면 *@
+                                    @if (ViewBag.RecentlyGradeAt.Equals("N")) {
+                                        <tr>
+                                            <td colspan="8">@ViewBag.RecentYear 년도 @ViewBag.RecentHakgi 학기의 석차정보가 아직 입력되어 있지 않습니다.</td>
                                         </tr>
                                     }
-                                }
+                                    @for (int i = 0; i < ViewBag.RankList.Count; i++) {
+                                        var Rank = ViewBag.RankList[i];
+                                        if (!Rank["TOTAL_GRADE_JUMSU"].Equals("0") && !Rank["TOTAL_GRADE_JUMSU"].Equals("")) {
+                                            <tr name="rank_tr" @if (!Rank["YEAR"].Equals(ViewBag.RecentYear) || !Rank["SEMESTER"].Equals(ViewBag.RecentHakgi)) { <text> style="display:none" </text> }>
+                                                <td>@Rank["YEAR"]</td>
+                                                <td>@Rank["SEMESTER"]</td>
+                                                <td>@Rank["TOTAL_CREDITS"]</td>
+                                                <td>@Rank["TOTAL_GRADE_JUMSU"]</td>
+                                                <td>@Rank["AVG_JUMSU"]</td>
+                                                <td>@Rank["PERCENTAGE"]</td>
+                                                <td>@Rank["RANK"]</td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                    }
                                 </tbody>
                             </table>
                         </table>
@@ -93,7 +93,7 @@
                 $(this).hide();
             });
         </script>
-        </main>
+    </main>
 </body>
 
 </html>
