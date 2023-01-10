@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Tool;
 
+
 namespace AREA1.Controllers.Lrn_Sport.Lct_QNA
 {
     [LoginActionFilter]
